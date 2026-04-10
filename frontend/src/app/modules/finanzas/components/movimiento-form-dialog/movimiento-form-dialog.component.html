@@ -1,0 +1,135 @@
+﻿<h2 mat-dialog-title class="dialog-title">{{ data.movimiento ? 'Editar movimiento' : (data.tipoInicial === 'Ingreso' ? 'Nuevo ingreso' : 'Nuevo egreso') }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="form-grid dialog-form">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Datos del movimiento</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo de movimiento</mat-label>
+      <mat-select formControlName="movementType">
+        <mat-option value="Ingreso">Ingreso</mat-option>
+        <mat-option value="Egreso">Egreso</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="categoryId">
+        @for (categoria of categoriasFiltradas(); track categoria.id) {
+          <mat-option [value]="categoria.id">{{ categoria.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.categoryId.hasError('required') && form.controls.categoryId.touched) {
+        <mat-error>La categoría es obligatoria</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descripción</mat-label>
+      <input matInput formControlName="description" />
+      @if (form.controls.description.hasError('required') && form.controls.description.touched) {
+        <mat-error>La descripción es obligatoria</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Monto</mat-label>
+      <input matInput type="number" formControlName="amount" />
+      @if (form.controls.amount.hasError('required') && form.controls.amount.touched) {
+        <mat-error>El monto es obligatorio</mat-error>
+      }
+      @if (form.controls.amount.hasError('min') && form.controls.amount.touched) {
+        <mat-error>El monto debe ser mayor a cero</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de movimiento</mat-label>
+      <input matInput type="date" formControlName="movementDate" />
+      @if (form.controls.movementDate.hasError('required') && form.controls.movementDate.touched) {
+        <mat-error>La fecha de movimiento es obligatoria</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de vencimiento</mat-label>
+      <input matInput type="date" formControlName="dueDate" />
+      @if (form.hasError('invalidDueDate')) {
+        <mat-error>La fecha de vencimiento no puede ser anterior a la fecha de movimiento</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        @for (estado of estados; track estado) {
+          <mat-option [value]="estado">{{ estado }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.status.hasError('required') && form.controls.status.touched) {
+        <mat-error>El estado es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Relacion comercial</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select formControlName="clientId">
+        <mat-option value="">Sin cliente</mat-option>
+        @for (cliente of data.clientes; track cliente.id) {
+          <mat-option [value]="cliente.id">{{ cliente.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Proveedor</mat-label>
+      <mat-select formControlName="providerId">
+        <mat-option value="">Sin proveedor</mat-option>
+        @for (proveedor of data.proveedores; track proveedor.id) {
+          <mat-option [value]="proveedor.id">{{ proveedor.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Proyecto</mat-label>
+      <mat-select formControlName="projectId">
+        <mat-option value="">Sin proyecto</mat-option>
+        @for (proyecto of data.proyectos; track proyecto.id) {
+          <mat-option [value]="proyecto.id">{{ proyecto.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Cobro y notas</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Medio de pago</mat-label>
+      <input matInput formControlName="paymentMethod" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Número de comprobante</mat-label>
+      <input matInput formControlName="receiptNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput rows="3" formControlName="notes"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

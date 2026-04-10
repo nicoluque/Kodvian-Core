@@ -1,0 +1,369 @@
+# Reglas de Desarrollo - Kodvian Core
+
+## Contexto del proyecto
+
+Kodvian Core es un sistema interno liviano para gestión de empresa de software.
+Incluye módulos de:
+
+- Dashboard
+- Clientes
+- Proyectos
+- Tareas
+- Finanzas
+- Administración
+
+Stack técnico:
+
+Backend:
+- .NET 8 Web API
+- EF Core
+- PostgreSQL
+
+Frontend:
+- Angular standalone
+- Angular Material
+
+Infraestructura:
+- Railway (optimización obligatoria)
+- bajo consumo de CPU y RAM
+- monolito modular
+
+IMPORTANTE:
+Todo el frontend debe estar en español latino.
+Nada de textos visibles en inglés.
+
+---
+
+# Principios Fundamentales
+
+## 1. Evitar sobreingeniería
+
+Este sistema está pensado para bajo consumo en Railway.
+
+NO usar:
+- microservicios
+- Redis
+- SignalR
+- WebSockets
+- background workers innecesarios
+- caching complejo
+- SSR Angular
+- polling agresivo
+
+SI usar:
+- monolito modular
+- queries paginadas
+- DTOs livianos
+- endpoints simples
+- lazy loading Angular
+
+---
+
+# Comunicación y Colaboración
+
+## Principio fundamental
+
+Siempre clarificar comportamientos antes de implementar.
+
+## Reglas
+
+1. Preguntar antes de asumir comportamientos
+2. Presentar opciones cuando haya múltiples soluciones
+3. Confirmar antes de cambios grandes
+4. Documentar decisiones importantes
+5. No modificar arquitectura sin aprobación
+
+---
+
+# Convención de Idioma
+
+## Código
+
+Código siempre en inglés:
+
+Client  
+Project  
+Task  
+FinancialMovement  
+User  
+
+## UI
+
+TODO en español latino:
+
+Clientes  
+Proyectos  
+Tareas  
+Finanzas  
+Administración  
+
+Botones:
+
+Guardar  
+Cancelar  
+Editar  
+Eliminar  
+Nuevo  
+Buscar  
+Filtrar  
+Volver  
+
+Estados:
+
+Pendiente  
+En curso  
+Bloqueado  
+Finalizado  
+Cancelado  
+
+Mensajes:
+
+Los cambios se guardaron correctamente  
+Ocurrió un error al guardar  
+No hay datos para mostrar  
+¿Desea eliminar este registro?  
+
+Nunca usar:
+
+Save  
+Delete  
+Edit  
+Dashboard  
+Settings  
+Cancel  
+Submit  
+
+---
+
+# Arquitectura Backend
+
+Estructura obligatoria:
+
+Kodvian.Core.Api  
+Kodvian.Core.Application  
+Kodvian.Core.Domain  
+Kodvian.Core.Infrastructure  
+
+Reglas:
+
+- Domain sin dependencias externas
+- Application contiene lógica de negocio
+- Infrastructure acceso a datos
+- Api solo controllers
+
+DTOs separados de entidades.
+
+Nunca exponer entidades directamente.
+
+---
+
+# Arquitectura Frontend
+
+Estructura Angular:
+
+app/
+core/
+shared/
+layout/
+modules/
+
+modules:
+
+dashboard
+clientes
+proyectos
+tareas
+finanzas
+administracion
+
+Reglas:
+
+- módulos lazy loaded
+- componentes standalone
+- formularios reactivos
+- tablas paginadas
+- dialogs para CRUD
+
+---
+
+# UI / UX Reglas
+
+Diseño:
+
+- profesional
+- minimalista
+- limpio
+- rápido
+
+Layout:
+
+Sidebar izquierda
+Header superior
+Contenido central
+
+Evitar:
+
+animaciones pesadas  
+componentes innecesarios  
+over-rendering  
+
+---
+
+# Performance (Railway)
+
+Obligatorio:
+
+- paginación en listados
+- filtros por servidor
+- evitar includes masivos
+- evitar queries sin índices
+- DTOs específicos
+- no cargar listas completas
+
+Nunca hacer:
+
+ToList() sin paginación  
+Include() múltiples innecesarios  
+Select * implícito  
+
+---
+
+# Base de datos
+
+Usar migraciones EF Core siempre.
+
+Nunca modificar DB manualmente.
+
+Convenciones:
+
+Id
+FechaCreacion
+FechaActualizacion
+Activo
+
+Índices obligatorios en:
+
+Clientes.Nombre
+Proyectos.ClienteId
+Tareas.ProyectoId
+Tareas.ResponsableId
+MovimientosFinancieros.Fecha
+
+---
+
+# Código limpio
+
+Reglas:
+
+- funciones pequeñas
+- nombres descriptivos
+- evitar duplicación
+- comentarios solo cuando necesario
+- manejar errores explícitamente
+
+Evitar:
+
+métodos gigantes  
+lógica duplicada  
+hardcode  
+
+---
+
+# Controllers
+
+Reglas:
+
+- endpoints REST claros
+- usar DTOs
+- validaciones
+- responses consistentes
+
+Formato response:
+
+success
+message
+data
+
+---
+
+# Tests
+
+Cada nueva funcionalidad backend debe incluir tests.
+
+Cubrir:
+
+caso exitoso  
+caso error  
+validaciones  
+
+---
+
+# Flujo de trabajo
+
+1 Entender requerimiento  
+2 Preguntar casos edge  
+3 Confirmar implementación  
+4 Implementar código limpio  
+5 Agregar tests  
+6 Validar performance  
+7 Documentar decisiones  
+
+---
+
+# Módulos del sistema
+
+## Dashboard
+
+Resumen general
+KPIs
+tareas críticas
+movimientos recientes
+
+## Clientes
+
+CRUD clientes
+estado cliente
+contacto
+información comercial
+
+## Proyectos
+
+cliente asociado
+responsable
+estado
+prioridad
+fechas
+
+## Tareas
+
+kanban
+responsable
+vencimiento
+prioridad
+
+## Finanzas
+
+ingresos
+egresos
+categorías
+balance mensual
+
+## Administración
+
+usuarios
+roles
+configuración
+
+---
+
+# Regla importante
+
+Kodvian Core debe ser:
+
+liviano  
+rápido  
+profesional  
+escalable  
+bajo consumo  
+
+Siempre priorizar simplicidad.

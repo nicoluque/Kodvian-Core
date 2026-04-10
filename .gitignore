@@ -19,6 +19,8 @@ node_modules/
 dist/
 build/
 frontend/dist/
+.angular/
+coverage/
 
 # =========================
 # IDE

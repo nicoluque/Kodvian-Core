@@ -1,0 +1,109 @@
+.administracion-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-card,
+.panel-card {
+  border-radius: 16px;
+  border: 1px solid var(--line-600);
+  background: linear-gradient(170deg, rgba(15, 23, 24, 0.9), rgba(9, 15, 17, 0.97));
+  box-shadow: var(--shadow-soft);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-block {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line-600);
+  background: linear-gradient(160deg, rgba(18, 29, 24, 0.75), rgba(11, 17, 19, 0.9));
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  color: var(--brand-300);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  color: var(--brand-300);
+  font-size: 34px;
+}
+
+.subtitulo {
+  margin: 6px 0 0;
+  color: var(--text-300);
+  max-width: 780px;
+}
+
+.estado-pill,
+.tag-ready {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(81, 205, 103, 0.56);
+  color: var(--brand-300);
+  background: rgba(24, 52, 33, 0.62);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.panel-card {
+  padding: 16px;
+
+  h3 {
+    margin: 0 0 8px;
+    color: rgba(140, 255, 152, 0.9);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--text-100);
+    line-height: 1.45;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--text-100);
+    display: grid;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .resumen-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+}

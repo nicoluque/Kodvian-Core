@@ -1,0 +1,22 @@
+﻿<h2 mat-dialog-title class="dialog-title">Cambiar estado</h2>
+<mat-dialog-content class="dialog-body">
+  <form class="form-grid dialog-form">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Actualizacion operativa</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width status-field">
+      <mat-label>Estado</mat-label>
+      <mat-select [formControl]="estadoControl" panelClass="status-select-panel">
+        @for (estado of estados; track estado) {
+          <mat-option [value]="estado">{{ estado }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="confirmar()">Guardar</button>
+</mat-dialog-actions>

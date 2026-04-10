@@ -1,0 +1,178 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+:root {
+  --bg-900: #06090a;
+  --bg-850: #080d0f;
+  --bg-800: #0b1113;
+  --surface-700: #121a1d;
+  --surface-650: #172225;
+  --brand-500: #27ff3f;
+  --brand-400: #59ff6a;
+  --brand-300: #8cff98;
+  --text-100: #eaf2ee;
+  --text-300: #a8b5ad;
+  --line-600: #1e2a24;
+  --danger-500: #ff5d5d;
+  --warning-500: #ffd44d;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 0 1px rgba(39, 255, 63, 0.28), 0 12px 28px rgba(8, 255, 53, 0.15);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 650px at 78% -8%, rgba(39, 255, 63, 0.12), transparent 60%),
+    radial-gradient(900px 600px at 20% 120%, rgba(39, 255, 63, 0.06), transparent 65%),
+    linear-gradient(180deg, var(--bg-850) 0%, var(--bg-900) 55%, var(--bg-850) 100%);
+  color: var(--text-100);
+  font-family: 'Montserrat', 'Poppins', 'Segoe UI', sans-serif;
+}
+
+html {
+  scrollbar-color: var(--brand-500) var(--bg-800);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #0a1012, #0d1315);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid #0a1012;
+  background: linear-gradient(180deg, var(--brand-500), #1ad132);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--brand-400), var(--brand-500));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--line-600);
+  background: linear-gradient(160deg, #0f1719, #0b1214);
+  color: var(--text-100);
+}
+
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary {
+  background: linear-gradient(145deg, var(--brand-500), #11d22b) !important;
+  color: #031005 !important;
+  font-weight: 700;
+}
+
+.mat-mdc-outlined-button,
+.mat-mdc-button {
+  border-color: var(--line-600);
+}
+
+.mat-mdc-card {
+  border: 1px solid var(--line-600);
+  box-shadow: var(--shadow-soft);
+}
+
+.mat-mdc-text-field-wrapper {
+  will-change: unset !important;
+}
+
+.mat-mdc-select-panel {
+  border: 1px solid rgba(74, 108, 94, 0.55);
+  border-radius: 12px !important;
+  background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99)) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.mat-mdc-option {
+  min-height: 44px;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text {
+  color: var(--text-100) !important;
+}
+
+.mat-mdc-option:hover {
+  background: rgba(24, 36, 39, 0.56) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background: rgba(22, 54, 34, 0.62) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+  color: #bfffc9 !important;
+  font-weight: 600;
+}
+
+.mat-mdc-option .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
+  color: var(--brand-300) !important;
+}
+
+.mat-mdc-autocomplete-panel {
+  border: 1px solid rgba(74, 108, 94, 0.55) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99)) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.mat-mdc-autocomplete-panel .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background: rgba(22, 54, 34, 0.62) !important;
+}
+
+.mat-mdc-menu-panel {
+  border: 1px solid rgba(74, 108, 94, 0.55) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99)) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.mat-mdc-menu-item,
+.mat-mdc-menu-item .mat-mdc-menu-item-text {
+  color: var(--text-100) !important;
+}
+
+.mat-mdc-menu-item:hover:not([disabled]),
+.mat-mdc-menu-item.cdk-program-focused:not([disabled]),
+.mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]) {
+  background: rgba(24, 36, 39, 0.56) !important;
+}
+
+.layout-shell,
+.layout-shell .mat-drawer-container,
+.layout-shell .mat-drawer-content,
+.layout-shell .mat-drawer,
+.layout-shell .mat-drawer-inner-container {
+  background-color: #0a1113;
+}
+
+.layout-shell .mat-drawer {
+  width: auto !important;
+}
+
+.layout-shell .mat-drawer-inner-container {
+  scrollbar-color: var(--brand-500) #0a1012;
+  scrollbar-width: thin;
+}
+
+.layout-shell .mat-drawer-inner-container::-webkit-scrollbar-track {
+  background: #0a1012;
+}
+
+.layout-shell .mat-drawer-inner-container::-webkit-scrollbar-thumb {
+  border: 2px solid #0a1012;
+  background: linear-gradient(180deg, var(--brand-500), #1ad132);
+}

@@ -1,0 +1,106 @@
+﻿<h2 mat-dialog-title class="dialog-title">{{ data.proyecto ? 'Editar proyecto' : 'Nuevo proyecto' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="form-grid dialog-form">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Contexto del proyecto</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select formControlName="clientId">
+        @for (cliente of data.clientes; track cliente.id) {
+          <mat-option [value]="cliente.id">{{ cliente.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.clientId.hasError('required') && form.controls.clientId.touched) {
+        <mat-error>El cliente es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+      @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+        <mat-error>El nombre del proyecto es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput rows="3" formControlName="description"></textarea>
+    </mat-form-field>
+
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Planificacion y seguimiento</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Responsable</mat-label>
+      <mat-select formControlName="responsibleId">
+        <mat-option value="">Sin asignar</mat-option>
+        @for (responsable of data.responsables; track responsable.id) {
+          <mat-option [value]="responsable.id">{{ responsable.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        @for (estado of estados; track estado.value) {
+          <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Prioridad</mat-label>
+      <mat-select formControlName="priority">
+        @for (prioridad of prioridades; track prioridad) {
+          <mat-option [value]="prioridad">{{ prioridad }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de inicio</mat-label>
+      <input matInput type="date" formControlName="startDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de entrega estimada</mat-label>
+      <input matInput type="date" formControlName="estimatedDeliveryDate" />
+      @if (form.hasError('invalidEstimatedDeliveryDate')) {
+        <mat-error>La fecha estimada no puede ser anterior a la fecha de inicio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de cierre</mat-label>
+      <input matInput type="date" formControlName="closingDate" />
+      @if (form.hasError('invalidClosingDate')) {
+        <mat-error>La fecha de cierre no puede ser anterior a la fecha de inicio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Presupuesto</mat-label>
+      <input matInput type="number" formControlName="budget" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Porcentaje de avance</mat-label>
+      <input matInput type="number" formControlName="progressPercentage" />
+    </mat-form-field>
+
+    <div class="full-width toggle-row">
+      <mat-slide-toggle formControlName="isActive">Activo</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

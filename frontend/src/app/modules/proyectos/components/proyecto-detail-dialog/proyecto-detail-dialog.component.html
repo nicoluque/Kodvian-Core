@@ -1,0 +1,18 @@
+﻿<h2 mat-dialog-title>Detalle del proyecto</h2>
+<mat-dialog-content>
+  <div class="grid">
+    <div><strong>Cliente:</strong> {{ valor(proyecto.clientName) }}</div>
+    <div><strong>Responsable:</strong> {{ valor(proyecto.responsibleName) }}</div>
+    <div><strong>Estado:</strong> {{ mostrarEstado(proyecto.status) }}</div>
+    <div><strong>Prioridad:</strong> {{ valor(proyecto.priority) }}</div>
+    <div><strong>Fecha de inicio:</strong> {{ valor(proyecto.startDate) }}</div>
+    <div><strong>Fecha de entrega estimada:</strong> {{ valor(proyecto.estimatedDeliveryDate) }}</div>
+    <div><strong>Fecha de cierre:</strong> {{ valor(proyecto.closingDate) }}</div>
+    <div><strong>Presupuesto:</strong> {{ proyecto.budget ? (proyecto.budget | currency:'ARS':'symbol':'1.0-0') : '-' }}</div>
+    <div><strong>Porcentaje de avance:</strong> {{ proyecto.progressPercentage }}%</div>
+    <div class="full-width"><strong>Descripción:</strong> {{ valor(proyecto.description) }}</div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

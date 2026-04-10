@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Kodvian.Core.Api/Kodvian.Core.Api.csproj" />
+    <Project Path="src/Kodvian.Core.Application/Kodvian.Core.Application.csproj" />
+    <Project Path="src/Kodvian.Core.Domain/Kodvian.Core.Domain.csproj" />
+    <Project Path="src/Kodvian.Core.Infrastructure/Kodvian.Core.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Kodvian.Core.Application.Tests/Kodvian.Core.Application.Tests.csproj" />
+  </Folder>
+</Solution>

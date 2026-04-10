@@ -1,0 +1,181 @@
+@mixin dialog-form-grid($min-width: 860px) {
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 12px;
+    min-width: min(#{$min-width}, 100%);
+    padding-top: 8px;
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 900px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+      min-width: 100%;
+    }
+  }
+}
+
+@mixin dialog-premium-shell() {
+  :host {
+    display: block;
+    color: var(--text-100);
+  }
+
+  .dialog-title {
+    margin: 0;
+    padding: 18px 22px 12px;
+    color: var(--brand-300);
+    font-size: 24px;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid rgba(52, 74, 64, 0.48);
+    background: linear-gradient(160deg, rgba(20, 33, 28, 0.72), rgba(12, 19, 21, 0.96));
+  }
+
+  .dialog-body {
+    padding: 14px 22px 8px !important;
+    background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99));
+  }
+
+  .dialog-form {
+    gap: 10px 12px;
+  }
+
+  .form-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding-top: 8px;
+  }
+
+  .section-eyebrow {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(140, 255, 152, 0.9);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(105, 156, 119, 0.52), rgba(58, 78, 70, 0.12));
+  }
+
+  .toggle-row {
+    padding-top: 4px;
+  }
+
+  .dialog-actions {
+    margin: 0;
+    padding: 12px 22px 18px;
+    border-top: 1px solid rgba(52, 74, 64, 0.36);
+    background: linear-gradient(175deg, rgba(10, 16, 18, 0.98), rgba(7, 12, 14, 0.99));
+    gap: 8px;
+  }
+
+  .action-save {
+    min-height: 42px;
+    padding-inline: 20px;
+    border-radius: 999px;
+  }
+
+  .action-cancel {
+    min-height: 42px;
+    padding-inline: 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(102, 127, 117, 0.62);
+    background: rgba(18, 27, 30, 0.92);
+    color: #d7e7de;
+
+    &:hover {
+      color: #eefff2;
+      border-color: rgba(132, 165, 152, 0.7);
+      background: rgba(27, 40, 44, 0.98);
+    }
+  }
+
+  :host ::ng-deep .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
+  :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch,
+  :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing {
+    border-color: #2a3a33 !important;
+  }
+
+  :host ::ng-deep .mat-mdc-text-field-wrapper {
+    background: rgba(9, 15, 17, 0.72) !important;
+  }
+
+  :host ::ng-deep .mat-mdc-form-field .mat-mdc-form-field-infix {
+    min-height: 56px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  :host ::ng-deep .mat-mdc-form-field textarea.mat-mdc-input-element {
+    min-height: 82px;
+    resize: vertical;
+  }
+
+  :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+  :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+  :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: var(--brand-500) !important;
+  }
+
+  :host ::ng-deep .mat-mdc-form-field .mdc-floating-label,
+  :host ::ng-deep .mat-mdc-form-field input,
+  :host ::ng-deep .mat-mdc-form-field textarea,
+  :host ::ng-deep .mat-mdc-form-field .mat-mdc-select-value,
+  :host ::ng-deep .mat-mdc-form-field .mat-mdc-select-arrow {
+    color: var(--text-100) !important;
+  }
+
+  :host ::ng-deep .mat-mdc-form-field .mat-mdc-form-field-error {
+    color: #ff7a7a !important;
+    font-size: 11px;
+  }
+
+  :host ::ng-deep .mat-mdc-slide-toggle {
+    --mdc-switch-selected-focus-state-layer-color: var(--brand-500);
+    --mdc-switch-selected-handle-color: #ffffff;
+    --mdc-switch-selected-track-color: var(--brand-500);
+    --mdc-switch-selected-hover-track-color: var(--brand-400);
+    --mdc-switch-selected-pressed-track-color: var(--brand-400);
+    --mdc-switch-unselected-track-color: #2a3a33;
+    --mdc-switch-unselected-handle-color: #ffffff;
+    color: var(--text-100);
+  }
+
+  :host ::ng-deep .mat-mdc-slide-toggle .mdc-label {
+    color: var(--text-100) !important;
+    font-weight: 500;
+  }
+
+  :host ::ng-deep .mat-mdc-dialog-content {
+    max-height: min(74vh, 680px);
+  }
+
+  @media (max-width: 900px) {
+    .dialog-title {
+      padding-inline: 16px;
+    }
+
+    .dialog-body {
+      padding-inline: 16px !important;
+    }
+
+    .dialog-actions {
+      padding-inline: 16px;
+    }
+  }
+}

@@ -1,0 +1,167 @@
+.login-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(760px 460px at 14% 10%, rgba(39, 255, 63, 0.16), transparent 65%),
+    radial-gradient(780px 520px at 90% 100%, rgba(39, 255, 63, 0.1), transparent 68%),
+    linear-gradient(180deg, rgba(8, 12, 13, 0.98), rgba(5, 9, 10, 1));
+}
+
+.login-card {
+  width: min(560px, 100%);
+  border-radius: 20px;
+  padding: 26px;
+  background: linear-gradient(165deg, rgba(16, 24, 26, 0.92), rgba(10, 16, 17, 0.97));
+  border: 1px solid var(--line-600);
+  box-shadow: var(--shadow-soft);
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line-600);
+  background: rgba(18, 29, 24, 0.58);
+}
+
+.brand-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-left: 4px;
+
+  .ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--brand-500);
+    box-shadow: 0 0 12px rgba(39, 255, 63, 0.5);
+  }
+
+  mat-icon {
+    color: var(--brand-500);
+    font-size: 19px;
+    width: 19px;
+    height: 19px;
+    filter: drop-shadow(0 0 6px rgba(39, 255, 63, 0.45));
+  }
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  margin-left: 4px;
+}
+
+.title {
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  font-size: 13px;
+  color: var(--text-100);
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-300);
+  margin-top: 2px;
+}
+
+.titles {
+  margin: 18px 0 10px;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-size: 11px;
+  color: var(--brand-300);
+}
+
+h1 {
+  margin: 8px 0 0;
+  color: var(--text-100);
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+.subtitulo {
+  margin: 10px 0 0;
+  color: var(--text-300);
+  font-size: 17px;
+}
+
+form {
+  margin-top: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: #2a3a33 !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--brand-500) !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mdc-floating-label,
+:host ::ng-deep .mat-mdc-form-field input {
+  color: var(--text-100) !important;
+}
+
+button {
+  margin-top: 8px;
+  min-height: 46px;
+  border-radius: 999px;
+  font-size: 15px;
+}
+
+.footnote {
+  margin: 14px 0 0;
+  color: var(--text-300);
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  .login-page {
+    padding: 14px;
+  }
+
+  .login-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .subtitulo {
+    font-size: 15px;
+  }
+}

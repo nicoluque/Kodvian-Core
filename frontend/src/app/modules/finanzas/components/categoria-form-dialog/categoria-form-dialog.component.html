@@ -1,0 +1,33 @@
+﻿<h2 mat-dialog-title class="dialog-title">{{ data.categoria ? 'Editar categoría' : 'Nueva categoría' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form class="form-grid dialog-form" [formGroup]="form">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Configuracion de categoria</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoría</mat-label>
+      <input matInput [formControl]="form.controls.name" />
+      @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+        <mat-error>La categoría es obligatoria</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo de movimiento</mat-label>
+      <mat-select [formControl]="form.controls.movementType">
+        <mat-option value="Ingreso">Ingreso</mat-option>
+        <mat-option value="Egreso">Egreso</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="full-width toggle-row">
+      <mat-slide-toggle [formControl]="form.controls.isActive">Activa</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

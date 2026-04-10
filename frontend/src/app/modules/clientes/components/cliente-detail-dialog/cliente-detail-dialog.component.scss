@@ -1,0 +1,170 @@
+﻿:host {
+  display: block;
+  color: var(--text-100);
+}
+
+.dialog-title {
+  margin: 0;
+  padding: 18px 22px 12px;
+  color: var(--brand-300);
+  font-size: 34px;
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid rgba(52, 74, 64, 0.46);
+  background: linear-gradient(160deg, rgba(20, 33, 28, 0.72), rgba(12, 19, 21, 0.96));
+}
+
+.dialog-body {
+  padding: 16px 22px 10px !important;
+  background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99));
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 250px);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.detail-card {
+  border: 1px solid var(--line-600);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(170deg, rgba(16, 26, 28, 0.86), rgba(11, 18, 20, 0.98));
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.section-eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  color: rgba(140, 255, 152, 0.92);
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-row.two-cols,
+.detail-row.three-cols {
+  display: grid;
+  gap: 12px;
+}
+
+.detail-row.two-cols {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-row.three-cols {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.label {
+  font-size: 11px;
+  color: #8fb1a2;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.value {
+  margin: 0;
+  color: #dceae1;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.value-main {
+  font-size: 22px;
+  color: #e9fff0;
+}
+
+.status-chip,
+.active-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line-600);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.status-chip.status-active,
+.active-chip.active-yes {
+  color: #8bff98;
+  border-color: rgba(90, 216, 113, 0.5);
+  background: rgba(24, 63, 36, 0.52);
+}
+
+.status-chip.status-prospect {
+  color: #7ce6ff;
+  border-color: rgba(84, 199, 224, 0.45);
+  background: rgba(18, 51, 58, 0.52);
+}
+
+.status-chip.status-paused {
+  color: #ffd078;
+  border-color: rgba(235, 188, 94, 0.45);
+  background: rgba(64, 47, 19, 0.52);
+}
+
+.status-chip.status-finished,
+.active-chip.active-no {
+  color: #c3d0da;
+  border-color: rgba(162, 177, 188, 0.38);
+  background: rgba(34, 42, 48, 0.55);
+}
+
+.dialog-actions {
+  margin: 0;
+  padding: 12px 22px 18px;
+  border-top: 1px solid rgba(52, 74, 64, 0.36);
+  background: linear-gradient(175deg, rgba(10, 16, 18, 0.98), rgba(7, 12, 14, 0.99));
+}
+
+:host ::ng-deep .mat-mdc-dialog-content {
+  max-height: none;
+}
+
+.action-close {
+  min-height: 42px;
+  padding-inline: 20px;
+  border-radius: 999px;
+}
+
+@media (max-width: 980px) {
+  .detail-grid,
+  .detail-row.two-cols,
+  .detail-row.three-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .dialog-title {
+    font-size: 28px;
+    padding-inline: 16px;
+  }
+
+  .dialog-body {
+    padding-inline: 16px !important;
+  }
+
+  .dialog-actions {
+    padding-inline: 16px;
+  }
+}

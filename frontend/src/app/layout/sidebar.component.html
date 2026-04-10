@@ -1,0 +1,23 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <span class="ring"></span>
+      <mat-icon>bolt</mat-icon>
+    </div>
+    <div class="brand-text">
+      <strong>Kodvian</strong>
+      <span>Solutions</span>
+    </div>
+  </div>
+
+  <div class="section-title">Panel principal</div>
+
+  <mat-nav-list>
+    @for (item of items; track item.route) {
+      <a mat-list-item [routerLink]="item.route" routerLinkActive="active-item" (click)="itemSelected.emit()">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    }
+  </mat-nav-list>
+</aside>

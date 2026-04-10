@@ -1,0 +1,20 @@
+﻿<h2 mat-dialog-title>Detalle de tarea</h2>
+<mat-dialog-content>
+  <div class="grid">
+    <div><strong>Título:</strong> {{ valor(tarea.title) }}</div>
+    <div><strong>Proyecto:</strong> {{ valor(tarea.projectName) }}</div>
+    <div><strong>Responsable:</strong> {{ valor(tarea.responsibleName) }}</div>
+    <div><strong>Creado por:</strong> {{ valor(tarea.createdByName) }}</div>
+    <div><strong>Estado:</strong> {{ mostrarEstado(tarea.status) }}</div>
+    <div><strong>Prioridad:</strong> {{ valor(tarea.priority) }}</div>
+    <div><strong>Fecha de inicio:</strong> {{ valor(tarea.startDate) }}</div>
+    <div><strong>Fecha de vencimiento:</strong> {{ valor(tarea.dueDate) }}</div>
+    <div><strong>Fecha de finalización:</strong> {{ valor(tarea.finishedDate) }}</div>
+    <div><strong>Horas estimadas:</strong> {{ valor(tarea.estimatedHours) }}</div>
+    <div><strong>Horas reales:</strong> {{ valor(tarea.realHours) }}</div>
+    <div class="full-width"><strong>Descripción:</strong> {{ valor(tarea.description) }}</div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

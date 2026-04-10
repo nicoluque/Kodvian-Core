@@ -1,0 +1,68 @@
+﻿<h2 mat-dialog-title class="dialog-title">Detalle del cliente</h2>
+<mat-dialog-content class="dialog-body">
+  <div class="detail-grid">
+    <article class="detail-card full-width">
+      <p class="section-eyebrow">Identidad comercial</p>
+      <div class="detail-row">
+        <span class="label">Nombre comercial</span>
+        <strong class="value value-main">{{ valor(cliente.commercialName) }}</strong>
+      </div>
+      <div class="detail-row two-cols">
+        <div>
+          <span class="label">Razón social</span>
+          <p class="value">{{ valor(cliente.legalName) }}</p>
+        </div>
+        <div>
+          <span class="label">Cuit</span>
+          <p class="value">{{ valor(cliente.taxId) }}</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail-card">
+      <p class="section-eyebrow">Contacto</p>
+      <div class="detail-row"><span class="label">Nombre de contacto</span><p class="value">{{ valor(cliente.contactName) }}</p></div>
+      <div class="detail-row"><span class="label">Correo electrónico</span><p class="value">{{ valor(cliente.contactEmail) }}</p></div>
+      <div class="detail-row"><span class="label">Teléfono de contacto</span><p class="value">{{ valor(cliente.contactPhone) }}</p></div>
+    </article>
+
+    <article class="detail-card">
+      <p class="section-eyebrow">Ubicación</p>
+      <div class="detail-row"><span class="label">Dirección</span><p class="value">{{ valor(cliente.address) }}</p></div>
+      <div class="detail-row two-cols">
+        <div><span class="label">Ciudad</span><p class="value">{{ valor(cliente.city) }}</p></div>
+        <div><span class="label">Provincia</span><p class="value">{{ valor(cliente.province) }}</p></div>
+      </div>
+      <div class="detail-row"><span class="label">País</span><p class="value">{{ valor(cliente.country) }}</p></div>
+    </article>
+
+    <article class="detail-card full-width">
+      <p class="section-eyebrow">Condiciones comerciales</p>
+      <div class="detail-row three-cols">
+        <div>
+          <span class="label">Estado</span>
+          <p class="value"><span class="status-chip" [class.status-active]="cliente.status === 'Activo'" [class.status-prospect]="cliente.status === 'Prospecto'" [class.status-paused]="cliente.status === 'Pausado'" [class.status-finished]="cliente.status === 'Finalizado'">{{ cliente.status }}</span></p>
+        </div>
+        <div>
+          <span class="label">Tipo de servicio</span>
+          <p class="value">{{ valor(cliente.serviceType) }}</p>
+        </div>
+        <div>
+          <span class="label">Activo</span>
+          <p class="value"><span class="active-chip" [class.active-yes]="cliente.isActive" [class.active-no]="!cliente.isActive">{{ cliente.isActive ? 'Sí' : 'No' }}</span></p>
+        </div>
+      </div>
+      <div class="detail-row two-cols">
+        <div><span class="label">Monto mensual</span><p class="value">{{ cliente.monthlyAmount ? (cliente.monthlyAmount | currency:'ARS':'symbol':'1.0-0') : '-' }}</p></div>
+        <div><span class="label">Día de cobro</span><p class="value">{{ valor(cliente.billingDay) }}</p></div>
+      </div>
+      <div class="detail-row full-width">
+        <span class="label">Observaciones</span>
+        <p class="value">{{ valor(cliente.notes) }}</p>
+      </div>
+    </article>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-flat-button color="primary" class="action-close" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

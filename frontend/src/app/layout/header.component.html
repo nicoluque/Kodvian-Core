@@ -1,0 +1,23 @@
+<mat-toolbar class="app-header">
+  <button mat-icon-button aria-label="Abrir menú" (click)="menuClick.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="brand-mark" aria-hidden="true">
+    <span class="ring"></span>
+    <mat-icon>bolt</mat-icon>
+  </div>
+
+  <div class="title-block">
+    <span class="title">KODVIAN SOLUTIONS</span>
+    <span class="subtitle">Soluciones informaticas hechas a medida</span>
+  </div>
+
+  <span class="spacer"></span>
+
+  <span class="session-pill">Operacion segura</span>
+
+  <button mat-icon-button aria-label="Cerrar sesión" (click)="logoutClick.emit()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

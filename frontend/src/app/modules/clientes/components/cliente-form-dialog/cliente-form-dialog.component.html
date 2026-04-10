@@ -1,0 +1,112 @@
+﻿<h2 mat-dialog-title class="dialog-title">{{ data.cliente ? 'Editar cliente' : 'Nuevo cliente' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="form-grid dialog-form">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Identidad comercial</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre comercial</mat-label>
+      <input matInput formControlName="commercialName" placeholder="Nombre comercial" />
+      @if (form.controls.commercialName.hasError('required') && form.controls.commercialName.touched) {
+        <mat-error>El nombre comercial es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Razón social</mat-label>
+      <input matInput formControlName="legalName" placeholder="Razón social" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cuit</mat-label>
+      <input matInput formControlName="taxId" placeholder="Cuit" />
+    </mat-form-field>
+
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Contacto y ubicacion</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre de contacto</mat-label>
+      <input matInput formControlName="contactName" placeholder="Nombre de contacto" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput formControlName="contactEmail" placeholder="Correo electrónico" />
+      @if (form.controls.contactEmail.hasError('email') && form.controls.contactEmail.touched) {
+        <mat-error>Ingresá un correo válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono de contacto</mat-label>
+      <input matInput formControlName="contactPhone" placeholder="Teléfono de contacto" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="address" placeholder="Dirección" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ciudad</mat-label>
+      <input matInput formControlName="city" placeholder="Ciudad" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Provincia</mat-label>
+      <input matInput formControlName="province" placeholder="Provincia" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>País</mat-label>
+      <input matInput formControlName="country" placeholder="País" />
+    </mat-form-field>
+
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Condiciones comerciales</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        @for (estado of estados; track estado) {
+          <mat-option [value]="estado">{{ estado }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo de servicio</mat-label>
+      <input matInput formControlName="serviceType" placeholder="Tipo de servicio" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Monto mensual</mat-label>
+      <input matInput type="number" formControlName="monthlyAmount" placeholder="Monto mensual" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Día de cobro</mat-label>
+      <input matInput type="number" formControlName="billingDay" placeholder="Día de cobro" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput formControlName="notes" rows="3" placeholder="Observaciones"></textarea>
+    </mat-form-field>
+
+    <div class="full-width toggle-row">
+      <mat-slide-toggle formControlName="isActive">Activo</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

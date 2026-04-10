@@ -1,0 +1,38 @@
+@mixin page-title {
+  h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .subtitulo {
+    margin: 4px 0 0;
+    color: #64748b;
+  }
+}
+
+@mixin page-header {
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+@mixin page-filters {
+  .acciones-filtro {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sin-resultados {
+    padding: 22px;
+    text-align: center;
+    color: #64748b;
+  }
+
+  .tabla-wrapper {
+    overflow: auto;
+  }
+}

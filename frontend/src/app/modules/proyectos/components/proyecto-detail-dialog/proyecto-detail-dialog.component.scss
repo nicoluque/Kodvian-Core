@@ -1,0 +1,18 @@
+﻿.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px 16px;
+  min-width: min(760px, 100%);
+  padding-top: 8px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+    min-width: 100%;
+  }
+}

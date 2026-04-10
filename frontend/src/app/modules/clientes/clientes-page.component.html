@@ -1,0 +1,104 @@
+﻿<section class="clientes-page">
+  <div class="header-row hero-block">
+    <div>
+      <p class="eyebrow">Panel comercial</p>
+      <h2>Clientes</h2>
+      <p class="subtitulo">Gestión comercial y operativa de clientes</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="abrirNuevoCliente()">
+      <mat-icon>add</mat-icon>
+      Nuevo cliente
+    </button>
+  </div>
+
+  <mat-card class="panel-card">
+    <form [formGroup]="filtrosForm" class="filtros-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar por nombre comercial</mat-label>
+        <input matInput formControlName="search" placeholder="Buscar cliente" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Filtrar por estado</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="">Todos</mat-option>
+          @for (estado of estados; track estado) {
+            <mat-option [value]="estado">{{ estado }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="acciones-filtro">
+        <button mat-flat-button color="primary" type="button" (click)="aplicarFiltros()">Filtrar</button>
+        <button mat-button type="button" (click)="limpiarFiltros()">
+          <mat-icon>restart_alt</mat-icon>
+          Limpiar
+        </button>
+      </div>
+    </form>
+
+    <div class="tabla-wrapper panel-table">
+      <table mat-table [dataSource]="clientes" class="tabla-clientes">
+        <ng-container matColumnDef="commercialName">
+          <th mat-header-cell *matHeaderCellDef>Nombre comercial</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="client-name">{{ row.commercialName }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contact">
+          <th mat-header-cell *matHeaderCellDef>Contacto</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="contact-primary">{{ row.contactName || '-' }}</div>
+            <small class="contact-secondary">{{ row.contactEmail || '-' }}</small>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row"><span class="tag-status" [class.status-active]="row.status === 'Activo'" [class.status-prospect]="row.status === 'Prospecto'" [class.status-paused]="row.status === 'Pausado'" [class.status-finished]="row.status === 'Finalizado'">{{ row.status }}</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="monthlyAmount">
+          <th mat-header-cell *matHeaderCellDef>Monto mensual</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="monto" [class.monto-vacio]="!row.monthlyAmount">{{ row.monthlyAmount ? (row.monthlyAmount | currency:'ARS':'symbol':'1.0-0') : '-' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef>Activo</th>
+          <td mat-cell *matCellDef="let row"><span class="tag-active" [class.active-yes]="row.isActive" [class.active-no]="!row.isActive">{{ row.isActive ? 'Si' : 'No' }}</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row" class="acciones-row">
+            <button mat-button type="button" class="table-action" (click)="verDetalle(row)">Ver</button>
+            <button mat-button type="button" class="table-action" (click)="editar(row)">Editar</button>
+            <button mat-button type="button" class="table-action" (click)="cambiarEstado(row)">Estado</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+
+      @if (!cargando && clientes.length === 0) {
+        <div class="sin-resultados">
+          <mat-icon>manage_search</mat-icon>
+          <p>No se encontraron resultados</p>
+          <small>Probá con otro filtro o limpiá la búsqueda actual.</small>
+        </div>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="total"
+      [pageSize]="pageSize"
+      [pageIndex]="pageNumber - 1"
+      [pageSizeOptions]="[10, 20, 50]"
+      (page)="cambiarPagina($event)">
+    </mat-paginator>
+  </mat-card>
+</section>

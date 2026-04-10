@@ -1,0 +1,89 @@
+﻿<section class="finanzas-page">
+  <div class="header-row hero-block">
+    <div>
+      <p class="eyebrow">Control financiero</p>
+      <h2>Finanzas</h2>
+      <p class="subtitulo">Registro de ingresos y egresos</p>
+    </div>
+    <div class="acciones-header">
+      <button mat-flat-button color="primary" (click)="nuevoIngreso()">Nuevo ingreso</button>
+      <button mat-flat-button color="primary" (click)="nuevoEgreso()">Nuevo egreso</button>
+      <button mat-button (click)="nuevaCategoria()">Nueva categoría</button>
+    </div>
+  </div>
+
+  <div class="resumen-grid">
+    <mat-card class="kpi-card success">
+      <h3>Ingresos del mes</h3>
+      <strong>{{ resumen.monthlyIncome | currency:'ARS':'symbol':'1.0-0' }}</strong>
+    </mat-card>
+    <mat-card class="kpi-card warning">
+      <h3>Egresos del mes</h3>
+      <strong>{{ resumen.monthlyExpense | currency:'ARS':'symbol':'1.0-0' }}</strong>
+    </mat-card>
+    <mat-card class="kpi-card result">
+      <h3>Resultado del mes</h3>
+      <strong>{{ resumen.monthlyResult | currency:'ARS':'symbol':'1.0-0' }}</strong>
+    </mat-card>
+    <mat-card class="kpi-card">
+      <h3>Pendientes de cobro</h3>
+      <strong>{{ resumen.pendingIncome | currency:'ARS':'symbol':'1.0-0' }}</strong>
+    </mat-card>
+    <mat-card class="kpi-card">
+      <h3>Pendientes de pago</h3>
+      <strong>{{ resumen.pendingExpense | currency:'ARS':'symbol':'1.0-0' }}</strong>
+    </mat-card>
+  </div>
+
+  <mat-card class="movimientos-card">
+    <form [formGroup]="filtrosForm" class="filtros-row">
+      <mat-form-field appearance="outline"><mat-label>Fecha desde</mat-label><input matInput type="date" formControlName="dateFrom" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Fecha hasta</mat-label><input matInput type="date" formControlName="dateTo" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Tipo de movimiento</mat-label><mat-select formControlName="movementType"><mat-option value="">Todos</mat-option>@for (tipo of tipos; track tipo) {<mat-option [value]="tipo">{{ tipo }}</mat-option>}</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Categoría</mat-label><mat-select formControlName="categoryId"><mat-option value="">Todas</mat-option>@for (cat of lookups.categories; track cat.id) {<mat-option [value]="cat.id">{{ cat.name }}</mat-option>}</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Cliente</mat-label><mat-select formControlName="clientId"><mat-option value="">Todos</mat-option>@for (cliente of lookups.clients; track cliente.id) {<mat-option [value]="cliente.id">{{ cliente.name }}</mat-option>}</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Proveedor</mat-label><mat-select formControlName="providerId"><mat-option value="">Todos</mat-option>@for (proveedor of lookups.providers; track proveedor.id) {<mat-option [value]="proveedor.id">{{ proveedor.name }}</mat-option>}</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Estado</mat-label><mat-select formControlName="status"><mat-option value="">Todos</mat-option>@for (estado of estados; track estado) {<mat-option [value]="estado">{{ estado }}</mat-option>}</mat-select></mat-form-field>
+      <div class="acciones-filtro"><button mat-flat-button color="primary" type="button" (click)="aplicarFiltros()">Filtrar</button><button mat-button type="button" (click)="limpiarFiltros()">Limpiar</button></div>
+    </form>
+
+    <div class="tabla-wrapper">
+      <table mat-table [dataSource]="movimientos" class="tabla-movimientos">
+        <ng-container matColumnDef="movementType"><th mat-header-cell *matHeaderCellDef>Tipo</th><td mat-cell *matCellDef="let row"><span class="tag-type">{{ row.movementType }}</span></td></ng-container>
+        <ng-container matColumnDef="category"><th mat-header-cell *matHeaderCellDef>Categoría</th><td mat-cell *matCellDef="let row">{{ row.categoryName }}</td></ng-container>
+        <ng-container matColumnDef="description"><th mat-header-cell *matHeaderCellDef>Descripción</th><td mat-cell *matCellDef="let row">{{ row.description }}</td></ng-container>
+        <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef>Monto</th><td mat-cell *matCellDef="let row">{{ row.amount | currency:'ARS':'symbol':'1.0-0' }}</td></ng-container>
+        <ng-container matColumnDef="movementDate"><th mat-header-cell *matHeaderCellDef>Fecha de movimiento</th><td mat-cell *matCellDef="let row">{{ row.movementDate }}</td></ng-container>
+        <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Estado</th><td mat-cell *matCellDef="let row"><span class="tag-status">{{ row.status }}</span></td></ng-container>
+        <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>Acciones</th><td mat-cell *matCellDef="let row" class="acciones-row"><button mat-button (click)="editarMovimiento(row)">Editar</button></td></ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+
+      @if (!cargando && movimientos.length === 0) {
+        <div class="sin-resultados">No se encontraron resultados</div>
+      }
+    </div>
+
+    <mat-paginator [length]="total" [pageSize]="pageSize" [pageIndex]="pageNumber - 1" [pageSizeOptions]="[10, 20, 50]" (page)="cambiarPagina($event)"></mat-paginator>
+  </mat-card>
+
+  <mat-card class="categorias-card">
+    <div class="categorias-header">
+      <h3>Categorías</h3>
+      <button mat-button (click)="nuevaCategoria()">Nueva categoría</button>
+    </div>
+    <div class="categorias-list">
+      @for (categoria of categorias; track categoria.id) {
+        <div class="categoria-item">
+          <div>
+            <strong>{{ categoria.name }}</strong>
+            <span>{{ categoria.movementType }} - {{ categoria.isActive ? 'Activa' : 'Inactiva' }}</span>
+          </div>
+          <button mat-button (click)="editarCategoria(categoria)">Editar</button>
+        </div>
+      }
+    </div>
+  </mat-card>
+</section>

@@ -1,0 +1,157 @@
+﻿<mat-card class="tareas-card">
+  <div class="header-row hero-block">
+    <div>
+      <p class="eyebrow">Operacion diaria</p>
+      <h2>Tareas</h2>
+      <p class="subtitulo">Gestión operativa diaria</p>
+    </div>
+    <div class="acciones-header">
+      <button mat-button [color]="vista === 'lista' ? 'primary' : undefined" (click)="cambiarVista('lista')">Vista de lista</button>
+      <button mat-button [color]="vista === 'kanban' ? 'primary' : undefined" (click)="cambiarVista('kanban')">Vista de tablero</button>
+      <button mat-flat-button color="primary" (click)="abrirNuevaTarea()">
+        <mat-icon>add</mat-icon>
+        Nueva tarea
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="filtrosForm" class="filtros-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar por título</mat-label>
+      <input matInput formControlName="search" placeholder="Buscar tarea" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Proyecto</mat-label>
+      <mat-select formControlName="projectId">
+        <mat-option value="">Todos</mat-option>
+        @for (project of projects; track project.id) {
+          <mat-option [value]="project.id">{{ project.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Responsable</mat-label>
+      <mat-select formControlName="responsibleId">
+        <mat-option value="">Todos</mat-option>
+        @for (responsable of responsibles; track responsable.id) {
+          <mat-option [value]="responsable.id">{{ responsable.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Todos</mat-option>
+        @for (estado of estados; track estado.value) {
+          <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Prioridad</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option value="">Todas</mat-option>
+        @for (prioridad of prioridades; track prioridad) {
+          <mat-option [value]="prioridad">{{ prioridad }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Vencimiento desde</mat-label>
+      <input matInput type="date" formControlName="dueDateFrom" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Vencimiento hasta</mat-label>
+      <input matInput type="date" formControlName="dueDateTo" />
+    </mat-form-field>
+
+    <div class="acciones-filtro">
+      <button mat-flat-button color="primary" type="button" (click)="aplicarFiltros()">Filtrar</button>
+      <button mat-button type="button" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+  </form>
+
+  @if (vista === 'lista') {
+    <div class="tabla-wrapper">
+      <table mat-table [dataSource]="tareas" class="tabla-tareas">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="project">
+          <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+          <td mat-cell *matCellDef="let row">{{ row.projectName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="responsible">
+          <th mat-header-cell *matHeaderCellDef>Responsable</th>
+          <td mat-cell *matCellDef="let row">{{ row.responsibleName || '-' }}</td>
+        </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let row"><span class="tag-status">{{ mostrarEstado(row.status) }}</span></td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+            <td mat-cell *matCellDef="let row"><span class="tag-priority">{{ row.priority }}</span></td>
+          </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Fecha de vencimiento</th>
+          <td mat-cell *matCellDef="let row">{{ row.dueDate || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row" class="acciones-row">
+            <button mat-button type="button" (click)="verDetalle(row.id)">Ver detalle</button>
+            <button mat-button type="button" (click)="editar(row)">Editar</button>
+            <button mat-button type="button" (click)="cambiarEstado(row.id, row.status)">Cambiar estado</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+
+      @if (!cargando && tareas.length === 0) {
+        <div class="sin-resultados">No se encontraron resultados</div>
+      }
+    </div>
+
+    <mat-paginator [length]="total" [pageSize]="pageSize" [pageIndex]="pageNumber - 1" [pageSizeOptions]="[10, 20, 50]" (page)="cambiarPagina($event)"></mat-paginator>
+  } @else {
+    <div class="kanban-grid">
+      @for (column of kanban; track column.status) {
+        <section class="kanban-col">
+          <h3>{{ mostrarEstado(column.status) }}</h3>
+          @if (column.items.length === 0) {
+            <p class="vacio">Sin tareas</p>
+          }
+          @for (item of column.items; track item.id) {
+            <article class="kanban-card">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.projectName }}</span>
+              <small>Responsable: {{ item.responsibleName || '-' }}</small>
+              <small>Prioridad: <span class="tag-priority">{{ item.priority }}</span></small>
+              <small>Vence: {{ item.dueDate || '-' }}</small>
+              <div class="kanban-actions">
+                <button mat-button type="button" (click)="verDetalle(item.id)">Ver detalle</button>
+                <button mat-button type="button" (click)="cambiarEstado(item.id, column.status)">Cambiar estado</button>
+              </div>
+            </article>
+          }
+        </section>
+      }
+    </div>
+  }
+</mat-card>

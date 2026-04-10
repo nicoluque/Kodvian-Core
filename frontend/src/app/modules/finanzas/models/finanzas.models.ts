@@ -1,0 +1,113 @@
+﻿export type { ApiResponse, PagedResult } from '../../../shared/models/api.models';
+
+export type TipoMovimiento = 'Ingreso' | 'Egreso';
+export type EstadoMovimiento = 'Pendiente' | 'Cobrado' | 'Pagado' | 'Vencido' | 'Anulado';
+
+export interface CategoriaFinanciera {
+  id: string;
+  name: string;
+  movementType: TipoMovimiento;
+  isActive: boolean;
+}
+
+export interface Proveedor {
+  id: string;
+  name: string;
+  taxId?: string;
+  email?: string;
+  phone?: string;
+  isActive: boolean;
+}
+
+export interface MovimientoListado {
+  id: string;
+  movementType: TipoMovimiento;
+  categoryName: string;
+  description: string;
+  amount: number;
+  movementDate: string;
+  dueDate?: string;
+  status: EstadoMovimiento;
+  paymentMethod?: string;
+  clientName?: string;
+  providerName?: string;
+}
+
+export interface MovimientoDetalle {
+  id: string;
+  movementType: TipoMovimiento;
+  categoryId: string;
+  categoryName: string;
+  clientId?: string;
+  clientName?: string;
+  providerId?: string;
+  providerName?: string;
+  projectId?: string;
+  projectName?: string;
+  description: string;
+  amount: number;
+  movementDate: string;
+  dueDate?: string;
+  status: EstadoMovimiento;
+  paymentMethod?: string;
+  receiptNumber?: string;
+  notes?: string;
+  createdById: string;
+  createdByName: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface MovimientoFormulario {
+  movementType: TipoMovimiento;
+  categoryId: string;
+  clientId?: string | null;
+  providerId?: string | null;
+  projectId?: string | null;
+  description: string;
+  amount: number;
+  movementDate: string;
+  dueDate?: string | null;
+  status: EstadoMovimiento;
+  paymentMethod?: string;
+  receiptNumber?: string;
+  notes?: string;
+}
+
+export interface FinanzaFiltros {
+  pageNumber: number;
+  pageSize: number;
+  dateFrom?: string;
+  dateTo?: string;
+  movementType?: TipoMovimiento | '';
+  categoryId?: string;
+  clientId?: string;
+  providerId?: string;
+  status?: EstadoMovimiento | '';
+}
+
+export interface LookupItem {
+  id: string;
+  name: string;
+}
+
+export interface FinanzasLookups {
+  categories: CategoriaFinanciera[];
+  clients: LookupItem[];
+  projects: LookupItem[];
+  providers: LookupItem[];
+}
+
+export interface ResumenMensual {
+  monthlyIncome: number;
+  monthlyExpense: number;
+  monthlyResult: number;
+  pendingIncome: number;
+  pendingExpense: number;
+}
+
+export interface CategoriaFormulario {
+  name: string;
+  movementType: TipoMovimiento;
+  isActive: boolean;
+}

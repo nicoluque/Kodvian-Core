@@ -1,0 +1,266 @@
+@use '../../shared/styles/page-common' as page;
+
+.tareas-card {
+  border-radius: 16px;
+  border: 1px solid var(--line-600);
+  background: linear-gradient(170deg, rgba(15, 23, 24, 0.9), rgba(9, 15, 17, 0.97));
+  box-shadow: var(--shadow-soft);
+}
+
+@include page.page-header;
+@include page.page-title;
+@include page.page-filters;
+
+.hero-block {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line-600);
+  background: linear-gradient(160deg, rgba(18, 29, 24, 0.75), rgba(11, 17, 19, 0.9));
+  margin-bottom: 12px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  color: var(--brand-300);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+h2 {
+  color: var(--brand-300);
+}
+
+.subtitulo {
+  color: var(--text-300);
+}
+
+.acciones-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  button[mat-button] {
+    min-height: 42px;
+    padding-inline: 14px;
+    border: 1px solid rgba(72, 98, 87, 0.5);
+    border-radius: 999px;
+    color: var(--text-100);
+    background: rgba(13, 21, 23, 0.92);
+    font-weight: 600;
+
+    &:hover {
+      border-color: rgba(108, 154, 124, 0.62);
+      background: rgba(22, 33, 36, 0.98);
+      color: #f2fff5;
+    }
+  }
+
+  button[mat-button].mat-primary {
+    color: var(--brand-300);
+    border-color: rgba(81, 205, 103, 0.56);
+    background: rgba(24, 52, 33, 0.62);
+    box-shadow: 0 0 0 1px rgba(74, 187, 94, 0.2) inset;
+  }
+
+  button[mat-flat-button] {
+    border-radius: 999px;
+    min-height: 44px;
+    padding-inline: 18px;
+  }
+}
+
+.filtros-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 12px 0 8px;
+}
+
+.acciones-filtro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button[mat-flat-button] {
+    border-radius: 999px;
+    min-height: 50px;
+    padding-inline: 20px;
+    font-weight: 700;
+  }
+
+  button[mat-button] {
+    min-height: 50px;
+    padding-inline: 18px;
+    color: #d7e7de;
+    border: 1px solid rgba(102, 127, 117, 0.62);
+    border-radius: 999px;
+    background: rgba(18, 27, 30, 0.92);
+
+    &:hover {
+      color: #eefff2;
+      border-color: rgba(132, 165, 152, 0.7);
+      background: rgba(27, 40, 44, 0.98);
+    }
+  }
+}
+
+.tabla-wrapper {
+  overflow: auto;
+  border: 1px solid var(--line-600);
+  border-radius: 12px;
+  background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
+}
+
+.tabla-tareas {
+  width: 100%;
+}
+
+.acciones-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tag-status,
+.tag-priority {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line-600);
+  color: var(--brand-300);
+  background: rgba(25, 52, 34, 0.44);
+  font-size: 11px;
+}
+
+.kanban-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(210px, 1fr));
+  gap: 12px;
+  overflow: auto;
+}
+
+.kanban-col {
+  background: linear-gradient(170deg, rgba(14, 22, 24, 0.92), rgba(10, 16, 18, 0.98));
+  border: 1px solid var(--line-600);
+  border-radius: 12px;
+  padding: 10px;
+  min-height: 240px;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    color: var(--brand-300);
+  }
+}
+
+.kanban-card {
+  background: linear-gradient(170deg, rgba(20, 31, 33, 0.8), rgba(11, 18, 20, 0.96));
+  border: 1px solid var(--line-600);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong,
+  span,
+  small {
+    color: var(--text-100);
+  }
+}
+
+.kanban-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vacio,
+.sin-resultados {
+  color: rgba(177, 255, 186, 0.86);
+}
+
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: #2a3a33 !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--brand-500) !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mdc-floating-label,
+:host ::ng-deep .mat-mdc-form-field input,
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-select-value,
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-select-arrow {
+  color: var(--text-100) !important;
+}
+
+:host ::ng-deep .mat-mdc-header-row {
+  background: rgba(19, 30, 33, 0.7);
+}
+
+:host ::ng-deep .mat-mdc-header-cell {
+  color: rgba(140, 255, 152, 0.9) !important;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom-color: var(--line-600) !important;
+}
+
+:host ::ng-deep .mat-mdc-row {
+  background: transparent;
+}
+
+:host ::ng-deep .mat-mdc-cell {
+  color: var(--text-100) !important;
+  border-bottom-color: var(--line-600) !important;
+}
+
+:host ::ng-deep .mat-mdc-row:hover {
+  background: rgba(24, 36, 39, 0.56);
+}
+
+:host ::ng-deep .mat-mdc-paginator {
+  margin-top: 10px;
+  background: transparent;
+  color: var(--text-100);
+}
+
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
+  color: var(--brand-300);
+}
+
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-select-value,
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-select-arrow,
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-range-label,
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-page-size-label {
+  color: var(--text-100);
+}
+
+@media (max-width: 1200px) {
+  .filtros-row {
+    grid-template-columns: 1fr;
+  }
+
+  .header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kanban-grid {
+    grid-template-columns: repeat(2, minmax(210px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .kanban-grid {
+    grid-template-columns: 1fr;
+  }
+}

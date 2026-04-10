@@ -1,0 +1,27 @@
+.layout-shell {
+  height: 100dvh;
+  background: linear-gradient(180deg, #0a1113, #090f11);
+}
+
+.layout-shell mat-sidenav-content {
+  background:
+    radial-gradient(900px 600px at 85% -10%, rgba(39, 255, 63, 0.12), transparent 65%),
+    linear-gradient(180deg, rgba(9, 14, 15, 0.86), rgba(6, 10, 11, 0.92));
+}
+
+.layout-shell mat-sidenav {
+  border-right: 1px solid var(--line-600);
+  background: linear-gradient(180deg, #0a1113 0%, #090f11 100%);
+}
+
+.content {
+  padding: 18px 24px 24px;
+  background: transparent;
+  min-height: calc(100dvh - 64px);
+}
+
+@media (max-width: 960px) {
+  .content {
+    padding: 14px;
+  }
+}
