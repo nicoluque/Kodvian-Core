@@ -1,0 +1,46 @@
+<h2 mat-dialog-title class="dialog-title">Registrar pago</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="dialog-form form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de pago</mat-label>
+      <input matInput type="date" formControlName="paymentDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Monto</mat-label>
+      <input matInput type="number" formControlName="amount" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Periodo año</mat-label>
+      <input matInput type="number" formControlName="periodYear" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Periodo mes</mat-label>
+      <input matInput type="number" formControlName="periodMonth" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Referencia</mat-label>
+      <input matInput formControlName="reference" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Notas</mat-label>
+      <textarea matInput rows="3" formControlName="notes"></textarea>
+    </mat-form-field>
+
+    <div class="full-width receipt-upload">
+      <label for="paymentReceipt">Comprobante PDF (opcional)</label>
+      <input id="paymentReceipt" type="file" accept="application/pdf" (change)="onReceiptSelected($event)" />
+      @if (receiptFile) {
+        <small>{{ receiptFile.name }}</small>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

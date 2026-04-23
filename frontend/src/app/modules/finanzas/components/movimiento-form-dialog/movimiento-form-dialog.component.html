@@ -127,6 +127,17 @@
       <mat-label>Observaciones</mat-label>
       <textarea matInput rows="3" formControlName="notes"></textarea>
     </mat-form-field>
+
+    <div class="full-width receipt-upload">
+      <label for="receiptFile">Comprobante PDF (opcional)</label>
+      <input id="receiptFile" type="file" accept="application/pdf" (change)="onReceiptSelected($event)" />
+      @if (receiptFile) {
+        <small>{{ receiptFile.name }}</small>
+      }
+      @if (form.hasError('invalidReceiptFile')) {
+        <small class="error">Solo se permiten archivos PDF</small>
+      }
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="dialog-actions">

@@ -1,0 +1,124 @@
+<mat-card class="desarrolladores-card">
+  <div class="header-row hero-block">
+    <div>
+      <p class="eyebrow">Recursos externos</p>
+      <h2>Desarrollador</h2>
+      <p class="subtitulo">Gestion de desarrolladores externos para contratos y pagos</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="nuevoDesarrollador()">
+      <mat-icon>add</mat-icon>
+      Nuevo desarrollador
+    </button>
+  </div>
+
+  <form [formGroup]="filtrosForm" class="filtros-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar desarrollador</mat-label>
+      <input matInput formControlName="search" />
+    </mat-form-field>
+  </form>
+
+  <div class="tabla-wrapper panel-table">
+    <table mat-table [dataSource]="filtrados" class="tabla-desarrolladores">
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let row"><strong>{{ row.fullName }}</strong></td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let row">{{ row.email || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Telefono</th>
+        <td mat-cell *matCellDef="let row">{{ row.phone || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="taxId">
+        <th mat-header-cell *matHeaderCellDef>CUIT/Documento</th>
+        <td mat-cell *matCellDef="let row">{{ row.taxId || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="tag-status" [class.status-active]="row.isActive" [class.status-inactive]="!row.isActive">
+            {{ row.isActive ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="acciones-row">
+            <button mat-button type="button" class="table-action" (click)="toggleResumen(row, $event)">Resumen</button>
+            <button mat-button type="button" class="table-action" (click)="editarDesarrollador(row); $event.stopPropagation()">Editar</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas" class="developer-row" [class.is-selected]="selectedDeveloper?.id === row.id" (click)="toggleResumen(row)"></tr>
+    </table>
+
+    @if (!cargando && filtrados.length === 0) {
+      <div class="sin-resultados">No hay desarrolladores registrados</div>
+    }
+  </div>
+
+  @if (selectedDeveloper) {
+    <div class="resumen-wrapper">
+      <div class="resumen-header">
+        <h3>Resumen por proyecto - {{ selectedDeveloper.fullName }}</h3>
+        <small>Periodo {{ summaryYear }}</small>
+      </div>
+
+      @if (cargandoResumen) {
+        <div class="resumen-empty">Cargando resumen...</div>
+      } @else if (resumenContratos.length === 0) {
+        <div class="resumen-empty">Este desarrollador no tiene proyectos asociados.</div>
+      } @else {
+        <div class="resumen-table-wrapper">
+          <table class="resumen-table">
+            <thead>
+              <tr>
+                <th>Proyecto</th>
+                <th>Modalidad</th>
+                <th>Arreglo</th>
+                <th>Debe</th>
+                <th>Pagado</th>
+                <th>Saldo</th>
+                <th>Estado de pago</th>
+                <th>Ultimo pago</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of resumenContratos; track item.contractId) {
+                <tr>
+                  <td>{{ item.projectName }}</td>
+                  <td>{{ obtenerModalidad(item) }}</td>
+                  <td>
+                    @if (item.paymentMode === 'Percentage') {
+                      {{ item.percentage || 0 }}%
+                    } @else {
+                      {{ item.agreedAmount ? (item.agreedAmount | currency:'ARS':'symbol':'1.0-0') : '-' }}
+                    }
+                  </td>
+                  <td>{{ item.totalDue | currency:'ARS':'symbol':'1.0-0' }}</td>
+                  <td>{{ item.totalPaid | currency:'ARS':'symbol':'1.0-0' }}</td>
+                  <td>{{ item.totalBalance | currency:'ARS':'symbol':'1.0-0' }}</td>
+                  <td>
+                    <span class="payment-chip" [class.ok]="item.isUpToDate" [class.pending]="!item.isUpToDate">{{ estadoPago(item) }}</span>
+                  </td>
+                  <td>{{ item.lastPaymentDate ? (item.lastPaymentDate | date:'dd/MM/yyyy') : '-' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</mat-card>

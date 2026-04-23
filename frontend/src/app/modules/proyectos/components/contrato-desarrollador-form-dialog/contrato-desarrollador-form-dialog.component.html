@@ -1,0 +1,55 @@
+<h2 mat-dialog-title class="dialog-title">{{ data.contract ? 'Editar contrato' : 'Nuevo contrato' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="dialog-form form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Desarrollador</mat-label>
+      <mat-select formControlName="developerId">
+        @for (developer of data.developers; track developer.id) {
+          <mat-option [value]="developer.id">{{ developer.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Modalidad</mat-label>
+      <mat-select formControlName="paymentMode">
+        @for (mode of paymentModes; track mode.value) {
+          <mat-option [value]="mode.value">{{ mode.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (form.value.paymentMode === 'Percentage') {
+      <mat-form-field appearance="outline">
+        <mat-label>Porcentaje (%)</mat-label>
+        <input matInput type="number" formControlName="percentage" />
+      </mat-form-field>
+    } @else {
+      <mat-form-field appearance="outline">
+        <mat-label>Monto acordado</mat-label>
+        <input matInput type="number" formControlName="agreedAmount" />
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Inicio</mat-label>
+      <input matInput type="date" formControlName="startDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fin (opcional)</mat-label>
+      <input matInput type="date" formControlName="endDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Notas</mat-label>
+      <textarea matInput rows="3" formControlName="notes"></textarea>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="isActive" class="full-width">Contrato activo</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

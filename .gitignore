@@ -5,6 +5,8 @@ bin/
 obj/
 out/
 publish/
+artifacts/
+backend/artifacts/
 
 # Temp
 _tmp_build/
@@ -26,7 +28,10 @@ coverage/
 # IDE
 # =========================
 .vs/
-.vscode/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .idea/
 
 # =========================

@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using System.Security.Cryptography;
+using Kodvian.Core.Application.Common.Files;
 using Kodvian.Core.Application.Common.Models;
 using Kodvian.Core.Application.Finances.Abstractions;
 using Kodvian.Core.Application.Finances.Dtos;
@@ -6,17 +8,26 @@ using Kodvian.Core.Application.Finances.Requests;
 using Kodvian.Core.Domain.Entities;
 using Kodvian.Core.Domain.Enums;
 using Kodvian.Core.Infrastructure.Persistence;
+using Kodvian.Core.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Kodvian.Core.Infrastructure.Services;
 
 public class FinancialMovementService : IFinancialMovementService
 {
     private readonly KodvianDbContext _dbContext;
+    private readonly IFileStorageService _fileStorageService;
+    private readonly StorageOptions _storageOptions;
 
-    public FinancialMovementService(KodvianDbContext dbContext)
+    public FinancialMovementService(
+        KodvianDbContext dbContext,
+        IFileStorageService fileStorageService,
+        IOptions<StorageOptions> storageOptions)
     {
         _dbContext = dbContext;
+        _fileStorageService = fileStorageService;
+        _storageOptions = storageOptions.Value;
     }
 
     public async Task<PagedResultDto<FinancialMovementListItemDto>> GetPagedAsync(FinancialMovementListRequestDto request, CancellationToken cancellationToken = default)
@@ -193,6 +204,101 @@ public class FinancialMovementService : IFinancialMovementService
         };
     }
 
+    public async Task<IReadOnlyCollection<FileMetadataDto>> GetReceiptsAsync(Guid movementId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.DocumentFiles
+            .AsNoTracking()
+            .Where(x => x.FinancialMovementId == movementId)
+            .OrderByDescending(x => x.FechaCreacion)
+            .Select(x => new FileMetadataDto
+            {
+                Id = x.Id,
+                FileName = x.OriginalFileName,
+                ContentType = x.ContentType,
+                SizeBytes = x.SizeBytes,
+                UploadedAt = x.FechaCreacion,
+                UploadedByName = x.UploadedBy != null ? x.UploadedBy.FullName : string.Empty
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<FileMetadataDto> AddReceiptAsync(Guid movementId, Guid uploadedById, string fileName, string contentType, byte[] content, CancellationToken cancellationToken = default)
+    {
+        await ValidateUploadAsync(movementId, uploadedById, fileName, contentType, content, cancellationToken);
+
+        var storagePath = await _fileStorageService.SaveAsync(content, ".pdf", cancellationToken);
+        var hash = Convert.ToHexString(SHA256.HashData(content)).ToLowerInvariant();
+
+        var file = new DocumentFile
+        {
+            FinancialMovementId = movementId,
+            UploadedById = uploadedById,
+            OriginalFileName = fileName.Trim(),
+            StoredFileName = Path.GetFileName(storagePath),
+            ContentType = "application/pdf",
+            SizeBytes = content.LongLength,
+            StoragePath = storagePath,
+            Sha256 = hash
+        };
+
+        _dbContext.DocumentFiles.Add(file);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        var uploader = await _dbContext.Users
+            .AsNoTracking()
+            .Where(x => x.Id == uploadedById)
+            .Select(x => x.FullName)
+            .FirstOrDefaultAsync(cancellationToken) ?? string.Empty;
+
+        return new FileMetadataDto
+        {
+            Id = file.Id,
+            FileName = file.OriginalFileName,
+            ContentType = file.ContentType,
+            SizeBytes = file.SizeBytes,
+            UploadedAt = file.FechaCreacion,
+            UploadedByName = uploader
+        };
+    }
+
+    public async Task<FileDownloadDto?> GetReceiptContentAsync(Guid movementId, Guid receiptId, CancellationToken cancellationToken = default)
+    {
+        var receipt = await _dbContext.DocumentFiles
+            .AsNoTracking()
+            .Where(x => x.Id == receiptId && x.FinancialMovementId == movementId)
+            .Select(x => new { x.OriginalFileName, x.ContentType, x.StoragePath })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (receipt is null)
+        {
+            return null;
+        }
+
+        var content = await _fileStorageService.ReadAsync(receipt.StoragePath, cancellationToken);
+        return new FileDownloadDto
+        {
+            FileName = receipt.OriginalFileName,
+            ContentType = receipt.ContentType,
+            Content = content
+        };
+    }
+
+    public async Task<bool> DeleteReceiptAsync(Guid movementId, Guid receiptId, CancellationToken cancellationToken = default)
+    {
+        var receipt = await _dbContext.DocumentFiles
+            .FirstOrDefaultAsync(x => x.Id == receiptId && x.FinancialMovementId == movementId, cancellationToken);
+
+        if (receipt is null)
+        {
+            return false;
+        }
+
+        _dbContext.DocumentFiles.Remove(receipt);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _fileStorageService.DeleteAsync(receipt.StoragePath, cancellationToken);
+        return true;
+    }
+
     private IQueryable<FinancialMovement> BuildFilteredQuery(FinancialMovementListRequestDto request)
     {
         var query = _dbContext.FinancialMovements
@@ -301,6 +407,42 @@ public class FinancialMovementService : IFinancialMovementService
             CreatedAt = x.FechaCreacion,
             UpdatedAt = x.FechaActualizacion
         };
+    }
+
+    private async Task ValidateUploadAsync(Guid movementId, Guid uploadedById, string fileName, string contentType, byte[] content, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            throw new ArgumentException("El comprobante debe tener nombre de archivo");
+        }
+
+        var movementExists = await _dbContext.FinancialMovements.AnyAsync(x => x.Id == movementId, cancellationToken);
+        if (!movementExists)
+        {
+            throw new ArgumentException("El movimiento indicado no existe");
+        }
+
+        var userExists = await _dbContext.Users.AnyAsync(x => x.Id == uploadedById, cancellationToken);
+        if (!userExists)
+        {
+            throw new ArgumentException("El usuario cargador no existe");
+        }
+
+        if (!string.Equals(contentType, "application/pdf", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException("Solo se admiten comprobantes PDF");
+        }
+
+        var maxBytes = Math.Max(_storageOptions.MaxPdfSizeMb, 1) * 1024 * 1024;
+        if (content.Length == 0 || content.Length > maxBytes)
+        {
+            throw new ArgumentException($"El archivo debe tener entre 1 byte y {maxBytes / (1024 * 1024)} MB");
+        }
+
+        if (content.Length < 4 || content[0] != 0x25 || content[1] != 0x50 || content[2] != 0x44 || content[3] != 0x46)
+        {
+            throw new ArgumentException("El archivo no es un PDF válido");
+        }
     }
 
     private async Task ValidateReferencesAsync(Guid? createdById, FinancialMovementUpsertRequestDto request, CancellationToken cancellationToken)

@@ -2,3 +2,19 @@
 
 @include dialog.dialog-form-grid(900px);
 @include dialog.dialog-premium-shell();
+
+.receipt-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label,
+  small {
+    color: var(--text-100);
+    font-size: 12px;
+  }
+
+  .error {
+    color: #ff8b8b;
+  }
+}

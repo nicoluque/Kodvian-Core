@@ -13,6 +13,9 @@ public static class RolePermissionMap
                 PermissionCodes.ClientsWrite,
                 PermissionCodes.ProjectsRead,
                 PermissionCodes.ProjectsWrite,
+                PermissionCodes.ProjectsDocumentsRead,
+                PermissionCodes.ProjectsDocumentsWrite,
+                PermissionCodes.ProjectsDocumentsDelete,
                 PermissionCodes.TasksRead,
                 PermissionCodes.TasksWrite,
                 PermissionCodes.FinancesRead,
@@ -27,6 +30,9 @@ public static class RolePermissionMap
                 PermissionCodes.ClientsWrite,
                 PermissionCodes.ProjectsRead,
                 PermissionCodes.ProjectsWrite,
+                PermissionCodes.ProjectsDocumentsRead,
+                PermissionCodes.ProjectsDocumentsWrite,
+                PermissionCodes.ProjectsDocumentsDelete,
                 PermissionCodes.TasksRead,
                 PermissionCodes.TasksWrite,
                 PermissionCodes.FinancesRead
@@ -36,6 +42,7 @@ public static class RolePermissionMap
                 PermissionCodes.DashboardRead,
                 PermissionCodes.ClientsRead,
                 PermissionCodes.ProjectsRead,
+                PermissionCodes.ProjectsDocumentsRead,
                 PermissionCodes.TasksRead,
                 PermissionCodes.FinancesRead,
                 PermissionCodes.AdministrationRead

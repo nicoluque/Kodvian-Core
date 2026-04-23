@@ -1,6 +1,13 @@
 @use '../../shared/styles/page-common' as page;
 
-.proyectos-card {
+.proyectos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-card {
+  padding: 14px 14px 8px;
   border-radius: 16px;
   border: 1px solid var(--line-600);
   background: linear-gradient(170deg, rgba(15, 23, 24, 0.9), rgba(9, 15, 17, 0.97));
@@ -37,7 +44,7 @@ h2 {
 
 .filtros-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(160px, 1fr)) auto;
+  grid-template-columns: minmax(380px, 1.35fr) minmax(260px, 1fr) minmax(260px, 1fr) minmax(260px, 1fr) auto;
   gap: 10px;
   align-items: end;
   margin: 0 0 12px;
@@ -47,33 +54,37 @@ h2 {
   overflow: auto;
   border: 1px solid var(--line-600);
   border-radius: 12px;
-  background: linear-gradient(175deg, rgba(10, 16, 18, 0.92), rgba(6, 10, 12, 0.98));
-  box-shadow: inset 0 1px 0 rgba(118, 154, 137, 0.14);
+  background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
 }
 
 .tabla-proyectos {
   width: 100%;
-  min-width: 980px;
+  min-width: 1040px;
 }
 
 .acciones-row {
   display: flex;
   gap: 8px;
   flex-wrap: nowrap;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  min-height: 34px;
+  white-space: nowrap;
 }
 
 .table-action {
-  width: 84px;
+  width: auto;
+  min-width: 68px;
   height: 34px;
   line-height: 1;
-  padding: 0;
+  padding: 0 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   border: 1px solid rgba(103, 133, 120, 0.58);
-  color: #d7e8df;
+  color: #d7e8df !important;
+  --mdc-text-button-label-text-color: #d7e8df;
   background: linear-gradient(180deg, rgba(16, 26, 29, 0.96), rgba(11, 19, 21, 0.98));
   font-size: 11px;
   font-weight: 600;
@@ -83,12 +94,17 @@ h2 {
   transition: all 140ms ease;
 
   &:hover {
-    color: #ecfff0;
+    color: #ecfff0 !important;
+    --mdc-text-button-label-text-color: #ecfff0;
     border-color: rgba(90, 216, 113, 0.72);
     background: linear-gradient(180deg, rgba(28, 53, 37, 0.9), rgba(18, 40, 28, 0.96));
     box-shadow: 0 0 0 1px rgba(56, 157, 76, 0.28) inset, 0 8px 20px rgba(9, 18, 14, 0.45);
     transform: translateY(-1px);
   }
+}
+
+.action-wide {
+  min-width: 76px;
 }
 
 .acciones-filtro {
@@ -145,6 +161,12 @@ h2 {
   color: #7ce6ff;
   border-color: rgba(84, 199, 224, 0.45);
   background: rgba(18, 51, 58, 0.52);
+}
+
+.tag-status.status-budgeted {
+  color: #8dd7ff;
+  border-color: rgba(112, 185, 230, 0.46);
+  background: rgba(18, 44, 66, 0.54);
 }
 
 .tag-status.status-progress {
@@ -212,9 +234,30 @@ h2 {
 .sin-resultados {
   min-height: 120px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   color: rgba(177, 255, 186, 0.86);
+
+  mat-icon {
+    color: rgba(118, 234, 138, 0.92);
+  }
+
+  p {
+    margin: 0;
+    font-size: 18px;
+    color: #bfffc9;
+  }
+
+  small {
+    color: #7ea08f;
+    font-size: 12px;
+  }
+}
+
+:host ::ng-deep .mat-mdc-card {
+  --mdc-elevated-card-container-color: transparent;
 }
 
 :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
@@ -253,67 +296,88 @@ h2 {
 }
 
 :host ::ng-deep .mat-mdc-header-row {
-  height: 47px;
-  background: linear-gradient(90deg, rgba(51, 63, 67, 0.74), rgba(34, 45, 48, 0.82));
-  border-bottom: 1px solid rgba(106, 132, 120, 0.34);
+  background: rgba(19, 30, 33, 0.7);
+}
+
+:host ::ng-deep .mat-mdc-table {
+  background: transparent !important;
+  --mat-table-background-color: transparent;
+  --mat-table-row-item-container-color: transparent;
 }
 
 :host ::ng-deep .mat-mdc-header-cell {
   color: rgba(140, 255, 152, 0.9) !important;
-  font-weight: 700;
-  font-size: 10px;
+  font-weight: 600;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1.1px;
-  padding: 0 16px !important;
+  letter-spacing: 0.8px;
   border-bottom-color: var(--line-600) !important;
-  border-right: 1px solid rgba(117, 138, 130, 0.18);
-}
-
-:host ::ng-deep .mat-mdc-header-cell:last-child {
-  border-right: 0;
 }
 
 :host ::ng-deep .mat-mdc-row {
-  height: 54px;
-  transition: background-color 120ms ease, box-shadow 120ms ease;
-}
-
-:host ::ng-deep .mat-mdc-row:nth-of-type(odd) {
-  background: rgba(14, 21, 24, 0.82);
-}
-
-:host ::ng-deep .mat-mdc-row:nth-of-type(even) {
-  background: rgba(10, 16, 19, 0.9);
+  background: rgba(8, 13, 15, 0.52) !important;
 }
 
 :host ::ng-deep .mat-mdc-cell {
-  color: #deebe3 !important;
-  border-bottom-color: rgba(72, 92, 84, 0.44) !important;
-  padding: 8px 16px !important;
-  vertical-align: middle;
+  color: var(--text-100) !important;
+  border-bottom-color: var(--line-600) !important;
   font-size: 13px;
+  vertical-align: middle;
+}
+
+:host ::ng-deep .mat-mdc-cell small {
+  color: var(--text-300) !important;
 }
 
 :host ::ng-deep .mat-mdc-row:hover {
-  background: rgba(30, 47, 41, 0.74) !important;
-  box-shadow: inset 0 1px 0 rgba(118, 154, 137, 0.16), inset 0 -1px 0 rgba(118, 154, 137, 0.16);
+  background: rgba(24, 36, 39, 0.72) !important;
+}
+
+:host ::ng-deep .mat-column-name {
+  min-width: 220px;
+}
+
+:host ::ng-deep .mat-column-client {
+  min-width: 180px;
+}
+
+:host ::ng-deep .mat-column-responsible {
+  min-width: 180px;
+}
+
+:host ::ng-deep .mat-column-status,
+:host ::ng-deep .mat-column-priority {
+  min-width: 130px;
+}
+
+:host ::ng-deep .mat-column-progress {
+  min-width: 120px;
+  text-align: center;
 }
 
 :host ::ng-deep .mat-column-actions {
-  width: 200px;
+  width: 240px;
+  min-width: 240px;
+  text-align: center;
+}
+
+:host ::ng-deep td.mat-column-actions {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+:host ::ng-deep .mat-column-actions .mat-mdc-button-base {
+  margin: 0 !important;
 }
 
 :host ::ng-deep .mat-mdc-paginator {
-  margin-top: 8px;
+  margin-top: 10px;
   background: transparent;
   color: var(--text-100);
-  border-top: 1px solid rgba(67, 87, 79, 0.35);
 }
 
 :host ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
   color: var(--brand-300);
-  border: 1px solid rgba(82, 109, 98, 0.36);
-  border-radius: 8px;
 }
 
 :host ::ng-deep .mat-mdc-paginator .mat-mdc-select-value,
@@ -321,14 +385,6 @@ h2 {
 :host ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-range-label,
 :host ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-page-size-label {
   color: var(--text-100);
-}
-
-:host ::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
-  border: 1px solid rgba(77, 104, 94, 0.45);
-  border-radius: 8px;
-  padding: 0 10px;
-  min-height: 36px;
-  align-items: center;
 }
 
 @media (max-width: 1080px) {

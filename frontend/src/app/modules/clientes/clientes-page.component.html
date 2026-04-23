@@ -22,8 +22,8 @@
         <mat-label>Filtrar por estado</mat-label>
         <mat-select formControlName="status">
           <mat-option value="">Todos</mat-option>
-          @for (estado of estados; track estado) {
-            <mat-option [value]="estado">{{ estado }}</mat-option>
+          @for (estado of estados; track estado.value) {
+            <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -56,7 +56,7 @@
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td mat-cell *matCellDef="let row"><span class="tag-status" [class.status-active]="row.status === 'Activo'" [class.status-prospect]="row.status === 'Prospecto'" [class.status-paused]="row.status === 'Pausado'" [class.status-finished]="row.status === 'Finalizado'">{{ row.status }}</span></td>
+          <td mat-cell *matCellDef="let row"><span class="tag-status" [class.status-active]="row.status === 'Activo'" [class.status-prospect]="row.status === 'Prospecto'" [class.status-budgeted]="row.status === 'Presupuestado'" [class.status-paused]="row.status === 'Pausado'" [class.status-finished]="row.status === 'Finalizado'">{{ mostrarEstado(row.status) }}</span></td>
         </ng-container>
 
         <ng-container matColumnDef="monthlyAmount">
@@ -73,10 +73,12 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
-          <td mat-cell *matCellDef="let row" class="acciones-row">
-            <button mat-button type="button" class="table-action" (click)="verDetalle(row)">Ver</button>
-            <button mat-button type="button" class="table-action" (click)="editar(row)">Editar</button>
-            <button mat-button type="button" class="table-action" (click)="cambiarEstado(row)">Estado</button>
+          <td mat-cell *matCellDef="let row">
+            <div class="acciones-row">
+              <button mat-button type="button" class="table-action" (click)="verDetalle(row)">Ver</button>
+              <button mat-button type="button" class="table-action" (click)="editar(row)">Editar</button>
+              <button mat-button type="button" class="table-action" (click)="cambiarEstado(row)">Estado</button>
+            </div>
           </td>
         </ng-container>
 

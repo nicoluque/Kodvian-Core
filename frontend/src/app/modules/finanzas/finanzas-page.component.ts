@@ -229,7 +229,23 @@ export class FinanzasPageComponent implements OnInit {
         : this.finanzasService.crearMovimiento(payload);
 
       request.subscribe({
-        next: () => {
+        next: (savedMovement) => {
+          if (payload.receiptFile) {
+            this.finanzasService.subirComprobanteMovimiento(savedMovement.id, payload.receiptFile).subscribe({
+              next: () => {
+                this.snackBar.open('El movimiento y su comprobante se registraron correctamente', 'Cerrar', { duration: 3000 });
+                this.cargarResumen();
+                this.cargarMovimientos();
+              },
+              error: (error) => {
+                this.snackBar.open(error?.error?.message ?? 'El movimiento se guardó, pero falló la carga del comprobante', 'Cerrar', { duration: 4000 });
+                this.cargarResumen();
+                this.cargarMovimientos();
+              }
+            });
+            return;
+          }
+
           this.snackBar.open('El movimiento se registró correctamente', 'Cerrar', { duration: 3000 });
           this.cargarResumen();
           this.cargarMovimientos();

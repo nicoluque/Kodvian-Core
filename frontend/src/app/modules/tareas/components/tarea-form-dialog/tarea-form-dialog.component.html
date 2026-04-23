@@ -37,11 +37,11 @@
     </div>
 
     <mat-form-field appearance="outline">
-      <mat-label>Responsable</mat-label>
-      <mat-select formControlName="responsibleId">
+      <mat-label>Desarrollador</mat-label>
+      <mat-select formControlName="developerId">
         <mat-option value="">Sin asignar</mat-option>
-        @for (responsable of data.responsibles; track responsable.id) {
-          <mat-option [value]="responsable.id">{{ responsable.name }}</mat-option>
+        @for (developer of data.developers; track developer.id) {
+          <mat-option [value]="developer.id">{{ developer.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

@@ -16,7 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ClienteDetailDialogComponent } from './components/cliente-detail-dialog/cliente-detail-dialog.component';
 import { ClienteFormDialogComponent } from './components/cliente-form-dialog/cliente-form-dialog.component';
 import { ClienteStatusDialogComponent } from './components/cliente-status-dialog/cliente-status-dialog.component';
-import { ClienteDetalle, ClienteFormulario, ClienteListado, EstadoCliente, PagedResult } from './models/clientes.models';
+import { ClienteDetalle, ClienteFormulario, ClienteListado, ESTADO_CLIENTE_OPTIONS, EstadoCliente, PagedResult, getEstadoClienteLabel } from './models/clientes.models';
 import { ClientesService } from './services/clientes.service';
 
 @Component({
@@ -46,7 +46,7 @@ export class ClientesPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  readonly estados: EstadoCliente[] = ['Prospecto', 'Activo', 'Pausado', 'Finalizado'];
+  readonly estados = ESTADO_CLIENTE_OPTIONS;
   readonly columnas = ['commercialName', 'contact', 'status', 'monthlyAmount', 'isActive', 'actions'];
 
   readonly filtrosForm = this.fb.group({
@@ -118,7 +118,10 @@ export class ClientesPageComponent implements OnInit {
 
   abrirNuevoCliente(): void {
     const dialogRef = this.dialog.open(ClienteFormDialogComponent, {
-      width: '920px'
+      width: '980px',
+      maxWidth: 'calc(100vw - 32px)',
+      maxHeight: 'calc(100vh - 32px)',
+      autoFocus: false
     });
 
     dialogRef.afterClosed().subscribe((formValue?: ClienteFormulario) => {
@@ -142,7 +145,7 @@ export class ClientesPageComponent implements OnInit {
     this.clientesService.obtenerDetalle(row.id).subscribe({
       next: (detalle: ClienteDetalle) => {
         this.dialog.open(ClienteDetailDialogComponent, {
-          width: '920px',
+          width: '980px',
           maxWidth: 'calc(100vw - 32px)',
           maxHeight: 'calc(100vh - 32px)',
           autoFocus: false,
@@ -159,7 +162,10 @@ export class ClientesPageComponent implements OnInit {
     this.clientesService.obtenerDetalle(row.id).subscribe({
       next: (detalle: ClienteDetalle) => {
         const dialogRef = this.dialog.open(ClienteFormDialogComponent, {
-          width: '920px',
+          width: '980px',
+          maxWidth: 'calc(100vw - 32px)',
+          maxHeight: 'calc(100vh - 32px)',
+          autoFocus: false,
           data: { cliente: detalle }
         });
 
@@ -187,8 +193,10 @@ export class ClientesPageComponent implements OnInit {
 
   cambiarEstado(row: ClienteListado): void {
     const dialogRef = this.dialog.open(ClienteStatusDialogComponent, {
-      width: '420px',
-      maxWidth: 'calc(100vw - 24px)',
+      width: '520px',
+      maxWidth: 'calc(100vw - 32px)',
+      maxHeight: 'calc(100vh - 32px)',
+      autoFocus: false,
       data: { statusActual: row.status }
     });
 
@@ -207,5 +215,9 @@ export class ClientesPageComponent implements OnInit {
         }
       });
     });
+  }
+
+  mostrarEstado(estado: EstadoCliente): string {
+    return getEstadoClienteLabel(estado);
   }
 }

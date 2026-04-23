@@ -1,5 +1,6 @@
 using System.Net.Mail;
 using Kodvian.Core.Application.Clients.Requests;
+using Kodvian.Core.Application.Developers.Requests;
 using Kodvian.Core.Application.Finances.Requests;
 using Kodvian.Core.Application.Projects.Requests;
 using Kodvian.Core.Application.Tasks.Requests;
@@ -20,7 +21,7 @@ internal static class RequestValidation
             return "Ingresa un correo electrónico válido";
         }
 
-        if (!IsAllowed(request.Status, "Prospecto", "Activo", "Pausado", "Finalizado"))
+        if (!IsAllowed(request.Status, "Prospecto", "Activo", "Pausado", "Finalizado", "Presupuestado"))
         {
             return "El estado del cliente no es válido";
         }
@@ -50,7 +51,7 @@ internal static class RequestValidation
             return "El nombre del proyecto es obligatorio";
         }
 
-        if (!IsAllowed(request.Status, "Planificacion", "EnCurso", "Pausado", "Finalizado", "Cancelado"))
+        if (!IsAllowed(request.Status, "Planificacion", "EnCurso", "Pausado", "Finalizado", "Cancelado", "Presupuestado"))
         {
             return "El estado del proyecto no es válido";
         }
@@ -150,7 +151,7 @@ internal static class RequestValidation
             return "El estado es obligatorio";
         }
 
-        if (!IsAllowed(request.Status, "Prospecto", "Activo", "Pausado", "Finalizado"))
+        if (!IsAllowed(request.Status, "Prospecto", "Activo", "Pausado", "Finalizado", "Presupuestado"))
         {
             return "El estado del cliente no es válido";
         }
@@ -218,6 +219,73 @@ internal static class RequestValidation
         if (!string.IsNullOrWhiteSpace(request.Email) && !IsValidEmail(request.Email))
         {
             return "Ingresa un correo electrónico válido";
+        }
+
+        return null;
+    }
+
+    public static string? Validate(DeveloperUpsertRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.FullName))
+        {
+            return "El nombre del desarrollador es obligatorio";
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Email) && !IsValidEmail(request.Email))
+        {
+            return "Ingresa un correo electrónico válido";
+        }
+
+        return null;
+    }
+
+    public static string? Validate(ProjectDeveloperContractUpsertRequestDto request)
+    {
+        if (request.DeveloperId == Guid.Empty)
+        {
+            return "El desarrollador es obligatorio";
+        }
+
+        if (!IsAllowed(request.PaymentMode, "Percentage", "FixedAmount"))
+        {
+            return "La modalidad de cobro no es válida";
+        }
+
+        if (string.Equals(request.PaymentMode, "Percentage", StringComparison.OrdinalIgnoreCase)
+            && (!request.Percentage.HasValue || request.Percentage <= 0 || request.Percentage > 100))
+        {
+            return "El porcentaje debe estar entre 0 y 100";
+        }
+
+        if (string.Equals(request.PaymentMode, "FixedAmount", StringComparison.OrdinalIgnoreCase)
+            && (!request.AgreedAmount.HasValue || request.AgreedAmount <= 0))
+        {
+            return "El monto acordado debe ser mayor a 0";
+        }
+
+        if (request.EndDate.HasValue && request.EndDate < request.StartDate)
+        {
+            return "La fecha de finalización no puede ser anterior a la fecha de inicio";
+        }
+
+        return null;
+    }
+
+    public static string? Validate(DeveloperPaymentCreateRequestDto request)
+    {
+        if (request.Amount <= 0)
+        {
+            return "El monto debe ser mayor a 0";
+        }
+
+        if (request.PeriodYear is < 2000 or > 2100)
+        {
+            return "El período anual no es válido";
+        }
+
+        if (request.PeriodMonth is < 1 or > 12)
+        {
+            return "El período mensual no es válido";
         }
 
         return null;

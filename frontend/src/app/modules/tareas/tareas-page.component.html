@@ -32,11 +32,11 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Responsable</mat-label>
-      <mat-select formControlName="responsibleId">
+      <mat-label>Desarrollador</mat-label>
+      <mat-select formControlName="developerId">
         <mat-option value="">Todos</mat-option>
-        @for (responsable of responsibles; track responsable.id) {
-          <mat-option [value]="responsable.id">{{ responsable.name }}</mat-option>
+        @for (developer of developers; track developer.id) {
+          <mat-option [value]="developer.id">{{ developer.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -90,9 +90,9 @@
           <td mat-cell *matCellDef="let row">{{ row.projectName }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="responsible">
-          <th mat-header-cell *matHeaderCellDef>Responsable</th>
-          <td mat-cell *matCellDef="let row">{{ row.responsibleName || '-' }}</td>
+        <ng-container matColumnDef="developer">
+          <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
+          <td mat-cell *matCellDef="let row">{{ row.developerName || row.responsibleName || '-' }}</td>
         </ng-container>
 
           <ng-container matColumnDef="status">
@@ -141,7 +141,7 @@
             <article class="kanban-card">
               <strong>{{ item.title }}</strong>
               <span>{{ item.projectName }}</span>
-              <small>Responsable: {{ item.responsibleName || '-' }}</small>
+               <small>Desarrollador: {{ item.developerName || item.responsibleName || '-' }}</small>
               <small>Prioridad: <span class="tag-priority">{{ item.priority }}</span></small>
               <small>Vence: {{ item.dueDate || '-' }}</small>
               <div class="kanban-actions">

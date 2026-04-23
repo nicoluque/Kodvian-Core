@@ -1,11 +1,14 @@
 using Kodvian.Core.Application.Auth.Abstractions;
 using Kodvian.Core.Application.Clients.Abstractions;
+using Kodvian.Core.Application.Developers.Abstractions;
+using Kodvian.Core.Application.Common.Files;
 using Kodvian.Core.Application.Dashboard.Abstractions;
 using Kodvian.Core.Application.Finances.Abstractions;
 using Kodvian.Core.Application.Projects.Abstractions;
 using Kodvian.Core.Application.Tasks.Abstractions;
 using Kodvian.Core.Infrastructure.Auth;
 using Kodvian.Core.Infrastructure.Persistence;
+using Kodvian.Core.Infrastructure.Storage;
 using Kodvian.Core.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,11 +25,16 @@ public static class DependencyInjectionExtensions
             options.UseNpgsql(BuildConnectionString(configuration)));
 
         services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+        services.Configure<StorageOptions>(configuration.GetSection("Storage"));
 
+        services.AddScoped<IFileStorageService, LocalFileStorageService>();
         services.AddScoped<IPasswordHasher, PasswordHasherService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IClientService, ClientService>();
+        services.AddScoped<IDeveloperService, DeveloperService>();
+        services.AddScoped<IProjectDeveloperContractService, ProjectDeveloperContractService>();
+        services.AddScoped<IDeveloperPaymentService, DeveloperPaymentService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<IFinancialCategoryService, FinancialCategoryService>();
         services.AddScoped<IFinancialMovementService, FinancialMovementService>();

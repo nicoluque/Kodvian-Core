@@ -7,6 +7,8 @@ public class TaskDetailDto
     public string ProjectName { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public Guid? DeveloperId { get; set; }
+    public string? DeveloperName { get; set; }
     public Guid? ResponsibleId { get; set; }
     public string? ResponsibleName { get; set; }
     public Guid CreatedById { get; set; }

@@ -8,6 +8,8 @@ export interface TareaListado {
   projectId: string;
   projectName: string;
   title: string;
+  developerId?: string;
+  developerName?: string;
   responsibleId?: string;
   responsibleName?: string;
   status: EstadoTarea;
@@ -25,6 +27,8 @@ export interface TareaDetalle {
   projectName: string;
   title: string;
   description?: string;
+  developerId?: string;
+  developerName?: string;
   responsibleId?: string;
   responsibleName?: string;
   createdById: string;
@@ -46,6 +50,7 @@ export interface TareaFormulario {
   projectId: string;
   title: string;
   description?: string;
+  developerId?: string | null;
   responsibleId?: string | null;
   status: EstadoTarea;
   priority: PrioridadTarea;
@@ -63,6 +68,7 @@ export interface TareaFiltros {
   pageSize: number;
   search?: string;
   projectId?: string;
+  developerId?: string;
   responsibleId?: string;
   status?: EstadoTarea | '';
   priority?: PrioridadTarea | '';
@@ -77,13 +83,14 @@ export interface LookupItem {
 
 export interface TareaLookups {
   projects: LookupItem[];
-  responsibles: LookupItem[];
+  developers: LookupItem[];
 }
 
 export interface KanbanItem {
   id: string;
   title: string;
   projectName: string;
+  developerName?: string;
   responsibleName?: string;
   priority: PrioridadTarea;
   dueDate?: string;

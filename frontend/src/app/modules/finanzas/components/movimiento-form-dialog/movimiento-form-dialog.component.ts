@@ -29,6 +29,7 @@ export class MovimientoFormDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<MovimientoFormDialogComponent>);
 
   readonly estados: EstadoMovimiento[] = ['Pendiente', 'Cobrado', 'Pagado', 'Vencido', 'Anulado'];
+  receiptFile: File | null = null;
 
   readonly form = this.fb.group({
     movementType: ['Ingreso' as TipoMovimiento, [Validators.required]],
@@ -90,8 +91,34 @@ export class MovimientoFormDialogComponent {
       status: raw.status,
       paymentMethod: raw.paymentMethod || undefined,
       receiptNumber: raw.receiptNumber || undefined,
-      notes: raw.notes || undefined
+      notes: raw.notes || undefined,
+      receiptFile: this.receiptFile
     } as MovimientoFormulario);
+  }
+
+  onReceiptSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    if (!file) {
+      this.receiptFile = null;
+      return;
+    }
+
+    if (file.type !== 'application/pdf') {
+      this.form.setErrors({ invalidReceiptFile: true });
+      this.receiptFile = null;
+      input.value = '';
+      return;
+    }
+
+    this.receiptFile = file;
+
+    if (this.form.hasError('invalidReceiptFile')) {
+      const errors = { ...(this.form.errors ?? {}) };
+      delete errors['invalidReceiptFile'];
+      this.form.setErrors(Object.keys(errors).length ? errors : null);
+    }
   }
 
   categoriasFiltradas(): CategoriaFinanciera[] {

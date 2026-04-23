@@ -41,7 +41,7 @@
       <div class="detail-row three-cols">
         <div>
           <span class="label">Estado</span>
-          <p class="value"><span class="status-chip" [class.status-active]="cliente.status === 'Activo'" [class.status-prospect]="cliente.status === 'Prospecto'" [class.status-paused]="cliente.status === 'Pausado'" [class.status-finished]="cliente.status === 'Finalizado'">{{ cliente.status }}</span></p>
+           <p class="value"><span class="status-chip" [class.status-active]="cliente.status === 'Activo'" [class.status-prospect]="cliente.status === 'Prospecto'" [class.status-budgeted]="cliente.status === 'Presupuestado'" [class.status-paused]="cliente.status === 'Pausado'" [class.status-finished]="cliente.status === 'Finalizado'">{{ mostrarEstado(cliente.status) }}</span></p>
         </div>
         <div>
           <span class="label">Tipo de servicio</span>

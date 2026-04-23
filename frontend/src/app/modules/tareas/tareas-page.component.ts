@@ -43,12 +43,12 @@ export class TareasPageComponent implements OnInit {
     { value: 'Cancelada', label: 'Cancelada' }
   ];
   readonly prioridades: PrioridadTarea[] = ['Baja', 'Media', 'Alta', 'Urgente'];
-  readonly columnas = ['title', 'project', 'responsible', 'status', 'priority', 'dueDate', 'actions'];
+  readonly columnas = ['title', 'project', 'developer', 'status', 'priority', 'dueDate', 'actions'];
 
   readonly filtrosForm = this.fb.group({
     search: [''],
     projectId: [''],
-    responsibleId: [''],
+    developerId: [''],
     status: [''],
     priority: [''],
     dueDateFrom: [''],
@@ -59,7 +59,7 @@ export class TareasPageComponent implements OnInit {
   tareas: TareaListado[] = [];
   kanban: KanbanColumn[] = [];
   projects: LookupItem[] = [];
-  responsibles: LookupItem[] = [];
+  developers: LookupItem[] = [];
   pageNumber = 1;
   pageSize = 10;
   total = 0;
@@ -80,7 +80,7 @@ export class TareasPageComponent implements OnInit {
     this.tareasService.obtenerLookups().subscribe({
       next: (data: TareaLookups) => {
         this.projects = data.projects;
-        this.responsibles = data.responsibles;
+        this.developers = data.developers;
         this.ejecutarAccionInicial();
       },
       error: () => {
@@ -152,7 +152,7 @@ export class TareasPageComponent implements OnInit {
   }
 
   limpiarFiltros(): void {
-    this.filtrosForm.reset({ search: '', projectId: '', responsibleId: '', status: '', priority: '', dueDateFrom: '', dueDateTo: '' });
+    this.filtrosForm.reset({ search: '', projectId: '', developerId: '', status: '', priority: '', dueDateFrom: '', dueDateTo: '' });
     this.pageNumber = 1;
     this.cargarDatos();
   }
@@ -166,7 +166,7 @@ export class TareasPageComponent implements OnInit {
   abrirNuevaTarea(): void {
     const dialogRef = this.dialog.open(TareaFormDialogComponent, {
       width: '960px',
-      data: { projects: this.projects, responsibles: this.responsibles }
+      data: { projects: this.projects, developers: this.developers }
     });
 
     dialogRef.afterClosed().subscribe((payload?: TareaFormulario) => {
@@ -194,7 +194,7 @@ export class TareasPageComponent implements OnInit {
       next: (detalle: TareaDetalle) => {
         const dialogRef = this.dialog.open(TareaFormDialogComponent, {
           width: '960px',
-          data: { tarea: detalle, projects: this.projects, responsibles: this.responsibles }
+          data: { tarea: detalle, projects: this.projects, developers: this.developers }
         });
 
         dialogRef.afterClosed().subscribe((payload?: TareaFormulario) => {
@@ -243,7 +243,7 @@ export class TareasPageComponent implements OnInit {
       pageSize: this.pageSize,
       search: this.filtrosForm.value.search?.trim() || undefined,
       projectId: this.filtrosForm.value.projectId || undefined,
-      responsibleId: this.filtrosForm.value.responsibleId || undefined,
+      developerId: this.filtrosForm.value.developerId || undefined,
       status: (this.filtrosForm.value.status as EstadoTarea | '') || undefined,
       priority: (this.filtrosForm.value.priority as PrioridadTarea | '') || undefined,
       dueDateFrom: this.filtrosForm.value.dueDateFrom || undefined,

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
-import { EstadoCliente } from '../../models/clientes.models';
+import { ESTADO_CLIENTE_OPTIONS, EstadoCliente } from '../../models/clientes.models';
 
 interface ClienteStatusDialogData {
   statusActual: EstadoCliente;
@@ -19,7 +19,7 @@ interface ClienteStatusDialogData {
   styleUrl: './cliente-status-dialog.component.scss'
 })
 export class ClienteStatusDialogComponent {
-  readonly estados: EstadoCliente[] = ['Prospecto', 'Activo', 'Pausado', 'Finalizado'];
+  readonly estados = ESTADO_CLIENTE_OPTIONS;
   readonly estadoControl: FormControl<EstadoCliente>;
 
   constructor(

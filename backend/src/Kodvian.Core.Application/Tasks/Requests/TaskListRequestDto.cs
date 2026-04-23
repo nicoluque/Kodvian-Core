@@ -6,6 +6,7 @@ public class TaskListRequestDto : PagedRequestDto
 {
     public string? Search { get; set; }
     public Guid? ProjectId { get; set; }
+    public Guid? DeveloperId { get; set; }
     public Guid? ResponsibleId { get; set; }
     public string? Status { get; set; }
     public string? Priority { get; set; }

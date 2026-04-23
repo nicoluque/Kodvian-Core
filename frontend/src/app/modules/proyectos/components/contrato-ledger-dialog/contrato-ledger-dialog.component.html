@@ -1,0 +1,54 @@
+<h2 mat-dialog-title class="dialog-title">Resumen {{ data.developerName }}</h2>
+<mat-dialog-content class="dialog-body">
+  <div class="detail-grid">
+    <article class="detail-card full-width">
+      <p class="section-eyebrow">Totales</p>
+      <div class="totals-grid">
+        <div class="summary-pill">
+          <span class="label">Total a pagar</span>
+          <strong>{{ data.totalDue | currency:'ARS':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div class="summary-pill">
+          <span class="label">Total pagado</span>
+          <strong>{{ data.totalPaid | currency:'ARS':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div class="summary-pill">
+          <span class="label">Saldo</span>
+          <strong>{{ data.totalBalance | currency:'ARS':'symbol':'1.0-0' }}</strong>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail-card full-width">
+      <p class="section-eyebrow">Detalle mensual</p>
+      <table mat-table [dataSource]="data.months" class="ledger-table">
+        <ng-container matColumnDef="month">
+          <th mat-header-cell *matHeaderCellDef>Mes</th>
+          <td mat-cell *matCellDef="let row">{{ row.month }}/{{ row.year }}</td>
+        </ng-container>
+        <ng-container matColumnDef="income">
+          <th mat-header-cell *matHeaderCellDef>Base ingreso</th>
+          <td mat-cell *matCellDef="let row">{{ row.projectIncomeBase | currency:'ARS':'symbol':'1.0-0' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="due">
+          <th mat-header-cell *matHeaderCellDef>Debe pagar</th>
+          <td mat-cell *matCellDef="let row">{{ row.dueAmount | currency:'ARS':'symbol':'1.0-0' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="paid">
+          <th mat-header-cell *matHeaderCellDef>Pagado</th>
+          <td mat-cell *matCellDef="let row">{{ row.paidAmount | currency:'ARS':'symbol':'1.0-0' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="balance">
+          <th mat-header-cell *matHeaderCellDef>Saldo</th>
+          <td mat-cell *matCellDef="let row">{{ row.balance | currency:'ARS':'symbol':'1.0-0' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </article>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-flat-button color="primary" mat-dialog-close class="action-close">Cerrar</button>
+</mat-dialog-actions>

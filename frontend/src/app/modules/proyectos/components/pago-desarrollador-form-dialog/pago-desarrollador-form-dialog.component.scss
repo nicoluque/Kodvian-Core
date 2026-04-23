@@ -1,0 +1,16 @@
+@use '../../../../shared/styles/dialog-common' as dialog;
+
+@include dialog.dialog-form-grid(760px);
+@include dialog.dialog-premium-shell();
+
+.receipt-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label,
+  small {
+    color: var(--text-100);
+    font-size: 12px;
+  }
+}

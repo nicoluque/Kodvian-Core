@@ -8,6 +8,7 @@ public class TaskItem : BaseEntity
     public string Titulo { get; set; } = string.Empty;
     public string? Descripcion { get; set; }
     public Guid ProyectoId { get; set; }
+    public Guid? DeveloperId { get; set; }
     public Guid? ResponsableId { get; set; }
     public Guid CreadoPorId { get; set; }
     public DomainTaskStatus Estado { get; set; } = DomainTaskStatus.Pendiente;
@@ -20,6 +21,7 @@ public class TaskItem : BaseEntity
     public int OrdenKanban { get; set; }
 
     public Project? Proyecto { get; set; }
+    public Developer? Developer { get; set; }
     public User? Responsable { get; set; }
     public User? CreadoPor { get; set; }
 }

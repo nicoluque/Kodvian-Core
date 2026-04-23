@@ -15,6 +15,7 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES) },
       { path: 'clientes', loadChildren: () => import('./modules/clientes/clientes.routes').then((m) => m.CLIENTES_ROUTES) },
+      { path: 'desarrolladores', loadChildren: () => import('./modules/desarrolladores/desarrolladores.routes').then((m) => m.DESARROLLADORES_ROUTES) },
       { path: 'proyectos', loadChildren: () => import('./modules/proyectos/proyectos.routes').then((m) => m.PROYECTOS_ROUTES) },
       { path: 'tareas', loadChildren: () => import('./modules/tareas/tareas.routes').then((m) => m.TAREAS_ROUTES) },
       { path: 'finanzas', loadChildren: () => import('./modules/finanzas/finanzas.routes').then((m) => m.FINANZAS_ROUTES) },

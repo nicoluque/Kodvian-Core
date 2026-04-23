@@ -6,6 +6,8 @@ public class TaskListItemDto
     public Guid ProjectId { get; set; }
     public string ProjectName { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
+    public Guid? DeveloperId { get; set; }
+    public string? DeveloperName { get; set; }
     public Guid? ResponsibleId { get; set; }
     public string? ResponsibleName { get; set; }
     public string Status { get; set; } = string.Empty;

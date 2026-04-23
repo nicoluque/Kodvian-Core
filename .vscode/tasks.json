@@ -1,0 +1,108 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "backend: restore",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "restore"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "backend: build",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "Kodvian.Core.slnx"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": "$msCompile",
+      "dependsOn": "backend: restore"
+    },
+    {
+      "label": "backend: run",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/Kodvian.Core.Api"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^(?!)$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Compilando...",
+          "endsPattern": "Now listening on:"
+        }
+      },
+      "dependsOn": "backend: build"
+    },
+    {
+      "label": "frontend: install",
+      "type": "process",
+      "command": "npm",
+      "args": [
+        "install"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      }
+    },
+    {
+      "label": "frontend: start",
+      "type": "process",
+      "command": "npm",
+      "args": [
+        "start"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^(?!)$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Building...",
+          "endsPattern": "Application bundle generation complete"
+        }
+      },
+      "dependsOn": "frontend: install"
+    },
+    {
+      "label": "Setup: install dependencies",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "backend: restore",
+        "frontend: install"
+      ]
+    },
+    {
+      "label": "Start: full stack",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "backend: run",
+        "frontend: start"
+      ]
+    }
+  ]
+}

@@ -12,7 +12,7 @@ import { EstadoTarea, LookupItem, PrioridadTarea, TareaDetalle, TareaFormulario 
 interface TareaFormData {
   tarea?: TareaDetalle;
   projects: LookupItem[];
-  responsibles: LookupItem[];
+  developers: LookupItem[];
 }
 
 @Component({
@@ -40,7 +40,7 @@ export class TareaFormDialogComponent {
     projectId: ['', [Validators.required]],
     title: ['', [Validators.required, Validators.maxLength(200)]],
     description: ['', [Validators.maxLength(2000)]],
-    responsibleId: [''],
+    developerId: [''],
     status: ['Pendiente' as EstadoTarea, [Validators.required]],
     priority: ['Media' as PrioridadTarea, [Validators.required]],
     startDate: [''],
@@ -58,7 +58,7 @@ export class TareaFormDialogComponent {
         projectId: data.tarea.projectId,
         title: data.tarea.title,
         description: data.tarea.description ?? '',
-        responsibleId: data.tarea.responsibleId ?? '',
+        developerId: data.tarea.developerId ?? '',
         status: data.tarea.status,
         priority: data.tarea.priority,
         startDate: data.tarea.startDate ?? '',
@@ -83,7 +83,8 @@ export class TareaFormDialogComponent {
       projectId: raw.projectId,
       title: raw.title,
       description: raw.description || undefined,
-      responsibleId: raw.responsibleId || null,
+      developerId: raw.developerId || null,
+      responsibleId: this.data.tarea?.responsibleId ?? null,
       status: raw.status,
       priority: raw.priority,
       startDate: raw.startDate || null,

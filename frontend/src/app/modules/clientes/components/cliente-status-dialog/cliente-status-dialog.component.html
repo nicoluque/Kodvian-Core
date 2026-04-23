@@ -9,8 +9,8 @@
     <mat-form-field appearance="outline" class="full-width status-field">
       <mat-label>Estado</mat-label>
       <mat-select [formControl]="estadoControl" panelClass="status-select-panel">
-        @for (estado of estados; track estado) {
-          <mat-option [value]="estado">{{ estado }}</mat-option>
+        @for (estado of estados; track estado.value) {
+          <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

@@ -1,0 +1,229 @@
+@use '../../../../shared/styles/dialog-common' as dialog;
+
+@include dialog.dialog-premium-shell();
+
+.dialog-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-card {
+  border: 1px solid var(--line-600);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(170deg, rgba(16, 26, 28, 0.86), rgba(11, 18, 20, 0.98));
+}
+
+.project-card {
+  padding-bottom: 10px;
+}
+
+.project-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.project-name {
+  color: #e9fff0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.table {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.contracts-table,
+.payments-table {
+  border: 1px solid var(--line-600);
+  background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
+}
+
+:host ::ng-deep .contracts-table .mat-mdc-header-row,
+:host ::ng-deep .payments-table .mat-mdc-header-row {
+  background: rgba(19, 30, 33, 0.7);
+}
+
+:host ::ng-deep .contracts-table .mat-mdc-header-cell,
+:host ::ng-deep .payments-table .mat-mdc-header-cell {
+  color: rgba(140, 255, 152, 0.9) !important;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom-color: var(--line-600) !important;
+}
+
+:host ::ng-deep .contracts-table .mat-mdc-row,
+:host ::ng-deep .payments-table .mat-mdc-row {
+  background: rgba(8, 13, 15, 0.52) !important;
+}
+
+:host ::ng-deep .contracts-table .mat-mdc-cell,
+:host ::ng-deep .payments-table .mat-mdc-cell {
+  color: var(--text-100) !important;
+  border-bottom-color: var(--line-600) !important;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+:host ::ng-deep .contracts-table .mat-mdc-row:hover,
+:host ::ng-deep .payments-table .mat-mdc-row:hover {
+  background: rgba(24, 36, 39, 0.72) !important;
+}
+
+.actions-cell {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  align-items: center;
+  justify-content: stretch;
+  min-width: 280px;
+}
+
+.payments-title {
+  margin: 6px 0 0;
+  color: var(--text-100);
+}
+
+.receipt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.receipt-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.receipt-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+
+  strong {
+    color: #1d2324;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  small {
+    color: #67727a;
+    font-size: 11px;
+  }
+}
+
+.table-action {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  line-height: 1;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(103, 133, 120, 0.58);
+  color: #d7e8df !important;
+  --mdc-text-button-label-text-color: #d7e8df;
+  background: linear-gradient(180deg, rgba(16, 26, 29, 0.96), rgba(11, 19, 21, 0.98));
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(147, 175, 162, 0.18);
+  transition: all 140ms ease;
+
+  &:hover {
+    color: #ecfff0 !important;
+    --mdc-text-button-label-text-color: #ecfff0;
+    border-color: rgba(90, 216, 113, 0.72);
+    background: linear-gradient(180deg, rgba(28, 53, 37, 0.9), rgba(18, 40, 28, 0.96));
+    box-shadow: 0 0 0 1px rgba(56, 157, 76, 0.28) inset, 0 8px 20px rgba(9, 18, 14, 0.45);
+    transform: translateY(-1px);
+  }
+}
+
+.table-action.danger {
+  color: #ff8b8b !important;
+  --mdc-text-button-label-text-color: #ff8b8b;
+}
+
+:host ::ng-deep .contracts-table .mat-column-developer {
+  min-width: 180px;
+}
+
+:host ::ng-deep .contracts-table .mat-column-mode {
+  min-width: 120px;
+}
+
+:host ::ng-deep .contracts-table .mat-column-amount {
+  min-width: 110px;
+}
+
+:host ::ng-deep .contracts-table .mat-column-startDate {
+  min-width: 120px;
+}
+
+:host ::ng-deep .contracts-table .mat-column-actions {
+  min-width: 280px;
+  width: 280px;
+}
+
+:host ::ng-deep .payments-table .mat-column-date {
+  min-width: 120px;
+}
+
+:host ::ng-deep .payments-table .mat-column-amount {
+  min-width: 120px;
+}
+
+:host ::ng-deep .payments-table .mat-column-period {
+  min-width: 110px;
+}
+
+:host ::ng-deep .payments-table .mat-column-reference {
+  min-width: 160px;
+}
+
+:host ::ng-deep .payments-table .mat-column-receipts {
+  min-width: 240px;
+}
+
+.empty-state,
+.empty-receipt {
+  color: var(--text-300);
+  font-size: 12px;
+}
+
+@media (max-width: 860px) {
+  .project-header {
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: stretch;
+  }
+}

@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 
 import {
   ApiResponse,
+  ComprobanteArchivo,
   CategoriaFinanciera,
   CategoriaFormulario,
   FinanzasLookups,
@@ -71,5 +72,11 @@ export class FinanzasService {
 
   obtenerProveedores(): Observable<Proveedor[]> {
     return this.http.get<ApiResponse<Proveedor[]>>('/api/providers').pipe(map((r) => r.data));
+  }
+
+  subirComprobanteMovimiento(movementId: string, file: File): Observable<ComprobanteArchivo> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<ApiResponse<ComprobanteArchivo>>(`/api/financial-movements/${movementId}/receipts`, formData).pipe(map((r) => r.data));
   }
 }

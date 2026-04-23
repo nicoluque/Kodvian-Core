@@ -1,0 +1,50 @@
+<h2 mat-dialog-title class="dialog-title">{{ data?.desarrollador ? 'Editar desarrollador' : 'Nuevo desarrollador' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="dialog-form form-grid">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Datos del desarrollador</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre y apellido</mat-label>
+      <input matInput formControlName="fullName" />
+      @if (form.controls.fullName.hasError('required') && form.controls.fullName.touched) {
+        <mat-error>El nombre es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Telefono</mat-label>
+      <input matInput formControlName="phone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>CUIT o documento</mat-label>
+      <input matInput formControlName="taxId" />
+    </mat-form-field>
+
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Contacto y estado</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Notas</mat-label>
+      <textarea matInput rows="3" formControlName="notes"></textarea>
+    </mat-form-field>
+
+    <div class="full-width toggle-row">
+      <mat-slide-toggle formControlName="isActive">Activo</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

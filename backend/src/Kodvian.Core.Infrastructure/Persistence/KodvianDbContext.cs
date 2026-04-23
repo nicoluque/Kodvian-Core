@@ -21,6 +21,12 @@ public class KodvianDbContext : DbContext
     public DbSet<FinancialCategory> FinancialCategories => Set<FinancialCategory>();
     public DbSet<FinancialMovement> FinancialMovements => Set<FinancialMovement>();
     public DbSet<Provider> Providers => Set<Provider>();
+    public DbSet<Developer> Developers => Set<Developer>();
+    public DbSet<ProjectDeveloperContract> ProjectDeveloperContracts => Set<ProjectDeveloperContract>();
+    public DbSet<DeveloperPayment> DeveloperPayments => Set<DeveloperPayment>();
+    public DbSet<DocumentFile> DocumentFiles => Set<DocumentFile>();
+    public DbSet<ProjectDocument> ProjectDocuments => Set<ProjectDocument>();
+    public DbSet<ProjectDocumentVersion> ProjectDocumentVersions => Set<ProjectDocumentVersion>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<User> Users => Set<User>();
 
@@ -87,6 +93,7 @@ public class KodvianDbContext : DbContext
             entity.Property(x => x.HorasReales).HasColumnType("numeric(8,2)");
             entity.Property(x => x.OrdenKanban).HasDefaultValue(0);
             entity.HasIndex(x => x.ProyectoId);
+            entity.HasIndex(x => x.DeveloperId);
             entity.HasIndex(x => x.ResponsableId);
             entity.HasIndex(x => x.CreadoPorId);
             entity.HasIndex(x => x.Estado);
@@ -99,6 +106,11 @@ public class KodvianDbContext : DbContext
                 .WithMany(x => x.Tareas)
                 .HasForeignKey(x => x.ProyectoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Developer)
+                .WithMany(x => x.Tasks)
+                .HasForeignKey(x => x.DeveloperId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(x => x.Responsable)
                 .WithMany(x => x.Tasks)
@@ -128,6 +140,61 @@ public class KodvianDbContext : DbContext
             entity.Property(x => x.Email).HasMaxLength(120);
             entity.Property(x => x.Phone).HasMaxLength(40);
             entity.HasIndex(x => x.Name);
+        });
+
+        modelBuilder.Entity<Developer>(entity =>
+        {
+            entity.ToTable("Developers");
+            entity.Property(x => x.FullName).IsRequired().HasMaxLength(160);
+            entity.Property(x => x.Email).HasMaxLength(120);
+            entity.Property(x => x.Phone).HasMaxLength(40);
+            entity.Property(x => x.TaxId).HasMaxLength(20);
+            entity.Property(x => x.Notes).HasMaxLength(1000);
+            entity.HasIndex(x => x.FullName);
+            entity.HasIndex(x => x.Email);
+            entity.HasIndex(x => x.TaxId);
+        });
+
+        modelBuilder.Entity<ProjectDeveloperContract>(entity =>
+        {
+            entity.ToTable("ProjectDeveloperContracts");
+            entity.Property(x => x.PaymentMode).HasConversion<int>();
+            entity.Property(x => x.Percentage).HasColumnType("numeric(5,2)");
+            entity.Property(x => x.AgreedAmount).HasColumnType("numeric(18,2)");
+            entity.Property(x => x.Notes).HasMaxLength(1000);
+            entity.HasIndex(x => x.ProjectId);
+            entity.HasIndex(x => x.DeveloperId);
+            entity.HasIndex(x => new { x.ProjectId, x.DeveloperId, x.Activo });
+            entity.HasIndex(x => new { x.DeveloperId, x.FechaCreacion });
+
+            entity.HasCheckConstraint("CK_ProjectDeveloperContracts_Percentage", "\"Percentage\" IS NULL OR (\"Percentage\" >= 0 AND \"Percentage\" <= 100)");
+            entity.HasCheckConstraint("CK_ProjectDeveloperContracts_FixedAmount", "\"AgreedAmount\" IS NULL OR \"AgreedAmount\" > 0");
+
+            entity.HasOne(x => x.Project)
+                .WithMany(x => x.DeveloperContracts)
+                .HasForeignKey(x => x.ProjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Developer)
+                .WithMany(x => x.Contracts)
+                .HasForeignKey(x => x.DeveloperId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<DeveloperPayment>(entity =>
+        {
+            entity.ToTable("DeveloperPayments");
+            entity.Property(x => x.Amount).HasColumnType("numeric(18,2)");
+            entity.Property(x => x.Reference).HasMaxLength(120);
+            entity.Property(x => x.Notes).HasMaxLength(1000);
+            entity.HasIndex(x => x.ContractId);
+            entity.HasIndex(x => x.PaymentDate);
+            entity.HasIndex(x => new { x.ContractId, x.PeriodYear, x.PeriodMonth });
+
+            entity.HasOne(x => x.Contract)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.ContractId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<FinancialMovement>(entity =>
@@ -174,6 +241,93 @@ public class KodvianDbContext : DbContext
             entity.HasOne(x => x.CreatedBy)
                 .WithMany(x => x.FinancialMovementsCreated)
                 .HasForeignKey(x => x.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<DocumentFile>(entity =>
+        {
+            entity.ToTable("DocumentFiles");
+            entity.Property(x => x.OriginalFileName).IsRequired().HasMaxLength(260);
+            entity.Property(x => x.StoredFileName).IsRequired().HasMaxLength(160);
+            entity.Property(x => x.ContentType).IsRequired().HasMaxLength(80);
+            entity.Property(x => x.StoragePath).IsRequired().HasMaxLength(260);
+            entity.Property(x => x.Sha256).IsRequired().HasMaxLength(64);
+            entity.HasIndex(x => x.ProjectId);
+            entity.HasIndex(x => x.FinancialMovementId);
+            entity.HasIndex(x => x.DeveloperPaymentId);
+            entity.HasIndex(x => x.UploadedById);
+            entity.HasIndex(x => x.Sha256);
+            entity.HasCheckConstraint("CK_DocumentFiles_Owner", "((\"ProjectId\" IS NOT NULL)::int + (\"FinancialMovementId\" IS NOT NULL)::int + (\"DeveloperPaymentId\" IS NOT NULL)::int) = 1");
+
+            entity.HasOne(x => x.Project)
+                .WithMany(x => x.Documents)
+                .HasForeignKey(x => x.ProjectId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(x => x.FinancialMovement)
+                .WithMany(x => x.Documents)
+                .HasForeignKey(x => x.FinancialMovementId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(x => x.DeveloperPayment)
+                .WithMany(x => x.Documents)
+                .HasForeignKey(x => x.DeveloperPaymentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(x => x.UploadedBy)
+                .WithMany(x => x.UploadedDocuments)
+                .HasForeignKey(x => x.UploadedById)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ProjectDocument>(entity =>
+        {
+            entity.ToTable("ProjectDocuments");
+            entity.Property(x => x.Type).HasConversion<int>();
+            entity.Property(x => x.Title).IsRequired().HasMaxLength(200);
+            entity.HasIndex(x => x.ProjectId);
+            entity.HasIndex(x => x.Type);
+            entity.HasIndex(x => new { x.ProjectId, x.Activo });
+
+            entity.HasOne(x => x.Project)
+                .WithMany(x => x.ProjectDocuments)
+                .HasForeignKey(x => x.ProjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.CreatedBy)
+                .WithMany(x => x.ProjectDocumentsCreated)
+                .HasForeignKey(x => x.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.DeletedBy)
+                .WithMany(x => x.ProjectDocumentsDeleted)
+                .HasForeignKey(x => x.DeletedById)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<ProjectDocumentVersion>(entity =>
+        {
+            entity.ToTable("ProjectDocumentVersions");
+            entity.Property(x => x.VersionNumber).IsRequired();
+            entity.Property(x => x.Notes).HasMaxLength(500);
+            entity.HasIndex(x => x.ProjectDocumentId);
+            entity.HasIndex(x => x.DocumentFileId).IsUnique();
+            entity.HasIndex(x => x.UploadedById);
+            entity.HasIndex(x => new { x.ProjectDocumentId, x.VersionNumber }).IsUnique();
+
+            entity.HasOne(x => x.ProjectDocument)
+                .WithMany(x => x.Versions)
+                .HasForeignKey(x => x.ProjectDocumentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(x => x.DocumentFile)
+                .WithMany()
+                .HasForeignKey(x => x.DocumentFileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.UploadedBy)
+                .WithMany(x => x.ProjectDocumentVersionsUploaded)
+                .HasForeignKey(x => x.UploadedById)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

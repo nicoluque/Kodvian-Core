@@ -24,4 +24,5 @@ public class FinancialMovement : BaseEntity
     public Provider? Provider { get; set; }
     public Project? Project { get; set; }
     public User? CreatedBy { get; set; }
+    public ICollection<DocumentFile> Documents { get; set; } = new List<DocumentFile>();
 }

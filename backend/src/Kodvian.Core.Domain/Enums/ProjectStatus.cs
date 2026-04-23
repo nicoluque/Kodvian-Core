@@ -6,5 +6,6 @@ public enum ProjectStatus
     EnCurso = 2,
     Pausado = 3,
     Finalizado = 4,
-    Cancelado = 5
+    Cancelado = 5,
+    Presupuestado = 6
 }

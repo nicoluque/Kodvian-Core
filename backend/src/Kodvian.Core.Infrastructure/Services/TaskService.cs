@@ -38,6 +38,8 @@ public class TaskService : ITaskService
                 ProjectId = x.ProyectoId,
                 ProjectName = x.Proyecto != null ? x.Proyecto.Nombre : string.Empty,
                 Title = x.Titulo,
+                DeveloperId = x.DeveloperId,
+                DeveloperName = x.Developer != null ? x.Developer.FullName : x.Responsable != null ? x.Responsable.FullName : null,
                 ResponsibleId = x.ResponsableId,
                 ResponsibleName = x.Responsable != null ? x.Responsable.FullName : null,
                 Status = x.Estado.ToString(),
@@ -146,6 +148,7 @@ public class TaskService : ITaskService
                 x.Id,
                 x.Titulo,
                 ProjectName = x.Proyecto != null ? x.Proyecto.Nombre : string.Empty,
+                DeveloperName = x.Developer != null ? x.Developer.FullName : x.Responsable != null ? x.Responsable.FullName : null,
                 ResponsibleName = x.Responsable != null ? x.Responsable.FullName : null,
                 Priority = x.Prioridad.ToString(),
                 DueDate = x.FechaVencimiento,
@@ -168,6 +171,7 @@ public class TaskService : ITaskService
                         Id = x.Id,
                         Title = x.Titulo,
                         ProjectName = x.ProjectName,
+                        DeveloperName = x.DeveloperName,
                         ResponsibleName = x.ResponsibleName,
                         Priority = x.Priority,
                         DueDate = x.DueDate,
@@ -188,7 +192,7 @@ public class TaskService : ITaskService
             .Select(x => new TaskLookupItemDto { Id = x.Id, Name = x.Nombre })
             .ToListAsync(cancellationToken);
 
-        var responsibles = await _dbContext.Users
+        var developers = await _dbContext.Developers
             .AsNoTracking()
             .Where(x => x.Activo)
             .OrderBy(x => x.FullName)
@@ -199,7 +203,7 @@ public class TaskService : ITaskService
         return new TaskLookupsDto
         {
             Projects = projects,
-            Responsibles = responsibles
+            Developers = developers
         };
     }
 
@@ -220,7 +224,11 @@ public class TaskService : ITaskService
             query = query.Where(x => x.ProyectoId == request.ProjectId);
         }
 
-        if (request.ResponsibleId.HasValue)
+        if (request.DeveloperId.HasValue)
+        {
+            query = query.Where(x => x.DeveloperId == request.DeveloperId);
+        }
+        else if (request.ResponsibleId.HasValue)
         {
             query = query.Where(x => x.ResponsableId == request.ResponsibleId);
         }
@@ -253,7 +261,8 @@ public class TaskService : ITaskService
         task.ProyectoId = request.ProjectId;
         task.Titulo = request.Title.Trim();
         task.Descripcion = Normalize(request.Description);
-        task.ResponsableId = request.ResponsibleId;
+        task.DeveloperId = request.DeveloperId;
+        task.ResponsableId = request.DeveloperId.HasValue ? null : request.ResponsibleId;
         task.Estado = ParseStatus(request.Status);
         task.Prioridad = ParsePriority(request.Priority);
         task.FechaInicio = request.StartDate;
@@ -302,6 +311,8 @@ public class TaskService : ITaskService
             ProjectId = x.ProyectoId,
             ProjectName = x.Proyecto != null ? x.Proyecto.Nombre : string.Empty,
             Title = x.Titulo,
+            DeveloperId = x.DeveloperId,
+            DeveloperName = x.Developer != null ? x.Developer.FullName : x.Responsable != null ? x.Responsable.FullName : null,
             Description = x.Descripcion,
             ResponsibleId = x.ResponsableId,
             ResponsibleName = x.Responsable != null ? x.Responsable.FullName : null,
@@ -329,7 +340,15 @@ public class TaskService : ITaskService
             throw new ArgumentException("El proyecto seleccionado no existe");
         }
 
-        if (request.ResponsibleId.HasValue)
+        if (request.DeveloperId.HasValue)
+        {
+            var developerExists = await _dbContext.Developers.AnyAsync(x => x.Id == request.DeveloperId.Value, cancellationToken);
+            if (!developerExists)
+            {
+                throw new ArgumentException("El desarrollador seleccionado no existe");
+            }
+        }
+        else if (request.ResponsibleId.HasValue)
         {
             var responsibleExists = await _dbContext.Users.AnyAsync(x => x.Id == request.ResponsibleId.Value, cancellationToken);
             if (!responsibleExists)

@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { ClienteDetalle, ClienteFormulario, EstadoCliente } from '../../models/clientes.models';
+import { ClienteDetalle, ClienteFormulario, ESTADO_CLIENTE_OPTIONS, EstadoCliente } from '../../models/clientes.models';
 
 interface ClienteFormDialogData {
   cliente?: ClienteDetalle;
@@ -32,7 +32,7 @@ export class ClienteFormDialogComponent {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<ClienteFormDialogComponent>);
 
-  readonly estados: EstadoCliente[] = ['Prospecto', 'Activo', 'Pausado', 'Finalizado'];
+  readonly estados = ESTADO_CLIENTE_OPTIONS;
   readonly data: ClienteFormDialogData;
 
   readonly form = this.fb.group({

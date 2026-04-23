@@ -1,0 +1,113 @@
+<h2 mat-dialog-title class="dialog-title">Desarrolladores del proyecto</h2>
+<mat-dialog-content class="dialog-body">
+  <div class="detail-grid">
+    <article class="detail-card full-width project-card">
+      <p class="section-eyebrow">Proyecto</p>
+      <div class="project-header">
+        <strong class="project-name">{{ data.project.name }}</strong>
+        <div class="header-actions">
+          <button mat-button class="action-cancel" (click)="crearDesarrollador()">Nuevo desarrollador</button>
+          <button mat-flat-button color="primary" class="action-save" (click)="crearContrato()">Nuevo contrato</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail-card full-width">
+      <p class="section-eyebrow">Contratos asociados</p>
+      <table mat-table [dataSource]="contracts" class="table full-width contracts-table">
+        <ng-container matColumnDef="developer">
+          <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
+          <td mat-cell *matCellDef="let row">{{ row.developerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="mode">
+          <th mat-header-cell *matHeaderCellDef>Modalidad</th>
+          <td mat-cell *matCellDef="let row">{{ row.paymentMode === 'Percentage' ? 'Porcentaje' : 'Monto fijo' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <td mat-cell *matCellDef="let row">{{ row.paymentMode === 'Percentage' ? (row.percentage + '%') : (row.agreedAmount | currency:'ARS':'symbol':'1.0-0') }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="startDate">
+          <th mat-header-cell *matHeaderCellDef>Inicio</th>
+          <td mat-cell *matCellDef="let row">{{ row.startDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row" class="actions-cell">
+            <button mat-button class="table-action" (click)="seleccionarContrato(row)">Pagos</button>
+            <button mat-button class="table-action" (click)="verLedger(row)">Resumen</button>
+            <button mat-button class="table-action" (click)="registrarPago(row)">Pagar</button>
+            <button mat-button class="table-action" (click)="editarContrato(row)">Editar</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="contractColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: contractColumns"></tr>
+      </table>
+
+      @if (contracts.length === 0) {
+        <p class="empty-state">No hay contratos cargados para este proyecto.</p>
+      }
+    </article>
+
+    @if (selectedContract) {
+      <article class="detail-card full-width">
+        <p class="section-eyebrow">Pagos</p>
+        <h3 class="payments-title">{{ selectedContract.developerName }}</h3>
+        <table mat-table [dataSource]="payments" class="table full-width payments-table">
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let row">{{ row.paymentDate }}</td>
+          </ng-container>
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let row">{{ row.amount | currency:'ARS':'symbol':'1.0-0' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="period">
+            <th mat-header-cell *matHeaderCellDef>Periodo</th>
+            <td mat-cell *matCellDef="let row">{{ row.periodMonth }}/{{ row.periodYear }}</td>
+          </ng-container>
+          <ng-container matColumnDef="reference">
+            <th mat-header-cell *matHeaderCellDef>Referencia</th>
+            <td mat-cell *matCellDef="let row">{{ row.reference || '-' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="receipts">
+            <th mat-header-cell *matHeaderCellDef>Comprobantes</th>
+            <td mat-cell *matCellDef="let row">
+              @if ((row.receipts?.length || 0) === 0) {
+                <span class="empty-receipt">Sin comprobantes</span>
+              } @else {
+                <div class="receipt-list">
+                  @for (receipt of row.receipts; track receipt.id) {
+                    <div class="receipt-item">
+                      <div class="receipt-meta">
+                        <strong>{{ receipt.fileName }}</strong>
+                        <small>{{ receipt.uploadedAt | date:'dd/MM/yyyy HH:mm' }}</small>
+                      </div>
+                      <button mat-button class="table-action" (click)="descargarComprobante(row.id, receipt)">Descargar</button>
+                      <button mat-button class="table-action danger" (click)="eliminarComprobante(row.id, receipt)">Eliminar</button>
+                    </div>
+                  }
+                </div>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="paymentColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: paymentColumns"></tr>
+        </table>
+
+        @if (payments.length === 0) {
+          <p class="empty-state">No hay pagos registrados para este contrato.</p>
+        }
+      </article>
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-flat-button color="primary" mat-dialog-close class="action-close">Cerrar</button>
+</mat-dialog-actions>

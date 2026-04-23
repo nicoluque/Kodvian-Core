@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "ms-dotnettools.csharp",
+    "Angular.ng-template",
+    "dbaeumer.vscode-eslint"
+  ]
+}

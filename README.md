@@ -40,6 +40,8 @@ dotnet run --project src/Kodvian.Core.Api
 
 Connection string inicial en `backend/src/Kodvian.Core.Api/appsettings.json`.
 
+Nota: al iniciar la API en entorno `Development`, EF Core aplica automaticamente las migraciones pendientes y ejecuta el seeding inicial.
+
 ## Frontend
 
 Desde `frontend/`:
@@ -54,6 +56,24 @@ Para compilación de producción:
 ```bash
 npm run build
 ```
+
+## Ejecucion local en VS Code
+
+Se incluye configuracion en `.vscode/` para correr backend y frontend sin pasos manuales extra.
+
+Prerequisitos:
+
+- PostgreSQL activo en `localhost:5432`
+- Credenciales por defecto segun `appsettings.json` (`postgres` / `1234`)
+
+Pasos sugeridos:
+
+1. Abrir la carpeta raiz del repositorio en VS Code.
+2. Ejecutar la tarea **Terminal > Run Task > Setup: install dependencies**.
+3. Ejecutar la tarea **Terminal > Run Task > Start: full stack**.
+4. Abrir `http://localhost:4200`.
+
+Para debug, usar **Run and Debug** con el perfil `Full Stack (API + Angular)`.
 
 ## Convenciones base
 

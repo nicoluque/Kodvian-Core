@@ -44,7 +44,8 @@ export class TareasService {
 
     if (filtros.search) params = params.set('search', filtros.search);
     if (filtros.projectId) params = params.set('projectId', filtros.projectId);
-    if (filtros.responsibleId) params = params.set('responsibleId', filtros.responsibleId);
+    if (filtros.developerId) params = params.set('developerId', filtros.developerId);
+    else if (filtros.responsibleId) params = params.set('responsibleId', filtros.responsibleId);
     if (filtros.status) params = params.set('status', filtros.status);
     if (filtros.priority) params = params.set('priority', filtros.priority);
     if (filtros.dueDateFrom) params = params.set('dueDateFrom', filtros.dueDateFrom);

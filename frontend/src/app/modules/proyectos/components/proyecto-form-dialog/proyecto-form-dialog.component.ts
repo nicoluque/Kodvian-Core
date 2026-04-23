@@ -36,6 +36,7 @@ export class ProyectoFormDialogComponent {
 
   readonly estados: { value: EstadoProyecto; label: string }[] = [
     { value: 'Planificacion', label: 'Planificación' },
+    { value: 'Presupuestado', label: 'Presupuestado' },
     { value: 'EnCurso', label: 'En curso' },
     { value: 'Pausado', label: 'Pausado' },
     { value: 'Finalizado', label: 'Finalizado' },

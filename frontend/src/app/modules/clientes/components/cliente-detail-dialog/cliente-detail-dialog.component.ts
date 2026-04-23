@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
-import { ClienteDetalle } from '../../models/clientes.models';
+import { ClienteDetalle, EstadoCliente, getEstadoClienteLabel } from '../../models/clientes.models';
 
 @Component({
   selector: 'app-cliente-detail-dialog',
@@ -17,5 +17,9 @@ export class ClienteDetailDialogComponent {
 
   valor(texto?: string | number | null): string {
     return texto === null || texto === undefined || texto === '' ? '-' : String(texto);
+  }
+
+  mostrarEstado(estado: EstadoCliente): string {
+    return getEstadoClienteLabel(estado);
   }
 }

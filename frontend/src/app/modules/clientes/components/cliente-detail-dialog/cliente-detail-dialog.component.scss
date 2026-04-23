@@ -1,24 +1,10 @@
-﻿:host {
-  display: block;
-  color: var(--text-100);
-}
+﻿@use '../../../../shared/styles/dialog-common' as dialog;
 
-.dialog-title {
-  margin: 0;
-  padding: 18px 22px 12px;
-  color: var(--brand-300);
-  font-size: 34px;
-  letter-spacing: 0.2px;
-  border-bottom: 1px solid rgba(52, 74, 64, 0.46);
-  background: linear-gradient(160deg, rgba(20, 33, 28, 0.72), rgba(12, 19, 21, 0.96));
-}
+@include dialog.dialog-premium-shell();
 
 .dialog-body {
-  padding: 16px 22px 10px !important;
-  background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99));
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: calc(100vh - 250px);
 }
 
 .detail-grid {
@@ -116,6 +102,12 @@
   background: rgba(18, 51, 58, 0.52);
 }
 
+.status-chip.status-budgeted {
+  color: #8dd7ff;
+  border-color: rgba(112, 185, 230, 0.46);
+  background: rgba(18, 44, 66, 0.54);
+}
+
 .status-chip.status-paused {
   color: #ffd078;
   border-color: rgba(235, 188, 94, 0.45);
@@ -130,14 +122,11 @@
 }
 
 .dialog-actions {
-  margin: 0;
-  padding: 12px 22px 18px;
-  border-top: 1px solid rgba(52, 74, 64, 0.36);
-  background: linear-gradient(175deg, rgba(10, 16, 18, 0.98), rgba(7, 12, 14, 0.99));
+  gap: 8px;
 }
 
 :host ::ng-deep .mat-mdc-dialog-content {
-  max-height: none;
+  max-height: min(74vh, 700px);
 }
 
 .action-close {
@@ -155,16 +144,7 @@
 }
 
 @media (max-width: 860px) {
-  .dialog-title {
-    font-size: 28px;
-    padding-inline: 16px;
-  }
-
-  .dialog-body {
-    padding-inline: 16px !important;
-  }
-
-  .dialog-actions {
-    padding-inline: 16px;
+  .value-main {
+    font-size: 20px;
   }
 }

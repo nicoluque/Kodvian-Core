@@ -13,4 +13,8 @@ public class User : BaseEntity
     public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
     public ICollection<TaskItem> CreatedTasks { get; set; } = new List<TaskItem>();
     public ICollection<FinancialMovement> FinancialMovementsCreated { get; set; } = new List<FinancialMovement>();
+    public ICollection<DocumentFile> UploadedDocuments { get; set; } = new List<DocumentFile>();
+    public ICollection<ProjectDocument> ProjectDocumentsCreated { get; set; } = new List<ProjectDocument>();
+    public ICollection<ProjectDocument> ProjectDocumentsDeleted { get; set; } = new List<ProjectDocument>();
+    public ICollection<ProjectDocumentVersion> ProjectDocumentVersionsUploaded { get; set; } = new List<ProjectDocumentVersion>();
 }

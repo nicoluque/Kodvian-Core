@@ -7,6 +7,9 @@ public static class PermissionCodes
     public const string ClientsWrite = "clients.write";
     public const string ProjectsRead = "projects.read";
     public const string ProjectsWrite = "projects.write";
+    public const string ProjectsDocumentsRead = "projects.documents.read";
+    public const string ProjectsDocumentsWrite = "projects.documents.write";
+    public const string ProjectsDocumentsDelete = "projects.documents.delete";
     public const string TasksRead = "tasks.read";
     public const string TasksWrite = "tasks.write";
     public const string FinancesRead = "finances.read";

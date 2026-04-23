@@ -1,0 +1,110 @@
+@use '../../../../shared/styles/dialog-common' as dialog;
+
+@include dialog.dialog-form-grid(980px);
+@include dialog.dialog-premium-shell();
+
+.dialog-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.detail-card {
+  border: 1px solid var(--line-600);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(170deg, rgba(16, 26, 28, 0.86), rgba(11, 18, 20, 0.98));
+}
+
+.section-eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  color: rgba(140, 255, 152, 0.92);
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.totals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line-600);
+  background: rgba(8, 13, 15, 0.52);
+
+  strong {
+    color: #e9fff0;
+    font-size: 18px;
+  }
+}
+
+.label {
+  font-size: 11px;
+  color: #8fb1a2;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.ledger-table {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid var(--line-600);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .ledger-table .mat-mdc-header-row {
+  background: rgba(19, 30, 33, 0.7);
+}
+
+:host ::ng-deep .ledger-table .mat-mdc-header-cell {
+  color: rgba(140, 255, 152, 0.9) !important;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom-color: var(--line-600) !important;
+}
+
+:host ::ng-deep .ledger-table .mat-mdc-row {
+  background: rgba(8, 13, 15, 0.52) !important;
+}
+
+:host ::ng-deep .ledger-table .mat-mdc-cell {
+  color: var(--text-100) !important;
+  border-bottom-color: var(--line-600) !important;
+  font-size: 13px;
+}
+
+:host ::ng-deep .ledger-table .mat-mdc-row:hover {
+  background: rgba(24, 36, 39, 0.72) !important;
+}
+
+.dialog-actions {
+  gap: 8px;
+}
+
+.action-close {
+  min-height: 42px;
+  padding-inline: 20px;
+  border-radius: 999px;
+}
+
+@media (max-width: 980px) {
+  .totals-grid {
+    grid-template-columns: 1fr;
+  }
+}

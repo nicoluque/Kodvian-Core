@@ -75,8 +75,8 @@
     <mat-form-field appearance="outline">
       <mat-label>Estado</mat-label>
       <mat-select formControlName="status">
-        @for (estado of estados; track estado) {
-          <mat-option [value]="estado">{{ estado }}</mat-option>
+        @for (estado of estados; track estado.value) {
+          <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

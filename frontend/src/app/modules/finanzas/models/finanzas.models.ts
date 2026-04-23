@@ -72,6 +72,16 @@ export interface MovimientoFormulario {
   paymentMethod?: string;
   receiptNumber?: string;
   notes?: string;
+  receiptFile?: File | null;
+}
+
+export interface ComprobanteArchivo {
+  id: string;
+  fileName: string;
+  contentType: string;
+  sizeBytes: number;
+  uploadedByName: string;
+  uploadedAt: string;
 }
 
 export interface FinanzaFiltros {

@@ -104,6 +104,175 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.ToTable("Clients", (string)null);
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.Developer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("TaxId")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("FullName");
+
+                    b.HasIndex("TaxId");
+
+                    b.ToTable("Developers", (string)null);
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.DeveloperPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateOnly>("PaymentDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("PeriodMonth")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PeriodYear")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("PaymentDate");
+
+                    b.HasIndex("ContractId", "PeriodYear", "PeriodMonth");
+
+                    b.ToTable("DeveloperPayments", (string)null);
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.DocumentFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<Guid?>("DeveloperPaymentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("FinancialMovementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("character varying(260)");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Sha256")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoragePath")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("character varying(260)");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<Guid>("UploadedById")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeveloperPaymentId");
+
+                    b.HasIndex("FinancialMovementId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("Sha256");
+
+                    b.HasIndex("UploadedById");
+
+                    b.ToTable("DocumentFiles", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_DocumentFiles_Owner", "((\"ProjectId\" IS NOT NULL)::int + (\"FinancialMovementId\" IS NOT NULL)::int + (\"DeveloperPaymentId\" IS NOT NULL)::int) = 1");
+                        });
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.FinancialCategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -298,6 +467,160 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.ToTable("Projects", (string)null);
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDeveloperContract", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal?>("AgreedAmount")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("DeveloperId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("PaymentMode")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("Percentage")
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeveloperId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("DeveloperId", "FechaCreacion");
+
+                    b.HasIndex("ProjectId", "DeveloperId", "Activo");
+
+                    b.ToTable("ProjectDeveloperContracts", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ProjectDeveloperContracts_FixedAmount", "\"AgreedAmount\" IS NULL OR \"AgreedAmount\" > 0");
+
+                            t.HasCheckConstraint("CK_ProjectDeveloperContracts_Percentage", "\"Percentage\" IS NULL OR (\"Percentage\" >= 0 AND \"Percentage\" <= 100)");
+                        });
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("Type");
+
+                    b.HasIndex("ProjectId", "Activo");
+
+                    b.ToTable("ProjectDocuments", (string)null);
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDocumentVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("DocumentFileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("ProjectDocumentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UploadedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("VersionNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentFileId")
+                        .IsUnique();
+
+                    b.HasIndex("ProjectDocumentId");
+
+                    b.HasIndex("UploadedById");
+
+                    b.HasIndex("ProjectDocumentId", "VersionNumber")
+                        .IsUnique();
+
+                    b.ToTable("ProjectDocumentVersions", (string)null);
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.Provider", b =>
                 {
                     b.Property<Guid>("Id")
@@ -415,6 +738,9 @@ namespace Kodvian.Core.Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
+                    b.Property<Guid?>("DeveloperId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Estado")
                         .HasColumnType("integer");
 
@@ -461,6 +787,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreadoPorId");
+
+                    b.HasIndex("DeveloperId");
 
                     b.HasIndex("Estado");
 
@@ -521,6 +849,49 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.DeveloperPayment", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.ProjectDeveloperContract", "Contract")
+                        .WithMany("Payments")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.DocumentFile", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.DeveloperPayment", "DeveloperPayment")
+                        .WithMany("Documents")
+                        .HasForeignKey("DeveloperPaymentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.FinancialMovement", "FinancialMovement")
+                        .WithMany("Documents")
+                        .HasForeignKey("FinancialMovementId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.Project", "Project")
+                        .WithMany("Documents")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.User", "UploadedBy")
+                        .WithMany("UploadedDocuments")
+                        .HasForeignKey("UploadedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DeveloperPayment");
+
+                    b.Navigation("FinancialMovement");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("UploadedBy");
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.FinancialMovement", b =>
                 {
                     b.HasOne("Kodvian.Core.Domain.Entities.FinancialCategory", "Category")
@@ -579,6 +950,78 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Navigation("Responsable");
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDeveloperContract", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.Developer", "Developer")
+                        .WithMany("Contracts")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.Project", "Project")
+                        .WithMany("DeveloperContracts")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Developer");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDocument", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.User", "CreatedBy")
+                        .WithMany("ProjectDocumentsCreated")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.User", "DeletedBy")
+                        .WithMany("ProjectDocumentsDeleted")
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.Project", "Project")
+                        .WithMany("ProjectDocuments")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("DeletedBy");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDocumentVersion", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.DocumentFile", "DocumentFile")
+                        .WithMany()
+                        .HasForeignKey("DocumentFileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.ProjectDocument", "ProjectDocument")
+                        .WithMany("Versions")
+                        .HasForeignKey("ProjectDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.User", "UploadedBy")
+                        .WithMany("ProjectDocumentVersionsUploaded")
+                        .HasForeignKey("UploadedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentFile");
+
+                    b.Navigation("ProjectDocument");
+
+                    b.Navigation("UploadedBy");
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.TaskItem", b =>
                 {
                     b.HasOne("Kodvian.Core.Domain.Entities.User", "CreadoPor")
@@ -586,6 +1029,11 @@ namespace Kodvian.Core.Infrastructure.Migrations
                         .HasForeignKey("CreadoPorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.Developer", "Developer")
+                        .WithMany("Tasks")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Kodvian.Core.Domain.Entities.Project", "Proyecto")
                         .WithMany("Tareas")
@@ -599,6 +1047,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("CreadoPor");
+
+                    b.Navigation("Developer");
 
                     b.Navigation("Proyecto");
 
@@ -621,14 +1071,47 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Navigation("Projects");
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.Developer", b =>
+                {
+                    b.Navigation("Contracts");
+
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.DeveloperPayment", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.FinancialCategory", b =>
                 {
                     b.Navigation("FinancialMovements");
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.FinancialMovement", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.Project", b =>
                 {
+                    b.Navigation("DeveloperContracts");
+
+                    b.Navigation("Documents");
+
+                    b.Navigation("ProjectDocuments");
+
                     b.Navigation("Tareas");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDeveloperContract", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.ProjectDocument", b =>
+                {
+                    b.Navigation("Versions");
                 });
 
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.Provider", b =>
@@ -647,9 +1130,17 @@ namespace Kodvian.Core.Infrastructure.Migrations
 
                     b.Navigation("FinancialMovementsCreated");
 
+                    b.Navigation("ProjectDocumentVersionsUploaded");
+
+                    b.Navigation("ProjectDocumentsCreated");
+
+                    b.Navigation("ProjectDocumentsDeleted");
+
                     b.Navigation("Projects");
 
                     b.Navigation("Tasks");
+
+                    b.Navigation("UploadedDocuments");
                 });
 #pragma warning restore 612, 618
         }

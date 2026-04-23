@@ -13,6 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 
 import { ProyectoDetailDialogComponent } from './components/proyecto-detail-dialog/proyecto-detail-dialog.component';
+import { ProyectoDevelopersDialogComponent } from './components/proyecto-developers-dialog/proyecto-developers-dialog.component';
 import { ProyectoFormDialogComponent } from './components/proyecto-form-dialog/proyecto-form-dialog.component';
 import { EstadoProyecto, LookupItem, PrioridadProyecto, ProyectoDetalle, ProyectoFormulario, ProyectoListado, ProyectoLookups } from './models/proyectos.models';
 import { ProyectosService } from './services/proyectos.service';
@@ -36,6 +37,7 @@ export class ProyectosPageComponent implements OnInit {
 
   readonly estados: { value: EstadoProyecto; label: string }[] = [
     { value: 'Planificacion', label: 'Planificación' },
+    { value: 'Presupuestado', label: 'Presupuestado' },
     { value: 'EnCurso', label: 'En curso' },
     { value: 'Pausado', label: 'Pausado' },
     { value: 'Finalizado', label: 'Finalizado' },
@@ -106,7 +108,13 @@ export class ProyectosPageComponent implements OnInit {
   cambiarPagina(event: PageEvent): void { this.pageNumber = event.pageIndex + 1; this.pageSize = event.pageSize; this.cargarProyectos(); }
 
   abrirNuevoProyecto(): void {
-    const dialogRef = this.dialog.open(ProyectoFormDialogComponent, { width: '960px', data: { clientes: this.clientes, responsables: this.responsables } });
+    const dialogRef = this.dialog.open(ProyectoFormDialogComponent, {
+      width: '980px',
+      maxWidth: 'calc(100vw - 32px)',
+      maxHeight: 'calc(100vh - 32px)',
+      autoFocus: false,
+      data: { clientes: this.clientes, responsables: this.responsables }
+    });
     dialogRef.afterClosed().subscribe((formValue?: ProyectoFormulario) => {
       if (!formValue) return;
       this.proyectosService.crear(formValue).subscribe({
@@ -118,7 +126,13 @@ export class ProyectosPageComponent implements OnInit {
 
   verDetalle(row: ProyectoListado): void {
     this.proyectosService.obtenerDetalle(row.id).subscribe({
-      next: (detalle: ProyectoDetalle) => this.dialog.open(ProyectoDetailDialogComponent, { width: '820px', data: detalle }),
+      next: (detalle: ProyectoDetalle) => this.dialog.open(ProyectoDetailDialogComponent, {
+        width: '980px',
+        maxWidth: 'calc(100vw - 32px)',
+        maxHeight: 'calc(100vh - 32px)',
+        autoFocus: false,
+        data: detalle
+      }),
       error: () => this.snackBar.open('No se pudo obtener el detalle del proyecto', 'Cerrar', { duration: 3500 })
     });
   }
@@ -126,7 +140,13 @@ export class ProyectosPageComponent implements OnInit {
   editar(row: ProyectoListado): void {
     this.proyectosService.obtenerDetalle(row.id).subscribe({
       next: (detalle: ProyectoDetalle) => {
-        const dialogRef = this.dialog.open(ProyectoFormDialogComponent, { width: '960px', data: { proyecto: detalle, clientes: this.clientes, responsables: this.responsables } });
+        const dialogRef = this.dialog.open(ProyectoFormDialogComponent, {
+          width: '980px',
+          maxWidth: 'calc(100vw - 32px)',
+          maxHeight: 'calc(100vh - 32px)',
+          autoFocus: false,
+          data: { proyecto: detalle, clientes: this.clientes, responsables: this.responsables }
+        });
         dialogRef.afterClosed().subscribe((formValue?: ProyectoFormulario) => {
           if (!formValue) return;
           this.proyectosService.actualizar(row.id, formValue).subscribe({
@@ -139,8 +159,19 @@ export class ProyectosPageComponent implements OnInit {
     });
   }
 
+  administrarDesarrolladores(row: ProyectoListado): void {
+    this.dialog.open(ProyectoDevelopersDialogComponent, {
+      width: '1100px',
+      maxWidth: 'calc(100vw - 32px)',
+      maxHeight: 'calc(100vh - 32px)',
+      autoFocus: false,
+      data: { project: row }
+    });
+  }
+
   mostrarEstado(estado: EstadoProyecto): string {
     if (estado === 'Planificacion') return 'Planificación';
+    if (estado === 'Presupuestado') return 'Presupuestado';
     if (estado === 'EnCurso') return 'En curso';
     return estado;
   }

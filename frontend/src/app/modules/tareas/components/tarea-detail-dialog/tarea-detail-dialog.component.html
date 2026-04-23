@@ -3,7 +3,7 @@
   <div class="grid">
     <div><strong>Título:</strong> {{ valor(tarea.title) }}</div>
     <div><strong>Proyecto:</strong> {{ valor(tarea.projectName) }}</div>
-    <div><strong>Responsable:</strong> {{ valor(tarea.responsibleName) }}</div>
+    <div><strong>Desarrollador:</strong> {{ valor(tarea.developerName || tarea.responsibleName) }}</div>
     <div><strong>Creado por:</strong> {{ valor(tarea.createdByName) }}</div>
     <div><strong>Estado:</strong> {{ mostrarEstado(tarea.status) }}</div>
     <div><strong>Prioridad:</strong> {{ valor(tarea.priority) }}</div>

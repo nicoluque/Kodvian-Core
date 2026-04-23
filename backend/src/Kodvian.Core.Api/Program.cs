@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -41,6 +42,10 @@ if (string.IsNullOrWhiteSpace(jwtAudience))
 }
 
 builder.Services.AddControllers();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 15 * 1024 * 1024;
+});
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -109,6 +114,15 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdministrationRead", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.AdministrationRead));
+
+    options.AddPolicy("ProjectsDocumentsRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsDocumentsRead));
+
+    options.AddPolicy("ProjectsDocumentsWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsDocumentsWrite));
+
+    options.AddPolicy("ProjectsDocumentsDelete", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsDocumentsDelete));
 });
 
 var allowedOrigins = builder.Configuration["Cors:AllowedOrigins"];

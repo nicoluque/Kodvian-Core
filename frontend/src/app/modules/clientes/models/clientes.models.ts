@@ -51,7 +51,24 @@ export interface ClienteFormulario {
   isActive: boolean;
 }
 
-export type EstadoCliente = 'Prospecto' | 'Activo' | 'Pausado' | 'Finalizado';
+export type EstadoCliente = 'Prospecto' | 'Activo' | 'Pausado' | 'Finalizado' | 'Presupuestado';
+
+export interface EstadoClienteOption {
+  value: EstadoCliente;
+  label: string;
+}
+
+export const ESTADO_CLIENTE_OPTIONS: EstadoClienteOption[] = [
+  { value: 'Prospecto', label: 'Planeado' },
+  { value: 'Presupuestado', label: 'Presupuestado' },
+  { value: 'Activo', label: 'Activo' },
+  { value: 'Pausado', label: 'Pausado' },
+  { value: 'Finalizado', label: 'Finalizado' }
+];
+
+export function getEstadoClienteLabel(value: EstadoCliente): string {
+  return ESTADO_CLIENTE_OPTIONS.find((x) => x.value === value)?.label ?? value;
+}
 
 export interface ClientesFiltros {
   search?: string;
