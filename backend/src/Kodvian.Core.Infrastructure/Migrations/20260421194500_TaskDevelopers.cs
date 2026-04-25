@@ -1,4 +1,6 @@
 using System;
+using Kodvian.Core.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Kodvian.Core.Infrastructure.Migrations
 {
     /// <inheritdoc />
+    [DbContext(typeof(KodvianDbContext))]
+    [Migration("20260421194500_TaskDevelopers")]
     public partial class TaskDevelopers : Migration
     {
         /// <inheritdoc />

@@ -36,6 +36,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
               }
             ],
             "styles": [
@@ -49,7 +54,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "650kB",
+                  "maximumWarning": "660kB",
                   "maximumError": "1MB"
                 },
                 {
@@ -96,6 +101,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
               }
             ],
             "styles": [

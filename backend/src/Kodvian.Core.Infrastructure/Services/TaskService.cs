@@ -26,24 +26,24 @@ public class TaskService : ITaskService
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var items = await query
+        var rows = await query
             .OrderBy(x => x.Estado)
             .ThenBy(x => x.OrdenKanban)
             .ThenByDescending(x => x.FechaCreacion)
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
-            .Select(x => new TaskListItemDto
+            .Select(x => new
             {
-                Id = x.Id,
+                x.Id,
                 ProjectId = x.ProyectoId,
                 ProjectName = x.Proyecto != null ? x.Proyecto.Nombre : string.Empty,
                 Title = x.Titulo,
-                DeveloperId = x.DeveloperId,
+                x.DeveloperId,
                 DeveloperName = x.Developer != null ? x.Developer.FullName : x.Responsable != null ? x.Responsable.FullName : null,
                 ResponsibleId = x.ResponsableId,
                 ResponsibleName = x.Responsable != null ? x.Responsable.FullName : null,
-                Status = x.Estado.ToString(),
-                Priority = x.Prioridad.ToString(),
+                Status = x.Estado,
+                Priority = x.Prioridad,
                 DueDate = x.FechaVencimiento,
                 EstimatedHours = x.HorasEstimadas,
                 RealHours = x.HorasReales,
@@ -51,6 +51,27 @@ public class TaskService : ITaskService
                 IsActive = x.Activo
             })
             .ToListAsync(cancellationToken);
+
+        var items = rows
+            .Select(x => new TaskListItemDto
+            {
+                Id = x.Id,
+                ProjectId = x.ProjectId,
+                ProjectName = x.ProjectName,
+                Title = x.Title,
+                DeveloperId = x.DeveloperId,
+                DeveloperName = x.DeveloperName,
+                ResponsibleId = x.ResponsibleId,
+                ResponsibleName = x.ResponsibleName,
+                Status = x.Status.ToString(),
+                Priority = x.Priority.ToString(),
+                DueDate = x.DueDate,
+                EstimatedHours = x.EstimatedHours,
+                RealHours = x.RealHours,
+                KanbanOrder = x.KanbanOrder,
+                IsActive = x.IsActive
+            })
+            .ToList();
 
         return new PagedResultDto<TaskListItemDto>
         {
@@ -63,11 +84,13 @@ public class TaskService : ITaskService
 
     public async Task<TaskDetailDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Tasks
+        var row = await _dbContext.Tasks
             .AsNoTracking()
             .Where(x => x.Id == id)
-            .Select(ToDetailDto())
+            .Select(ToDetailProjection())
             .FirstOrDefaultAsync(cancellationToken);
+
+        return row is null ? null : MapToDetailDto(row);
     }
 
     public async Task<TaskDetailDto> CreateAsync(Guid createdById, TaskUpsertRequestDto request, CancellationToken cancellationToken = default)
@@ -84,11 +107,13 @@ public class TaskService : ITaskService
         _dbContext.Tasks.Add(task);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return await _dbContext.Tasks
+        var row = await _dbContext.Tasks
             .AsNoTracking()
             .Where(x => x.Id == task.Id)
-            .Select(ToDetailDto())
+            .Select(ToDetailProjection())
             .FirstAsync(cancellationToken);
+
+        return MapToDetailDto(row);
     }
 
     public async Task<TaskDetailDto?> UpdateAsync(Guid id, TaskUpsertRequestDto request, CancellationToken cancellationToken = default)
@@ -106,11 +131,13 @@ public class TaskService : ITaskService
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return await _dbContext.Tasks
+        var row = await _dbContext.Tasks
             .AsNoTracking()
             .Where(x => x.Id == id)
-            .Select(ToDetailDto())
+            .Select(ToDetailProjection())
             .FirstOrDefaultAsync(cancellationToken);
+
+        return row is null ? null : MapToDetailDto(row);
     }
 
     public async Task<TaskDetailDto?> UpdateStatusAsync(Guid id, TaskStatusUpdateRequestDto request, CancellationToken cancellationToken = default)
@@ -131,11 +158,13 @@ public class TaskService : ITaskService
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return await _dbContext.Tasks
+        var row = await _dbContext.Tasks
             .AsNoTracking()
             .Where(x => x.Id == id)
-            .Select(ToDetailDto())
+            .Select(ToDetailProjection())
             .FirstOrDefaultAsync(cancellationToken);
+
+        return row is null ? null : MapToDetailDto(row);
     }
 
     public async Task<IReadOnlyCollection<TaskKanbanColumnDto>> GetKanbanAsync(TaskListRequestDto request, CancellationToken cancellationToken = default)
@@ -150,9 +179,9 @@ public class TaskService : ITaskService
                 ProjectName = x.Proyecto != null ? x.Proyecto.Nombre : string.Empty,
                 DeveloperName = x.Developer != null ? x.Developer.FullName : x.Responsable != null ? x.Responsable.FullName : null,
                 ResponsibleName = x.Responsable != null ? x.Responsable.FullName : null,
-                Priority = x.Prioridad.ToString(),
+                Priority = x.Prioridad,
                 DueDate = x.FechaVencimiento,
-                Status = x.Estado.ToString(),
+                Status = x.Estado,
                 x.OrdenKanban
             })
             .ToListAsync(cancellationToken);
@@ -165,7 +194,7 @@ public class TaskService : ITaskService
                 Status = status,
                 Title = ToUiStatus(status),
                 Items = items
-                    .Where(x => x.Status == status)
+                    .Where(x => x.Status.ToString() == status)
                     .Select(x => new TaskKanbanItemDto
                     {
                         Id = x.Id,
@@ -173,7 +202,7 @@ public class TaskService : ITaskService
                         ProjectName = x.ProjectName,
                         DeveloperName = x.DeveloperName,
                         ResponsibleName = x.ResponsibleName,
-                        Priority = x.Priority,
+                        Priority = x.Priority.ToString(),
                         DueDate = x.DueDate,
                         KanbanOrder = x.OrdenKanban
                     })
@@ -303,9 +332,9 @@ public class TaskService : ITaskService
         };
     }
 
-    private static Expression<Func<TaskItem, TaskDetailDto>> ToDetailDto()
+    private static Expression<Func<TaskItem, TaskDetailProjection>> ToDetailProjection()
     {
-        return x => new TaskDetailDto
+        return x => new TaskDetailProjection
         {
             Id = x.Id,
             ProjectId = x.ProyectoId,
@@ -318,8 +347,8 @@ public class TaskService : ITaskService
             ResponsibleName = x.Responsable != null ? x.Responsable.FullName : null,
             CreatedById = x.CreadoPorId,
             CreatedByName = x.CreadoPor != null ? x.CreadoPor.FullName : string.Empty,
-            Status = x.Estado.ToString(),
-            Priority = x.Prioridad.ToString(),
+            Status = x.Estado,
+            Priority = x.Prioridad,
             StartDate = x.FechaInicio,
             DueDate = x.FechaVencimiento,
             FinishedDate = x.FechaFinalizacion,
@@ -330,6 +359,61 @@ public class TaskService : ITaskService
             CreatedAt = x.FechaCreacion,
             UpdatedAt = x.FechaActualizacion
         };
+    }
+
+    private static TaskDetailDto MapToDetailDto(TaskDetailProjection source)
+    {
+        return new TaskDetailDto
+        {
+            Id = source.Id,
+            ProjectId = source.ProjectId,
+            ProjectName = source.ProjectName,
+            Title = source.Title,
+            Description = source.Description,
+            DeveloperId = source.DeveloperId,
+            DeveloperName = source.DeveloperName,
+            ResponsibleId = source.ResponsibleId,
+            ResponsibleName = source.ResponsibleName,
+            CreatedById = source.CreatedById,
+            CreatedByName = source.CreatedByName,
+            Status = source.Status.ToString(),
+            Priority = source.Priority.ToString(),
+            StartDate = source.StartDate,
+            DueDate = source.DueDate,
+            FinishedDate = source.FinishedDate,
+            EstimatedHours = source.EstimatedHours,
+            RealHours = source.RealHours,
+            KanbanOrder = source.KanbanOrder,
+            IsActive = source.IsActive,
+            CreatedAt = source.CreatedAt,
+            UpdatedAt = source.UpdatedAt
+        };
+    }
+
+    private sealed class TaskDetailProjection
+    {
+        public Guid Id { get; init; }
+        public Guid ProjectId { get; init; }
+        public string ProjectName { get; init; } = string.Empty;
+        public string Title { get; init; } = string.Empty;
+        public string? Description { get; init; }
+        public Guid? DeveloperId { get; init; }
+        public string? DeveloperName { get; init; }
+        public Guid? ResponsibleId { get; init; }
+        public string? ResponsibleName { get; init; }
+        public Guid CreatedById { get; init; }
+        public string CreatedByName { get; init; } = string.Empty;
+        public DomainTaskStatus Status { get; init; }
+        public TaskPriority Priority { get; init; }
+        public DateOnly? StartDate { get; init; }
+        public DateOnly? DueDate { get; init; }
+        public DateOnly? FinishedDate { get; init; }
+        public decimal? EstimatedHours { get; init; }
+        public decimal? RealHours { get; init; }
+        public int KanbanOrder { get; init; }
+        public bool IsActive { get; init; }
+        public DateTime CreatedAt { get; init; }
+        public DateTime? UpdatedAt { get; init; }
     }
 
     private async Task ValidateReferencesAsync(Guid? createdById, TaskUpsertRequestDto request, CancellationToken cancellationToken)

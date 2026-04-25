@@ -47,7 +47,9 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Fecha de movimiento</mat-label>
-      <input matInput type="date" formControlName="movementDate" />
+      <input matInput [matDatepicker]="movementDatePicker" formControlName="movementDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="movementDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #movementDatePicker></mat-datepicker>
       @if (form.controls.movementDate.hasError('required') && form.controls.movementDate.touched) {
         <mat-error>La fecha de movimiento es obligatoria</mat-error>
       }
@@ -55,7 +57,9 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Fecha de vencimiento</mat-label>
-      <input matInput type="date" formControlName="dueDate" />
+      <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #dueDatePicker></mat-datepicker>
       @if (form.hasError('invalidDueDate')) {
         <mat-error>La fecha de vencimiento no puede ser anterior a la fecha de movimiento</mat-error>
       }
@@ -107,6 +111,7 @@
         }
       </mat-select>
     </mat-form-field>
+    <p class="project-impact-note full-width">Solo los ingresos con proyecto asignado impactan en el cálculo de contratos de desarrolladores.</p>
 
     <div class="form-section full-width">
       <p class="section-eyebrow">Cobro y notas</p>

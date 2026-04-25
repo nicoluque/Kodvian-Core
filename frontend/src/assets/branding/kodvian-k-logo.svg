@@ -1,0 +1,78 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Kodvian K Logo</title>
+  <desc id="desc">Isotipo vectorial de Kodvian con K 3D verde y plateada sobre fondo transparente.</desc>
+  <defs>
+    <linearGradient id="greenFace" x1="250" y1="120" x2="510" y2="850" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8DFF2A"/>
+      <stop offset="0.35" stop-color="#15F000"/>
+      <stop offset="0.72" stop-color="#029B00"/>
+      <stop offset="1" stop-color="#013D12"/>
+    </linearGradient>
+    <linearGradient id="greenEdge" x1="220" y1="180" x2="430" y2="850" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C8FF83"/>
+      <stop offset="0.45" stop-color="#30FF00"/>
+      <stop offset="1" stop-color="#006A19"/>
+    </linearGradient>
+    <linearGradient id="silverFace" x1="620" y1="165" x2="850" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.18" stop-color="#D7D7D7"/>
+      <stop offset="0.5" stop-color="#828282"/>
+      <stop offset="0.78" stop-color="#E6E6E6"/>
+      <stop offset="1" stop-color="#575757"/>
+    </linearGradient>
+    <linearGradient id="silverEdge" x1="600" y1="220" x2="890" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.5" stop-color="#9B9B9B"/>
+      <stop offset="1" stop-color="#282828"/>
+    </linearGradient>
+    <filter id="greenGlow" x="120" y="60" width="820" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="11" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.15 0 0 0 0 1 0 0 0 0 0 0 0 0 .75 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softShadow" x="80" y="80" width="900" height="900" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="18" dy="24" stdDeviation="20" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Green left pillar / K stem -->
+    <path d="M275 153 L468 153 L419 705 L246 820 Z" fill="url(#greenFace)" stroke="#71FF22" stroke-width="6" stroke-linejoin="round" filter="url(#greenGlow)"/>
+    <path d="M275 153 L308 177 L283 780 L246 820 Z" fill="#034B15" opacity="0.78"/>
+    <path d="M468 153 L498 182 L450 682 L419 705 Z" fill="url(#greenEdge)" opacity="0.85"/>
+
+    <!-- Inner angular cut / highlight -->
+    <path d="M318 682 L405 560 L388 620 Z" fill="#B8FF79" opacity="0.55"/>
+    <path d="M286 780 L405 560" stroke="#B8FF79" stroke-width="5" opacity="0.8"/>
+
+    <!-- Silver upper arm -->
+    <path d="M500 382 L728 163 L894 163 L635 452 Z" fill="url(#silverFace)" stroke="#F2F2F2" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M635 452 L894 163 L870 207 L646 485 Z" fill="#2F2F2F" opacity="0.75"/>
+    <path d="M500 382 L635 452 L646 485 L480 414 Z" fill="#151515" opacity="0.9"/>
+
+    <!-- Silver lower arm -->
+    <path d="M500 455 L635 394 L890 817 L727 817 Z" fill="url(#silverFace)" stroke="#E9E9E9" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M727 817 L890 817 L850 782 L706 772 Z" fill="#242424" opacity="0.85"/>
+    <path d="M500 455 L635 394 L650 430 L515 488 Z" fill="url(#silverEdge)" opacity="0.75"/>
+
+    <!-- Center overlap shadow -->
+    <path d="M418 448 L516 385 L540 430 L448 510 Z" fill="#050505" opacity="0.58"/>
+
+    <!-- Pixel blocks -->
+    <g filter="url(#greenGlow)">
+      <rect x="245" y="225" width="45" height="45" rx="4" fill="url(#greenFace)" stroke="#7CFF28" stroke-width="4"/>
+      <rect x="202" y="286" width="38" height="38" rx="4" fill="url(#greenFace)" stroke="#7CFF28" stroke-width="4"/>
+      <rect x="295" y="297" width="41" height="41" rx="4" fill="url(#greenFace)" stroke="#7CFF28" stroke-width="4"/>
+      <rect x="346" y="365" width="44" height="44" rx="4" fill="url(#greenFace)" stroke="#7CFF28" stroke-width="4"/>
+    </g>
+    <g>
+      <rect x="171" y="358" width="42" height="42" rx="4" fill="url(#silverFace)" stroke="#F2F2F2" stroke-width="4"/>
+      <rect x="229" y="417" width="42" height="42" rx="4" fill="url(#silverFace)" stroke="#F2F2F2" stroke-width="4"/>
+      <rect x="286" y="365" width="42" height="42" rx="4" fill="url(#silverFace)" stroke="#F2F2F2" stroke-width="4"/>
+      <rect x="198" y="475" width="38" height="38" rx="4" fill="url(#silverFace)" stroke="#F2F2F2" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

@@ -1,4 +1,5 @@
 @use '../../shared/styles/page-common' as page;
+@use '../../shared/styles/table-common' as table;
 
 .tareas-card {
   border-radius: 16px;
@@ -10,6 +11,10 @@
 @include page.page-header;
 @include page.page-title;
 @include page.page-filters;
+@include table.table-shell;
+@include table.mat-table-theme;
+@include table.status-chip-base(11px, 4px 10px);
+@include table.table-action-pill(auto, 34px, 0 10px);
 
 .hero-block {
   padding: 16px;
@@ -106,21 +111,8 @@ h2 {
   }
 }
 
-.tabla-wrapper {
-  overflow: auto;
-  border: 1px solid var(--line-600);
-  border-radius: 12px;
-  background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
-}
-
 .tabla-tareas {
   width: 100%;
-}
-
-.acciones-row {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
 }
 
 .tag-status,

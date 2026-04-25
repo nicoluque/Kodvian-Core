@@ -63,12 +63,16 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Vencimiento desde</mat-label>
-      <input matInput type="date" formControlName="dueDateFrom" />
+      <input matInput [matDatepicker]="dueDateFromPicker" formControlName="dueDateFrom" />
+      <mat-datepicker-toggle matIconSuffix [for]="dueDateFromPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dueDateFromPicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Vencimiento hasta</mat-label>
-      <input matInput type="date" formControlName="dueDateTo" />
+      <input matInput [matDatepicker]="dueDateToPicker" formControlName="dueDateTo" />
+      <mat-datepicker-toggle matIconSuffix [for]="dueDateToPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dueDateToPicker></mat-datepicker>
     </mat-form-field>
 
     <div class="acciones-filtro">
@@ -113,9 +117,9 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let row" class="acciones-row">
-            <button mat-button type="button" (click)="verDetalle(row.id)">Ver detalle</button>
-            <button mat-button type="button" (click)="editar(row)">Editar</button>
-            <button mat-button type="button" (click)="cambiarEstado(row.id, row.status)">Cambiar estado</button>
+            <button mat-button class="table-action" type="button" (click)="verDetalle(row.id)">Ver detalle</button>
+            <button mat-button class="table-action" type="button" (click)="editar(row)">Editar</button>
+            <button mat-button class="table-action" type="button" (click)="cambiarEstado(row.id, row.status)">Cambiar estado</button>
           </td>
         </ng-container>
 

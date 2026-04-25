@@ -66,12 +66,16 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Fecha de inicio</mat-label>
-      <input matInput type="date" formControlName="startDate" />
+      <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Fecha de vencimiento</mat-label>
-      <input matInput type="date" formControlName="dueDate" />
+      <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #dueDatePicker></mat-datepicker>
       @if (form.hasError('invalidDueDate')) {
         <mat-error>La fecha de vencimiento no puede ser anterior a la fecha de inicio</mat-error>
       }
@@ -79,7 +83,9 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Fecha de finalización</mat-label>
-      <input matInput type="date" formControlName="finishedDate" />
+      <input matInput [matDatepicker]="finishedDatePicker" formControlName="finishedDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="finishedDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #finishedDatePicker></mat-datepicker>
       @if (form.hasError('invalidFinishedDate')) {
         <mat-error>La fecha de finalización no puede ser anterior a la fecha de inicio</mat-error>
       }

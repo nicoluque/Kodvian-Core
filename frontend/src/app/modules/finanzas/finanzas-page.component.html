@@ -37,8 +37,8 @@
 
   <mat-card class="movimientos-card">
     <form [formGroup]="filtrosForm" class="filtros-row">
-      <mat-form-field appearance="outline"><mat-label>Fecha desde</mat-label><input matInput type="date" formControlName="dateFrom" /></mat-form-field>
-      <mat-form-field appearance="outline"><mat-label>Fecha hasta</mat-label><input matInput type="date" formControlName="dateTo" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Fecha desde</mat-label><input matInput [matDatepicker]="dateFromPicker" formControlName="dateFrom" /><mat-datepicker-toggle matIconSuffix [for]="dateFromPicker"></mat-datepicker-toggle><mat-datepicker #dateFromPicker></mat-datepicker></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Fecha hasta</mat-label><input matInput [matDatepicker]="dateToPicker" formControlName="dateTo" /><mat-datepicker-toggle matIconSuffix [for]="dateToPicker"></mat-datepicker-toggle><mat-datepicker #dateToPicker></mat-datepicker></mat-form-field>
       <mat-form-field appearance="outline"><mat-label>Tipo de movimiento</mat-label><mat-select formControlName="movementType"><mat-option value="">Todos</mat-option>@for (tipo of tipos; track tipo) {<mat-option [value]="tipo">{{ tipo }}</mat-option>}</mat-select></mat-form-field>
       <mat-form-field appearance="outline"><mat-label>Categoría</mat-label><mat-select formControlName="categoryId"><mat-option value="">Todas</mat-option>@for (cat of lookups.categories; track cat.id) {<mat-option [value]="cat.id">{{ cat.name }}</mat-option>}</mat-select></mat-form-field>
       <mat-form-field appearance="outline"><mat-label>Cliente</mat-label><mat-select formControlName="clientId"><mat-option value="">Todos</mat-option>@for (cliente of lookups.clients; track cliente.id) {<mat-option [value]="cliente.id">{{ cliente.name }}</mat-option>}</mat-select></mat-form-field>
@@ -55,7 +55,7 @@
         <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef>Monto</th><td mat-cell *matCellDef="let row">{{ row.amount | currency:'ARS':'symbol':'1.0-0' }}</td></ng-container>
         <ng-container matColumnDef="movementDate"><th mat-header-cell *matHeaderCellDef>Fecha de movimiento</th><td mat-cell *matCellDef="let row">{{ row.movementDate }}</td></ng-container>
         <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Estado</th><td mat-cell *matCellDef="let row"><span class="tag-status">{{ row.status }}</span></td></ng-container>
-        <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>Acciones</th><td mat-cell *matCellDef="let row" class="acciones-row"><button mat-button (click)="editarMovimiento(row)">Editar</button></td></ng-container>
+        <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>Acciones</th><td mat-cell *matCellDef="let row" class="acciones-row"><button mat-button class="table-action" (click)="editarMovimiento(row)">Editar</button></td></ng-container>
 
         <tr mat-header-row *matHeaderRowDef="columnas"></tr>
         <tr mat-row *matRowDef="let row; columns: columnas"></tr>

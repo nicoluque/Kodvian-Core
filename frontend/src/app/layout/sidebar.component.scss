@@ -1,5 +1,6 @@
 .sidebar {
   min-height: 100%;
+  padding-top: 1px;
   background:
     radial-gradient(600px 320px at 0% 0%, rgba(39, 255, 63, 0.14), transparent 55%),
     linear-gradient(180deg, #0a1113 0%, #090f11 100%);
@@ -57,11 +58,21 @@
 }
 
 .section-title {
-  margin: 8px 20px 6px;
+  /* margin: 8px 20px 6px; */
+  margin: 10px auto 8px;
+  padding: 6px 12px;
+  width: fit-content;
   color: rgba(140, 255, 152, 0.9);
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
   letter-spacing: 1.4px;
   text-transform: uppercase;
+  justify-self: center;
+  border: 1px solid rgba(89, 173, 103, 0.45);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(18, 42, 26, 0.68), rgba(10, 22, 14, 0.72));
+  text-shadow: 0 0 8px rgba(96, 241, 125, 0.3);
 }
 
 mat-nav-list {

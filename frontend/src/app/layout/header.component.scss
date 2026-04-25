@@ -32,6 +32,16 @@
   font-size: 13px;
 }
 
+.title-kodvian {
+  color: var(--brand-500);
+  text-shadow: 0 0 8px rgba(39, 255, 63, 0.35);
+}
+
+.title-solutions {
+  color: var(--text-100);
+  margin-left: 4px;
+}
+
 .subtitle {
   font-size: 12px;
   color: var(--text-300);
@@ -43,28 +53,19 @@
 }
 
 .brand-mark {
-  position: relative;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   margin-left: 4px;
+}
 
-  .ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid var(--brand-500);
-    box-shadow: 0 0 12px rgba(39, 255, 63, 0.5);
-  }
-
-  mat-icon {
-    color: var(--brand-500);
-    font-size: 19px;
-    width: 19px;
-    height: 19px;
-    filter: drop-shadow(0 0 6px rgba(39, 255, 63, 0.45));
-  }
+.brand-isotipo {
+  width: 38px;
+  height: 38px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(39, 255, 63, 0.22));
 }
 
 .session-pill {
@@ -87,5 +88,11 @@
   .title {
     font-size: 12px;
     letter-spacing: 1px;
+  }
+
+  .brand-mark,
+  .brand-isotipo {
+    width: 34px;
+    height: 34px;
   }
 }

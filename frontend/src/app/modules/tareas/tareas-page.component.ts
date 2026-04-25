@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -15,13 +16,14 @@ import { MatTableModule } from '@angular/material/table';
 import { TareaDetailDialogComponent } from './components/tarea-detail-dialog/tarea-detail-dialog.component';
 import { TareaFormDialogComponent } from './components/tarea-form-dialog/tarea-form-dialog.component';
 import { TareaStatusDialogComponent } from './components/tarea-status-dialog/tarea-status-dialog.component';
+import { compareDates, formatDateToIso } from '../../core/date.utils';
 import { EstadoTarea, KanbanColumn, LookupItem, PrioridadTarea, TareaDetalle, TareaFormulario, TareaListado, TareaLookups } from './models/tareas.models';
 import { TareasService } from './services/tareas.service';
 
 @Component({
   selector: 'app-tareas-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatCardModule, MatTableModule, MatPaginatorModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, MatSnackBarModule],
+  imports: [ReactiveFormsModule, MatCardModule, MatTableModule, MatPaginatorModule, MatFormFieldModule, MatDatepickerModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './tareas-page.component.html',
   styleUrl: './tareas-page.component.scss'
 })
@@ -51,8 +53,8 @@ export class TareasPageComponent implements OnInit {
     developerId: [''],
     status: [''],
     priority: [''],
-    dueDateFrom: [''],
-    dueDateTo: ['']
+    dueDateFrom: [null as Date | null],
+    dueDateTo: [null as Date | null]
   });
 
   vista: 'lista' | 'kanban' = 'lista';
@@ -152,7 +154,7 @@ export class TareasPageComponent implements OnInit {
   }
 
   limpiarFiltros(): void {
-    this.filtrosForm.reset({ search: '', projectId: '', developerId: '', status: '', priority: '', dueDateFrom: '', dueDateTo: '' });
+    this.filtrosForm.reset({ search: '', projectId: '', developerId: '', status: '', priority: '', dueDateFrom: null, dueDateTo: null });
     this.pageNumber = 1;
     this.cargarDatos();
   }
@@ -246,19 +248,19 @@ export class TareasPageComponent implements OnInit {
       developerId: this.filtrosForm.value.developerId || undefined,
       status: (this.filtrosForm.value.status as EstadoTarea | '') || undefined,
       priority: (this.filtrosForm.value.priority as PrioridadTarea | '') || undefined,
-      dueDateFrom: this.filtrosForm.value.dueDateFrom || undefined,
-      dueDateTo: this.filtrosForm.value.dueDateTo || undefined
+      dueDateFrom: formatDateToIso(this.filtrosForm.value.dueDateFrom) || undefined,
+      dueDateTo: formatDateToIso(this.filtrosForm.value.dueDateTo) || undefined
     };
   }
 
   private rangoFechasValido(): boolean {
-    const dueDateFrom = this.filtrosForm.value.dueDateFrom || '';
-    const dueDateTo = this.filtrosForm.value.dueDateTo || '';
+    const dueDateFrom = this.filtrosForm.value.dueDateFrom;
+    const dueDateTo = this.filtrosForm.value.dueDateTo;
 
     if (!dueDateFrom || !dueDateTo) {
       return true;
     }
 
-    return dueDateFrom <= dueDateTo;
+    return compareDates(dueDateFrom, dueDateTo) <= 0;
   }
 }

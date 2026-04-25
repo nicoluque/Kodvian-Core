@@ -2,11 +2,13 @@ import { Component, Inject, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+import { compareDates, formatDateToIso, parseIsoDate } from '../../../../core/date.utils';
 import { EstadoTarea, LookupItem, PrioridadTarea, TareaDetalle, TareaFormulario } from '../../models/tareas.models';
 
 interface TareaFormData {
@@ -18,7 +20,7 @@ interface TareaFormData {
 @Component({
   selector: 'app-tarea-form-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSlideToggleModule],
+  imports: [ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatDatepickerModule, MatInputModule, MatSelectModule, MatSlideToggleModule],
   templateUrl: './tarea-form-dialog.component.html',
   styleUrl: './tarea-form-dialog.component.scss'
 })
@@ -43,9 +45,9 @@ export class TareaFormDialogComponent {
     developerId: [''],
     status: ['Pendiente' as EstadoTarea, [Validators.required]],
     priority: ['Media' as PrioridadTarea, [Validators.required]],
-    startDate: [''],
-    dueDate: [''],
-    finishedDate: [''],
+    startDate: [null as Date | null],
+    dueDate: [null as Date | null],
+    finishedDate: [null as Date | null],
     estimatedHours: [null as number | null, [Validators.min(0)]],
     realHours: [null as number | null, [Validators.min(0)]],
     kanbanOrder: [0],
@@ -61,9 +63,9 @@ export class TareaFormDialogComponent {
         developerId: data.tarea.developerId ?? '',
         status: data.tarea.status,
         priority: data.tarea.priority,
-        startDate: data.tarea.startDate ?? '',
-        dueDate: data.tarea.dueDate ?? '',
-        finishedDate: data.tarea.finishedDate ?? '',
+        startDate: parseIsoDate(data.tarea.startDate),
+        dueDate: parseIsoDate(data.tarea.dueDate),
+        finishedDate: parseIsoDate(data.tarea.finishedDate),
         estimatedHours: data.tarea.estimatedHours ?? null,
         realHours: data.tarea.realHours ?? null,
         kanbanOrder: data.tarea.kanbanOrder,
@@ -87,9 +89,9 @@ export class TareaFormDialogComponent {
       responsibleId: this.data.tarea?.responsibleId ?? null,
       status: raw.status,
       priority: raw.priority,
-      startDate: raw.startDate || null,
-      dueDate: raw.dueDate || null,
-      finishedDate: raw.finishedDate || null,
+      startDate: formatDateToIso(raw.startDate),
+      dueDate: formatDateToIso(raw.dueDate),
+      finishedDate: formatDateToIso(raw.finishedDate),
       estimatedHours: raw.estimatedHours,
       realHours: raw.realHours,
       kanbanOrder: raw.kanbanOrder ?? 0,
@@ -100,15 +102,15 @@ export class TareaFormDialogComponent {
 
 function taskDateRangeValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const startDate = control.get('startDate')?.value as string | null;
-    const dueDate = control.get('dueDate')?.value as string | null;
-    const finishedDate = control.get('finishedDate')?.value as string | null;
+    const startDate = control.get('startDate')?.value as Date | null;
+    const dueDate = control.get('dueDate')?.value as Date | null;
+    const finishedDate = control.get('finishedDate')?.value as Date | null;
 
-    if (startDate && dueDate && dueDate < startDate) {
+    if (startDate && dueDate && compareDates(dueDate, startDate) < 0) {
       return { invalidDueDate: true };
     }
 
-    if (startDate && finishedDate && finishedDate < startDate) {
+    if (startDate && finishedDate && compareDates(finishedDate, startDate) < 0) {
       return { invalidFinishedDate: true };
     }
 

@@ -2,10 +2,12 @@ import { Component, Inject, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
+import { compareDates, formatDateToIso, parseIsoDate } from '../../../../core/date.utils';
 import { CategoriaFinanciera, EstadoMovimiento, LookupItem, MovimientoDetalle, MovimientoFormulario, TipoMovimiento } from '../../models/finanzas.models';
 
 interface MovimientoFormData {
@@ -20,7 +22,7 @@ interface MovimientoFormData {
 @Component({
   selector: 'app-movimiento-form-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatDatepickerModule, MatInputModule, MatSelectModule],
   templateUrl: './movimiento-form-dialog.component.html',
   styleUrl: './movimiento-form-dialog.component.scss'
 })
@@ -39,8 +41,8 @@ export class MovimientoFormDialogComponent {
     projectId: [''],
     description: ['', [Validators.required, Validators.maxLength(500)]],
     amount: [0, [Validators.required, Validators.min(0.01)]],
-    movementDate: ['', [Validators.required]],
-    dueDate: [''],
+    movementDate: [null as Date | null, [Validators.required]],
+    dueDate: [null as Date | null],
     status: ['Pendiente' as EstadoMovimiento, [Validators.required]],
     paymentMethod: ['', [Validators.maxLength(80)]],
     receiptNumber: ['', [Validators.maxLength(80)]],
@@ -61,8 +63,8 @@ export class MovimientoFormDialogComponent {
         projectId: data.movimiento.projectId ?? '',
         description: data.movimiento.description,
         amount: data.movimiento.amount,
-        movementDate: data.movimiento.movementDate,
-        dueDate: data.movimiento.dueDate ?? '',
+        movementDate: parseIsoDate(data.movimiento.movementDate),
+        dueDate: parseIsoDate(data.movimiento.dueDate),
         status: data.movimiento.status,
         paymentMethod: data.movimiento.paymentMethod ?? '',
         receiptNumber: data.movimiento.receiptNumber ?? '',
@@ -86,8 +88,8 @@ export class MovimientoFormDialogComponent {
       projectId: raw.projectId || null,
       description: raw.description,
       amount: Number(raw.amount),
-      movementDate: raw.movementDate,
-      dueDate: raw.dueDate || null,
+      movementDate: formatDateToIso(raw.movementDate) ?? '',
+      dueDate: formatDateToIso(raw.dueDate),
       status: raw.status,
       paymentMethod: raw.paymentMethod || undefined,
       receiptNumber: raw.receiptNumber || undefined,
@@ -129,10 +131,10 @@ export class MovimientoFormDialogComponent {
 
 function movementDateRangeValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const movementDate = control.get('movementDate')?.value as string | null;
-    const dueDate = control.get('dueDate')?.value as string | null;
+    const movementDate = control.get('movementDate')?.value as Date | null;
+    const dueDate = control.get('dueDate')?.value as Date | null;
 
-    if (movementDate && dueDate && dueDate < movementDate) {
+    if (movementDate && dueDate && compareDates(dueDate, movementDate) < 0) {
       return { invalidDueDate: true };
     }
 

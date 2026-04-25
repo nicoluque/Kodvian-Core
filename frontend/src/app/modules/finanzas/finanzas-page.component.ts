@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,13 +15,14 @@ import { MatTableModule } from '@angular/material/table';
 
 import { CategoriaFormDialogComponent } from './components/categoria-form-dialog/categoria-form-dialog.component';
 import { MovimientoFormDialogComponent } from './components/movimiento-form-dialog/movimiento-form-dialog.component';
+import { compareDates, formatDateToIso } from '../../core/date.utils';
 import { CategoriaFinanciera, CategoriaFormulario, EstadoMovimiento, FinanzaFiltros, FinanzasLookups, MovimientoDetalle, MovimientoFormulario, MovimientoListado, ResumenMensual, TipoMovimiento } from './models/finanzas.models';
 import { FinanzasService } from './services/finanzas.service';
 
 @Component({
   selector: 'app-finanzas-page',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe, MatCardModule, MatTableModule, MatPaginatorModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSnackBarModule],
+  imports: [ReactiveFormsModule, CurrencyPipe, MatCardModule, MatTableModule, MatPaginatorModule, MatFormFieldModule, MatDatepickerModule, MatInputModule, MatSelectModule, MatButtonModule, MatSnackBarModule],
   templateUrl: './finanzas-page.component.html',
   styleUrl: './finanzas-page.component.scss'
 })
@@ -39,8 +41,8 @@ export class FinanzasPageComponent implements OnInit {
   readonly columnas = ['movementType', 'category', 'description', 'amount', 'movementDate', 'status', 'actions'];
 
   readonly filtrosForm = this.fb.group({
-    dateFrom: [''],
-    dateTo: [''],
+    dateFrom: [null as Date | null],
+    dateTo: [null as Date | null],
     movementType: [''],
     categoryId: [''],
     clientId: [''],
@@ -146,7 +148,7 @@ export class FinanzasPageComponent implements OnInit {
   }
 
   limpiarFiltros(): void {
-    this.filtrosForm.reset({ dateFrom: '', dateTo: '', movementType: '', categoryId: '', clientId: '', providerId: '', status: '' });
+    this.filtrosForm.reset({ dateFrom: null, dateTo: null, movementType: '', categoryId: '', clientId: '', providerId: '', status: '' });
     this.pageNumber = 1;
     this.cargarMovimientos();
   }
@@ -259,8 +261,8 @@ export class FinanzasPageComponent implements OnInit {
     return {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
-      dateFrom: this.filtrosForm.value.dateFrom || undefined,
-      dateTo: this.filtrosForm.value.dateTo || undefined,
+      dateFrom: formatDateToIso(this.filtrosForm.value.dateFrom) || undefined,
+      dateTo: formatDateToIso(this.filtrosForm.value.dateTo) || undefined,
       movementType: (this.filtrosForm.value.movementType as TipoMovimiento | '') || undefined,
       categoryId: this.filtrosForm.value.categoryId || undefined,
       clientId: this.filtrosForm.value.clientId || undefined,
@@ -270,13 +272,13 @@ export class FinanzasPageComponent implements OnInit {
   }
 
   private rangoFechasValido(): boolean {
-    const dateFrom = this.filtrosForm.value.dateFrom || '';
-    const dateTo = this.filtrosForm.value.dateTo || '';
+    const dateFrom = this.filtrosForm.value.dateFrom;
+    const dateTo = this.filtrosForm.value.dateTo;
 
     if (!dateFrom || !dateTo) {
       return true;
     }
 
-    return dateFrom <= dateTo;
+    return compareDates(dateFrom, dateTo) <= 0;
   }
 }

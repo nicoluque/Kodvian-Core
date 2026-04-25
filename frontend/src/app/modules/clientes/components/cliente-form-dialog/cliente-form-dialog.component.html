@@ -53,19 +53,58 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Ciudad</mat-label>
-      <input matInput formControlName="city" placeholder="Ciudad" />
+      <mat-label>País</mat-label>
+      <mat-select formControlName="countrySelection" (selectionChange)="onCountrySelectionChange($event.value)">
+        <mat-option value="">Seleccionar país</mat-option>
+        @for (country of countries; track country.code) {
+          <mat-option [value]="country.code">{{ country.name }}</mat-option>
+        }
+        <mat-option value="__manual__">Otro (manual)</mat-option>
+      </mat-select>
     </mat-form-field>
+
+    @if (isCountryManual) {
+      <mat-form-field appearance="outline">
+        <mat-label>País (manual)</mat-label>
+        <input matInput formControlName="countryManual" placeholder="Ingresar país" />
+      </mat-form-field>
+    }
 
     <mat-form-field appearance="outline">
       <mat-label>Provincia</mat-label>
-      <input matInput formControlName="province" placeholder="Provincia" />
+      <mat-select formControlName="provinceSelection" (selectionChange)="onProvinceSelectionChange($event.value)" [disabled]="(!isCountryManual && !form.value.countrySelection) || loadingRegions">
+        <mat-option value="">Seleccionar provincia</mat-option>
+        @for (region of regions; track region.code) {
+          <mat-option [value]="region.code">{{ region.name }}</mat-option>
+        }
+        <mat-option value="__manual__">Otro (manual)</mat-option>
+      </mat-select>
     </mat-form-field>
 
+    @if (isProvinceManual) {
+      <mat-form-field appearance="outline">
+        <mat-label>Provincia (manual)</mat-label>
+        <input matInput formControlName="provinceManual" placeholder="Ingresar provincia" />
+      </mat-form-field>
+    }
+
     <mat-form-field appearance="outline">
-      <mat-label>País</mat-label>
-      <input matInput formControlName="country" placeholder="País" />
+      <mat-label>Ciudad</mat-label>
+      <mat-select formControlName="citySelection" [disabled]="(!isProvinceManual && !form.value.provinceSelection) || loadingCities">
+        <mat-option value="">Seleccionar ciudad</mat-option>
+        @for (city of cities; track city.code) {
+          <mat-option [value]="city.code">{{ city.name }}</mat-option>
+        }
+        <mat-option value="__manual__">Otro (manual)</mat-option>
+      </mat-select>
     </mat-form-field>
+
+    @if (isCityManual) {
+      <mat-form-field appearance="outline">
+        <mat-label>Ciudad (manual)</mat-label>
+        <input matInput formControlName="cityManual" placeholder="Ingresar ciudad" />
+      </mat-form-field>
+    }
 
     <div class="form-section full-width">
       <p class="section-eyebrow">Condiciones comerciales</p>

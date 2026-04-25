@@ -1,0 +1,157 @@
+@mixin table-shell {
+  .tabla-wrapper {
+    overflow: auto;
+    border: 1px solid var(--line-600);
+    border-radius: 12px;
+    background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
+  }
+}
+
+@mixin table-action-pill($width: auto, $height: 34px, $padding: 0 10px) {
+  .acciones-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 34px;
+    white-space: nowrap;
+  }
+
+  .actions-cell {
+    text-align: center;
+  }
+
+  :host ::ng-deep .mat-column-actions {
+    text-align: center;
+  }
+
+  :host ::ng-deep td.mat-column-actions {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  :host ::ng-deep .mat-column-actions .mat-mdc-button-base {
+    margin: 0 !important;
+  }
+
+  .table-action {
+    width: $width;
+    height: $height;
+    line-height: 1;
+    padding: $padding;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(103, 133, 120, 0.58);
+    color: #d7e8df !important;
+    --mdc-text-button-label-text-color: #d7e8df;
+    background: linear-gradient(180deg, rgba(16, 26, 29, 0.96), rgba(11, 19, 21, 0.98));
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: inset 0 1px 0 rgba(147, 175, 162, 0.18);
+    transition: all 140ms ease;
+
+    &:hover {
+      color: #ecfff0 !important;
+      --mdc-text-button-label-text-color: #ecfff0;
+      border-color: rgba(90, 216, 113, 0.72);
+      background: linear-gradient(180deg, rgba(28, 53, 37, 0.9), rgba(18, 40, 28, 0.96));
+      box-shadow: 0 0 0 1px rgba(56, 157, 76, 0.28) inset, 0 8px 20px rgba(9, 18, 14, 0.45);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+@mixin status-chip-base($font-size: 11px, $padding: 4px 10px) {
+  .tag-status {
+    display: inline-block;
+    padding: $padding;
+    border-radius: 999px;
+    border: 1px solid var(--line-600);
+    color: var(--brand-300);
+    background: rgba(25, 52, 34, 0.44);
+    font-size: $font-size;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+}
+
+@mixin mat-table-theme {
+  :host ::ng-deep .mat-mdc-header-row {
+    background: rgba(19, 30, 33, 0.7);
+  }
+
+  :host ::ng-deep .mat-mdc-table {
+    background: transparent !important;
+    --mat-table-background-color: transparent;
+    --mat-table-row-item-container-color: transparent;
+  }
+
+  :host ::ng-deep .mat-mdc-header-cell {
+    color: rgba(140, 255, 152, 0.9) !important;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom-color: var(--line-600) !important;
+  }
+
+  :host ::ng-deep .mat-mdc-row {
+    background: rgba(8, 13, 15, 0.52) !important;
+  }
+
+  :host ::ng-deep .mat-mdc-cell {
+    color: var(--text-100) !important;
+    border-bottom-color: var(--line-600) !important;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  :host ::ng-deep .mat-mdc-row:hover {
+    background: rgba(24, 36, 39, 0.72) !important;
+  }
+}
+
+@mixin plain-table-theme($selector: '.tabla-simple') {
+  #{$selector} {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line-600);
+      padding: 9px 6px;
+      text-align: left;
+    }
+
+    th {
+      color: rgba(160, 255, 170, 0.96);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    td {
+      color: var(--text-100);
+    }
+
+    tbody tr {
+      transition: background-color 120ms ease;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(17, 28, 30, 0.34);
+    }
+
+    tbody tr:hover {
+      background: rgba(27, 44, 41, 0.58);
+    }
+  }
+}

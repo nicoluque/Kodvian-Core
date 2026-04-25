@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
@@ -12,6 +13,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(withInterceptors([authInterceptor])),
+    { provide: MAT_DATE_LOCALE, useValue: 'es-AR' },
+    provideNativeDateAdapter(),
     { provide: MatPaginatorIntl, useFactory: createMatPaginatorEs },
     provideRouter(routes),
     provideAnimationsAsync()

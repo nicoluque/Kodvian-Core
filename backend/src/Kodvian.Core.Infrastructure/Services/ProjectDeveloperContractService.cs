@@ -173,7 +173,7 @@ public class ProjectDeveloperContractService : IProjectDeveloperContractService
             .AsNoTracking()
             .Where(x => x.ProjectId == contract.ProjectId
                         && x.MovementType == FinancialMovementType.Ingreso
-                        && x.Status == FinancialMovementStatus.Cobrado
+                        && (x.Status == FinancialMovementStatus.Pendiente || x.Status == FinancialMovementStatus.Cobrado)
                         && x.MovementDate >= activeStart
                         && x.MovementDate <= activeEnd)
             .GroupBy(x => x.MovementDate.Month)
@@ -193,8 +193,9 @@ public class ProjectDeveloperContractService : IProjectDeveloperContractService
 
         for (var month = 1; month <= 12; month++)
         {
-            var monthDate = new DateOnly(year, month, 1);
-            if (monthDate < activeStart || monthDate > activeEnd)
+            var monthStartDate = new DateOnly(year, month, 1);
+            var monthEndDate = monthStartDate.AddMonths(1).AddDays(-1);
+            if (monthEndDate < activeStart || monthStartDate > activeEnd)
             {
                 continue;
             }

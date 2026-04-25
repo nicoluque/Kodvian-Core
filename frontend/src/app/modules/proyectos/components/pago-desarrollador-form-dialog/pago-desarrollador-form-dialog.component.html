@@ -3,7 +3,9 @@
   <form [formGroup]="form" class="dialog-form form-grid">
     <mat-form-field appearance="outline">
       <mat-label>Fecha de pago</mat-label>
-      <input matInput type="date" formControlName="paymentDate" />
+      <input matInput [matDatepicker]="paymentDatePicker" formControlName="paymentDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="paymentDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #paymentDatePicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

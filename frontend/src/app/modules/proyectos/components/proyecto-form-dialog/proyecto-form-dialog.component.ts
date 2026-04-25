@@ -2,11 +2,13 @@ import { Component, Inject, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+import { compareDates, formatDateToIso, parseIsoDate } from '../../../../core/date.utils';
 import { EstadoProyecto, LookupItem, PrioridadProyecto, ProyectoDetalle, ProyectoFormulario } from '../../models/proyectos.models';
 
 interface ProyectoFormData {
@@ -23,6 +25,7 @@ interface ProyectoFormData {
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatDatepickerModule,
     MatInputModule,
     MatSelectModule,
     MatSlideToggleModule
@@ -52,9 +55,9 @@ export class ProyectoFormDialogComponent {
     responsibleId: [''],
     status: ['Planificacion' as EstadoProyecto, [Validators.required]],
     priority: ['Media' as PrioridadProyecto, [Validators.required]],
-    startDate: [''],
-    estimatedDeliveryDate: [''],
-    closingDate: [''],
+    startDate: [null as Date | null],
+    estimatedDeliveryDate: [null as Date | null],
+    closingDate: [null as Date | null],
     budget: [null as number | null, [Validators.min(0)]],
     progressPercentage: [0, [Validators.min(0), Validators.max(100)]],
     isActive: [true]
@@ -69,9 +72,9 @@ export class ProyectoFormDialogComponent {
         responsibleId: data.proyecto.responsibleId ?? '',
         status: data.proyecto.status,
         priority: data.proyecto.priority,
-        startDate: data.proyecto.startDate ?? '',
-        estimatedDeliveryDate: data.proyecto.estimatedDeliveryDate ?? '',
-        closingDate: data.proyecto.closingDate ?? '',
+        startDate: parseIsoDate(data.proyecto.startDate),
+        estimatedDeliveryDate: parseIsoDate(data.proyecto.estimatedDeliveryDate),
+        closingDate: parseIsoDate(data.proyecto.closingDate),
         budget: data.proyecto.budget ?? null,
         progressPercentage: data.proyecto.progressPercentage,
         isActive: data.proyecto.isActive
@@ -94,9 +97,9 @@ export class ProyectoFormDialogComponent {
       responsibleId: raw.responsibleId || null,
       status: raw.status,
       priority: raw.priority,
-      startDate: raw.startDate || null,
-      estimatedDeliveryDate: raw.estimatedDeliveryDate || null,
-      closingDate: raw.closingDate || null,
+      startDate: formatDateToIso(raw.startDate),
+      estimatedDeliveryDate: formatDateToIso(raw.estimatedDeliveryDate),
+      closingDate: formatDateToIso(raw.closingDate),
       budget: raw.budget,
       progressPercentage: raw.progressPercentage ?? 0,
       isActive: !!raw.isActive
@@ -106,15 +109,15 @@ export class ProyectoFormDialogComponent {
 
 function projectDateRangeValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const startDate = control.get('startDate')?.value as string | null;
-    const estimatedDeliveryDate = control.get('estimatedDeliveryDate')?.value as string | null;
-    const closingDate = control.get('closingDate')?.value as string | null;
+    const startDate = control.get('startDate')?.value as Date | null;
+    const estimatedDeliveryDate = control.get('estimatedDeliveryDate')?.value as Date | null;
+    const closingDate = control.get('closingDate')?.value as Date | null;
 
-    if (startDate && estimatedDeliveryDate && estimatedDeliveryDate < startDate) {
+    if (startDate && estimatedDeliveryDate && compareDates(estimatedDeliveryDate, startDate) < 0) {
       return { invalidEstimatedDeliveryDate: true };
     }
 
-    if (startDate && closingDate && closingDate < startDate) {
+    if (startDate && closingDate && compareDates(closingDate, startDate) < 0) {
       return { invalidClosingDate: true };
     }
 
