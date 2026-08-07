@@ -2,9 +2,10 @@
 using Kodvian.Core.Application.Auth.Abstractions;
 using Kodvian.Core.Application.Auth.Dtos;
 using Kodvian.Core.Application.Common.Models;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Hosting;
 
 namespace Kodvian.Core.Api.Controllers;
 
@@ -15,10 +16,12 @@ public class AuthController : ControllerBase
     private const string AuthCookieName = "auth_token";
 
     private readonly IAuthService _authService;
+    private readonly IHostEnvironment _environment;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, IHostEnvironment environment)
     {
         _authService = authService;
+        _environment = environment;
     }
 
     [HttpPost("login")]
@@ -75,7 +78,7 @@ public class AuthController : ControllerBase
         return new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps,
+            Secure = !_environment.IsDevelopment() || Request.IsHttps,
             SameSite = SameSiteMode.Strict,
             IsEssential = true,
             Path = "/",

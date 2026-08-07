@@ -27,8 +27,8 @@ public static class DependencyInjectionExtensions
 
         services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
         services.Configure<StorageOptions>(configuration.GetSection("Storage"));
+        RegisterFileStorage(services, configuration);
 
-        services.AddScoped<IFileStorageService, LocalFileStorageService>();
         services.AddScoped<IPasswordHasher, PasswordHasherService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();
@@ -45,6 +45,48 @@ public static class DependencyInjectionExtensions
         services.AddScoped<ITaskService, TaskService>();
 
         return services;
+    }
+
+    private static void RegisterFileStorage(IServiceCollection services, IConfiguration configuration)
+    {
+        var storageSection = configuration.GetSection("Storage");
+        var provider = storageSection["Provider"]?.Trim();
+        if (string.IsNullOrWhiteSpace(provider))
+        {
+            provider = StorageOptions.LocalProvider;
+        }
+
+        if (string.Equals(provider, StorageOptions.S3Provider, StringComparison.OrdinalIgnoreCase))
+        {
+            ValidateS3Options(storageSection);
+            services.AddSingleton<IFileStorageService, S3FileStorageService>();
+            return;
+        }
+
+        if (!string.Equals(provider, StorageOptions.LocalProvider, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException($"Unsupported storage provider '{provider}'. Use Local or S3.");
+        }
+
+        services.AddScoped<IFileStorageService, LocalFileStorageService>();
+    }
+
+    private static void ValidateS3Options(IConfigurationSection storageSection)
+    {
+        var bucket = storageSection["Bucket"];
+        var accessKey = storageSection["AccessKey"];
+        var secretKey = storageSection["SecretKey"];
+        var serviceUrl = storageSection["ServiceUrl"];
+        var region = storageSection["Region"];
+
+        if (string.IsNullOrWhiteSpace(bucket)
+            || string.IsNullOrWhiteSpace(accessKey)
+            || string.IsNullOrWhiteSpace(secretKey)
+            || (string.IsNullOrWhiteSpace(serviceUrl) && string.IsNullOrWhiteSpace(region)))
+        {
+            throw new InvalidOperationException(
+                "S3 storage requires Bucket, AccessKey, SecretKey, and ServiceUrl or Region.");
+        }
     }
 
     private static string BuildConnectionString(IConfiguration configuration)
