@@ -1,0 +1,181 @@
+# Modelo De Datos
+
+El modelo de datos vive en `backend/src/Kodvian.Core.Domain` y se configura en `backend/src/Kodvian.Core.Infrastructure/Persistence/KodvianDbContext.cs`.
+
+## BaseEntity
+
+Campos compartidos:
+
+- `Id`.
+- `FechaCreacion`.
+- `FechaActualizacion`.
+- `Activo`.
+
+## Entidades principales
+
+### Client
+
+Representa un cliente comercial.
+
+Relaciones:
+
+- Tiene muchos `Project`.
+
+Campos relevantes:
+
+- `CommercialName` requerido.
+- Datos legales/contacto.
+- Estado comercial.
+- Servicio, monto mensual, dia de facturacion y notas.
+
+### Project
+
+Representa un proyecto para un cliente.
+
+Relaciones:
+
+- Requiere `ClienteId` hacia `Client` con delete restrict.
+- Puede tener `ResponsableId` hacia `User` con set null.
+- Tiene muchas `TaskItem`.
+- Tiene muchos `ProjectDeveloperContract`.
+- Tiene documentos versionados con `ProjectDocument`.
+- Tiene documentos legacy o comprobantes relacionados via `DocumentFile`.
+
+### TaskItem
+
+Representa una tarea operativa.
+
+Relaciones:
+
+- Requiere `ProyectoId` hacia `Project` con delete restrict.
+- Puede tener `DeveloperId` hacia `Developer` con set null.
+- Puede tener `ResponsableId` hacia `User` con set null.
+- Requiere `CreadoPorId` hacia `User` con delete restrict.
+
+### Developer
+
+Representa un desarrollador externo o colaborador asociado a proyectos/tareas.
+
+Relaciones:
+
+- Tiene muchos `ProjectDeveloperContract`.
+- Tiene muchas `TaskItem`.
+
+### ProjectDeveloperContract
+
+Representa el acuerdo economico entre un proyecto y un desarrollador.
+
+Relaciones:
+
+- Requiere `ProjectId` hacia `Project` con delete restrict.
+- Requiere `DeveloperId` hacia `Developer` con delete restrict.
+- Tiene muchos `DeveloperPayment` con cascade desde contrato a pagos.
+
+Restricciones:
+
+- `Percentage` entre 0 y 100 si existe.
+- `AgreedAmount` mayor a 0 si existe.
+
+### DeveloperPayment
+
+Representa un pago realizado a un desarrollador por un contrato.
+
+Relaciones:
+
+- Requiere `ContractId`.
+- Tiene comprobantes `DocumentFile`.
+
+### FinancialCategory
+
+Representa una categoria financiera para ingresos o egresos.
+
+Relaciones:
+
+- Tiene muchos `FinancialMovement`.
+
+### Provider
+
+Representa un proveedor.
+
+Relaciones:
+
+- Tiene muchos `FinancialMovement`.
+
+### FinancialMovement
+
+Representa un ingreso o egreso.
+
+Relaciones:
+
+- Requiere `CategoryId` hacia `FinancialCategory` con restrict.
+- Puede relacionarse con `Client`, `Provider` y `Project` con set null.
+- Requiere `CreatedById` hacia `User` con restrict.
+- Tiene comprobantes `DocumentFile`.
+
+### DocumentFile
+
+Representa un archivo fisico o remoto persistido por el storage.
+
+Puede pertenecer a exactamente uno de:
+
+- `ProjectId`.
+- `FinancialMovementId`.
+- `DeveloperPaymentId`.
+
+La constraint `CK_DocumentFiles_Owner` evita archivos sin owner o con multiples owners.
+
+### ProjectDocument
+
+Representa un documento funcional de proyecto con versionado.
+
+Relaciones:
+
+- Requiere `ProjectId`.
+- Requiere `CreatedById`.
+- Puede tener `DeletedById`.
+- Tiene muchas `ProjectDocumentVersion`.
+
+Usa baja logica con `Activo`, `DeletedAt` y `DeletedById`.
+
+### ProjectDocumentVersion
+
+Representa una version de un documento de proyecto.
+
+Relaciones:
+
+- Requiere `ProjectDocumentId`.
+- Requiere `DocumentFileId`, unico.
+- Requiere `UploadedById`.
+
+Restricciones:
+
+- `(ProjectDocumentId, VersionNumber)` es unico.
+
+### Role y User
+
+`Role` define perfiles de acceso.
+
+`User` representa usuarios autenticables:
+
+- Email unico.
+- Password hash requerido.
+- Role requerido.
+
+## Enums
+
+- `ClientStatus`: `Prospecto`, `Activo`, `Pausado`, `Finalizado`, `Presupuestado`.
+- `ProjectStatus`: `Planificacion`, `EnCurso`, `Pausado`, `Finalizado`, `Cancelado`, `Presupuestado`.
+- `ProjectPriority`: `Baja`, `Media`, `Alta`, `Urgente`.
+- `TaskStatus`: `Pendiente`, `EnCurso`, `Bloqueada`, `Finalizada`, `Cancelada`.
+- `TaskPriority`: `Baja`, `Media`, `Alta`, `Urgente`.
+- `FinancialMovementType`: `Ingreso`, `Egreso`.
+- `FinancialMovementStatus`: `Pendiente`, `Cobrado`, `Pagado`, `Vencido`, `Anulado`.
+- `ContractPaymentMode`: `Percentage`, `FixedAmount`.
+- `ProjectDocumentType`: `Contract`, `Scope`, `Proposal`, `Deliverable`, `Legal`, `Invoice`, `General`.
+
+## Cuidados
+
+- Revisar delete behavior antes de eliminar entidades relacionadas.
+- Mantener precision decimal en campos monetarios.
+- Agregar indices cuando se incorporen filtros frecuentes.
+- Mantener DTOs separados de entidades para evitar exponer relaciones internas.

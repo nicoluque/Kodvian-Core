@@ -1,0 +1,198 @@
+# API Reference
+
+Esta referencia lista los endpoints detectados en `backend/src/Kodvian.Core.Api/Controllers`.
+
+## Auth
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/AuthController.cs`
+
+Base route: `/api/auth`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| POST | `/api/auth/login` | Login anonimo, rate-limited, crea cookie `auth_token`. |
+| POST | `/api/auth/logout` | Cierra sesion y elimina cookie. |
+| GET | `/api/auth/me` | Devuelve usuario actual y permisos. |
+
+## Health
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/HealthController.cs`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/health` | Health response de API. |
+| GET | `/healthz` | Healthcheck mapeado en `Program.cs` para Railway. |
+
+## Dashboard
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/DashboardController.cs`
+
+Base route: `/api/dashboard`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/dashboard/overview` | KPIs, tareas prioritarias, cobranzas proximas y movimientos recientes. |
+
+## Clients
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/ClientsController.cs`
+
+Base route: `/api/clients`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/clients` | Listado paginado de clientes. |
+| GET | `/api/clients/{id}` | Detalle de cliente. |
+| POST | `/api/clients` | Alta de cliente. |
+| PUT | `/api/clients/{id}` | Edicion de cliente. |
+| PATCH | `/api/clients/{id}/status` | Cambio de estado. |
+
+## Projects
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/ProjectsController.cs`
+
+Base route: `/api/projects`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/projects` | Listado paginado de proyectos. |
+| GET | `/api/projects/{id}` | Detalle de proyecto. |
+| GET | `/api/projects/lookups` | Datos auxiliares para formularios. |
+| POST | `/api/projects` | Alta de proyecto. |
+| PUT | `/api/projects/{id}` | Edicion de proyecto. |
+| GET | `/api/projects/document-types` | Tipos de documento de proyecto. |
+| GET | `/api/projects/{id}/documents` | Documentos del proyecto. |
+| POST | `/api/projects/{id}/documents` | Alta de documento con PDF. |
+| POST | `/api/projects/{id}/documents/{documentId}/versions` | Nueva version de documento. |
+| GET | `/api/projects/{id}/documents/{documentId}/versions` | Versiones de un documento. |
+| GET | `/api/projects/{id}/documents/{documentId}` | Descarga version vigente. |
+| GET | `/api/projects/{id}/documents/{documentId}/versions/{versionId}` | Descarga version especifica. |
+| DELETE | `/api/projects/{id}/documents/{documentId}` | Baja logica de documento. |
+
+## Tasks
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/TasksController.cs`
+
+Base route: `/api/tasks`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/tasks` | Listado paginado de tareas. |
+| GET | `/api/tasks/{id}` | Detalle de tarea. |
+| GET | `/api/tasks/kanban` | Tareas agrupadas para kanban. |
+| GET | `/api/tasks/lookups` | Datos auxiliares para formularios. |
+| POST | `/api/tasks` | Alta de tarea. |
+| PUT | `/api/tasks/{id}` | Edicion de tarea. |
+| PATCH | `/api/tasks/{id}/status` | Cambio de estado. |
+
+## Financial Movements
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/FinancialMovementsController.cs`
+
+Base route: `/api/financial-movements`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/financial-movements` | Listado paginado de movimientos. |
+| GET | `/api/financial-movements/{id}` | Detalle de movimiento. |
+| GET | `/api/financial-movements/monthly-summary` | Resumen mensual financiero. |
+| GET | `/api/financial-movements/lookups` | Datos auxiliares de finanzas. |
+| POST | `/api/financial-movements` | Alta de movimiento. |
+| PUT | `/api/financial-movements/{id}` | Edicion de movimiento. |
+| GET | `/api/financial-movements/{id}/receipts` | Comprobantes del movimiento. |
+| POST | `/api/financial-movements/{id}/receipts` | Upload de comprobante PDF. |
+| GET | `/api/financial-movements/{id}/receipts/{receiptId}` | Descarga de comprobante. |
+| DELETE | `/api/financial-movements/{id}/receipts/{receiptId}` | Eliminacion de comprobante. |
+
+## Financial Categories
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/FinancialCategoriesController.cs`
+
+Base route: `/api/financial-categories`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/financial-categories` | Lista categorias financieras. |
+| POST | `/api/financial-categories` | Alta de categoria. |
+| PUT | `/api/financial-categories/{id}` | Edicion de categoria. |
+
+## Providers
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/ProvidersController.cs`
+
+Base route: `/api/providers`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/providers` | Lista proveedores. |
+| POST | `/api/providers` | Alta de proveedor. |
+| PUT | `/api/providers/{id}` | Edicion de proveedor. |
+
+## Developers
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/DevelopersController.cs`
+
+Base route: `/api/developers`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/developers` | Lista desarrolladores. |
+| GET | `/api/developers/{id}/contracts-summary` | Resumen anual de contratos por desarrollador. |
+| POST | `/api/developers` | Alta de desarrollador. |
+| PUT | `/api/developers/{id}` | Edicion de desarrollador. |
+
+## Developer Contracts
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/ProjectDeveloperContractsController.cs`
+
+Base route: `/api`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/projects/{projectId}/developer-contracts` | Contratos de desarrolladores del proyecto. |
+| POST | `/api/projects/{projectId}/developer-contracts` | Alta de contrato. |
+| PUT | `/api/developer-contracts/{id}` | Edicion de contrato. |
+| GET | `/api/developer-contracts/{id}/ledger` | Ledger mensual del contrato. |
+
+## Developer Payments
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/DeveloperPaymentsController.cs`
+
+Base route: `/api`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/developer-contracts/{contractId}/payments` | Pagos de un contrato. |
+| POST | `/api/developer-contracts/{contractId}/payments` | Alta de pago. |
+| GET | `/api/developer-payments/{paymentId}/receipts` | Comprobantes de pago. |
+| POST | `/api/developer-payments/{paymentId}/receipts` | Upload de comprobante PDF. |
+| GET | `/api/developer-payments/{paymentId}/receipts/{receiptId}` | Descarga de comprobante. |
+| DELETE | `/api/developer-payments/{paymentId}/receipts/{receiptId}` | Eliminacion de comprobante. |
+
+## Locations
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/LocationsController.cs`
+
+Base route: `/api/locations`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/locations/countries` | Lista paises. |
+| GET | `/api/locations/regions` | Lista regiones por pais. |
+| GET | `/api/locations/cities` | Lista ciudades por pais y region. |
+
+## Users
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/UsersController.cs`
+
+Base route: `/api/users`
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/users` | Listado paginado de usuarios. Actualmente devuelve resultado vacio. |
+
+## Notas de seguridad
+
+- La mayoria de controllers requiere `[Authorize]`.
+- Las policies finas estan aplicadas principalmente a documentos de proyectos y administracion.
+- Para nuevos endpoints sensibles, agregar policy backend aunque el frontend oculte botones.
