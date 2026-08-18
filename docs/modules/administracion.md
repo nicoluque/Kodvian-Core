@@ -55,6 +55,15 @@ Archivos:
 - Evitar UI de escritura hasta que existan endpoints backend seguros.
 - Definir reglas de alta, baja, cambio de rol y reset de password antes de implementar.
 
+## Tests requeridos
+
+- Backend: tests de `UsersController` cuando implemente listado real.
+- Backend: tests de policy `AdministrationRead` y role `Administrador` para acceso permitido y denegado.
+- Backend: tests de alta, edicion, cambio de rol, activacion/desactivacion y reset de password cuando esos flujos existan.
+- Frontend: specs de `administrationGuard` para permiso presente y ausente.
+- Frontend: specs de `AdministracionPageComponent` para listado, loading, empty y error cuando consuma usuarios reales.
+- Frontend: specs de visibilidad de menu si se filtra administracion por permisos.
+
 ## Mejoras futuras
 
 - Listado real de usuarios.

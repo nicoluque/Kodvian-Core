@@ -102,6 +102,19 @@ Enums:
 - Validar permisos backend para acciones sensibles.
 - Evitar inconsistencias entre presupuesto de proyecto, contratos y pagos.
 
+## Tests requeridos
+
+- Backend: tests de `ProjectService` para listado, detalle, lookups, alta y edicion.
+- Backend: tests de documentos para alta, versionado, descarga, listado y baja logica.
+- Backend: tests de permisos para `projects.documents.read/write/delete` con acceso permitido y denegado.
+- Backend: tests de contratos para porcentaje, monto fijo, constraints, edicion y ledger.
+- Backend: tests de pagos y comprobantes para alta, upload, descarga y eliminacion.
+- Backend: integration tests de endpoints principales de proyectos, documentos, contratos y pagos.
+- Frontend: specs de `ProyectosService` para endpoints, FormData, downloads y params.
+- Frontend: specs de pagina para filtros, paginacion, loading, empty, error y alta/edicion.
+- Frontend: specs de dialogs de proyecto, detalle, documentos, contratos, pagos y ledger.
+- Frontend: specs de permisos visibles para acciones de documentos.
+
 ## Mejoras futuras
 
 - Vista de timeline de proyecto.

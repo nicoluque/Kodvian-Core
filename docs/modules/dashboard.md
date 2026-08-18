@@ -60,6 +60,14 @@ El dashboard consulta informacion agregada desde:
 - No mezclar ingresos/egresos con signos ambiguos.
 - Si se agregan filtros por periodo, documentar exactamente como impactan los KPIs.
 
+## Tests requeridos
+
+- Backend: tests de `DashboardService` para KPIs, tareas prioritarias, cobranzas proximas y movimientos recientes.
+- Backend: integration test de `GET /api/dashboard/overview` autenticado.
+- Backend: tests de calculos financieros por periodo cuando se modifiquen reglas de resumen.
+- Frontend: specs de `DashboardService` para URL y mapeo de respuesta.
+- Frontend: specs de `DashboardPageComponent` para loading, success, error y listas vacias.
+
 ## Mejoras futuras
 
 - Filtros por periodo.

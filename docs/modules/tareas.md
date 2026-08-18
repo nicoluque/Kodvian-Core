@@ -87,6 +87,16 @@ Prioridades:
 - Evitar cambiar orden kanban sin persistencia consistente.
 - No mostrar campos tecnicos al usuario final.
 
+## Tests requeridos
+
+- Backend: tests de `TaskService` para listado, detalle, kanban, lookups, alta, edicion y cambio de estado.
+- Backend: tests de validacion para proyecto requerido, prioridad, estado, horas y fechas.
+- Backend: tests de transiciones de estado cuando se agreguen reglas.
+- Backend: integration tests de `GET`, `POST`, `PUT`, `PATCH /api/tasks/{id}/status` y `GET /api/tasks/kanban`.
+- Frontend: specs de `TareasService` para rutas, filtros, params y payloads.
+- Frontend: specs de pagina para listado, kanban, filtros, loading, empty, error y acciones.
+- Frontend: specs de dialogs de form, detail y status para validacion, submit y cierre.
+
 ## Mejoras futuras
 
 - Drag and drop kanban con persistencia de orden.

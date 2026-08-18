@@ -65,6 +65,16 @@ Archivos:
 - Cuidar exposicion de informacion fiscal.
 - Al editar, verificar impacto en contratos historicos.
 
+## Tests requeridos
+
+- Backend: tests de `DeveloperService` para listado, alta, edicion y resumen de contratos.
+- Backend: tests de validacion para datos de contacto/fiscales y duplicados si se agregan reglas.
+- Backend: integration tests de `GET`, `POST`, `PUT` y `GET /api/developers/{id}/contracts-summary`.
+- Backend: tests de permisos si se agregan permisos dedicados para desarrolladores.
+- Frontend: specs de `DesarrolladoresService` para endpoints y query params.
+- Frontend: specs de pagina para loading, empty, error, alta y edicion.
+- Frontend: specs del dialog de desarrollador para validaciones y payload enviado.
+
 ## Mejoras futuras
 
 - Estado del desarrollador: activo/inactivo.

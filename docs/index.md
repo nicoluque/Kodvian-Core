@@ -12,7 +12,8 @@ Kodvian Core es un sistema interno liviano para gestionar una empresa de softwar
 4. [Frontend overview](frontend/overview.md)
 5. [Modulos funcionales](modules/dashboard.md)
 6. [Setup local](development/local-setup.md)
-7. [Railway readiness](railway-readiness.md)
+7. [Estrategia de testing](development/testing-strategy.md)
+8. [Railway readiness](railway-readiness.md)
 
 ## Documentacion general
 
@@ -53,6 +54,7 @@ Kodvian Core es un sistema interno liviano para gestionar una empresa de softwar
 ## Desarrollo
 
 - [Setup local](development/local-setup.md)
+- [Estrategia de testing](development/testing-strategy.md)
 - [Checklist de validacion](development/validation-checklist.md)
 - [Convenciones](development/conventions.md)
 
@@ -62,5 +64,7 @@ Al cambiar un flujo, actualizar la documentacion relacionada en este orden:
 
 1. Documento del modulo en `docs/modules`.
 2. Referencia API o documentacion frontend/backend afectada.
-3. `docs/architecture.md` si cambia una decision transversal.
-4. `docs/index.md` si se agrega una seccion nueva.
+3. Tests automaticos del flujo nuevo o modificado.
+4. `docs/development/testing-strategy.md` si cambia el criterio de cobertura.
+5. `docs/architecture.md` si cambia una decision transversal.
+6. `docs/index.md` si se agrega una seccion nueva.

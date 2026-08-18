@@ -7,6 +7,8 @@
 - Mantener nombres existentes aunque mezclen ingles/espanol si ya forman parte del modulo.
 - Preferir cambios pequenos y seguros.
 - No agregar abstracciones sin reutilizacion clara.
+- Toda funcionalidad nueva o modificada debe incluir tests automaticos proporcionales al cambio.
+- Toda correccion de bug debe incluir un test que reproduzca el caso corregido cuando sea tecnicamente posible.
 
 ## Backend
 
@@ -17,6 +19,8 @@
 - Entidades y enums en Domain.
 - EF mappings, relaciones e indices en `KodvianDbContext`.
 - Migrations en Infrastructure.
+- Agregar unit tests para reglas, validaciones, calculos, permisos y servicios.
+- Agregar integration tests para endpoints, autorizacion, persistencia y storage cuando el cambio cruce capas.
 
 ## API
 
@@ -35,6 +39,8 @@
 - Usar rutas lazy por modulo.
 - Reutilizar estilos compartidos cuando el patron ya existe.
 - Evitar meter logica de negocio compleja en templates.
+- Agregar specs para servicios API, guards, interceptor, paginas, dialogs, formularios y estados UI afectados.
+- Cubrir loading, empty, error y success states cuando el componente los implemente.
 
 ## UX/UI
 
@@ -61,3 +67,5 @@
 - Usar rutas y nombres de archivo reales.
 - Mantener `docs/index.md` como punto de entrada.
 - Si cambia un contrato, actualizar backend, frontend y modulo afectado.
+- Si cambia un flujo u operacion, actualizar la seccion `Tests requeridos` del modulo.
+- Si una validacion no puede automatizarse, documentar la excepcion y el procedimiento manual minimo.

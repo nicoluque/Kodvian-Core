@@ -97,6 +97,18 @@ Enums:
 - Evitar eliminar comprobantes por error; usar confirmacion clara.
 - Revisar permisos antes de exponer finanzas a roles operativos.
 
+## Tests requeridos
+
+- Backend: tests de `FinancialMovementService` para listado, detalle, alta, edicion, lookups y resumen mensual.
+- Backend: tests de calculos financieros, precision decimal, estado y tipo de movimiento.
+- Backend: tests de comprobantes para PDF valido, PDF invalido, descarga y eliminacion.
+- Backend: tests de categorias y proveedores para alta, edicion y listado.
+- Backend: integration tests de movimientos, resumen mensual, comprobantes, categorias y proveedores.
+- Backend: tests de permisos cuando se agreguen policies para `finances.read/write`.
+- Frontend: specs de `FinanzasService` para endpoints, query params, FormData y downloads.
+- Frontend: specs de pagina para filtros, resumen, loading, empty, error, upload y delete.
+- Frontend: specs de dialogs de movimiento y categoria para validaciones y payload.
+
 ## Mejoras futuras
 
 - Conciliacion o historial de cambios.

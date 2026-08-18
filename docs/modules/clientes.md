@@ -74,6 +74,16 @@ Estados:
 - Evitar exponer IDs internos en UI.
 - Verificar que filtros frontend coincidan con `ClientListRequestDto`.
 
+## Tests requeridos
+
+- Backend: tests de `ClientService` para listado, detalle, alta, edicion y cambio de estado.
+- Backend: tests de validacion para campos requeridos, limites y estados validos.
+- Backend: integration tests de `GET`, `POST`, `PUT` y `PATCH /api/clients/{id}/status`.
+- Backend: tests de permisos cuando se agreguen policies para `clients.read/write`.
+- Frontend: specs de `ClientesService` para rutas, params, body y respuesta.
+- Frontend: specs de pagina para filtros, paginacion, loading, empty, error y apertura de dialogs.
+- Frontend: specs de dialogs de form, detail y status para validaciones, submit y cierre.
+
 ## Mejoras futuras
 
 - Historial de cambios de estado.
