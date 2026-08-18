@@ -115,6 +115,17 @@ mat-form-field {
   border-color: #2a3a33 !important;
 }
 
+:host ::ng-deep .mat-mdc-text-field-wrapper {
+  border-radius: 12px !important;
+  background: rgba(9, 15, 17, 0.72) !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field-infix {
+  min-height: 56px;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
 :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
 :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
 :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
@@ -124,6 +135,26 @@ mat-form-field {
 :host ::ng-deep .mat-mdc-form-field .mdc-floating-label,
 :host ::ng-deep .mat-mdc-form-field input {
   color: var(--text-100) !important;
+  caret-color: var(--brand-300);
+}
+
+:host ::ng-deep .mat-mdc-form-field input::placeholder {
+  color: rgba(168, 181, 173, 0.68) !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field input:-webkit-autofill,
+:host ::ng-deep .mat-mdc-form-field input:-webkit-autofill:hover,
+:host ::ng-deep .mat-mdc-form-field input:-webkit-autofill:focus,
+:host ::ng-deep .mat-mdc-form-field input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(9, 15, 17, 0.98) inset !important;
+  -webkit-text-fill-color: var(--text-100) !important;
+  caret-color: var(--brand-300);
+  transition: background-color 9999s ease-out;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-form-field-error {
+  color: #ff7a7a !important;
+  font-size: 11px;
 }
 
 button {
