@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography;
 using Kodvian.Core.Application.Common.Files;
 using Kodvian.Core.Application.Common.Models;
+using Kodvian.Core.Application.Common.Security;
 using Kodvian.Core.Application.Projects.Abstractions;
 using Kodvian.Core.Application.Projects.Dtos;
 using Kodvian.Core.Application.Projects.Requests;
@@ -150,7 +151,7 @@ public class ProjectService : IProjectService
 
         var responsibles = await _dbContext.Users
             .AsNoTracking()
-            .Where(x => x.Activo)
+            .Where(x => x.Activo && x.Role != null && x.Role.Name == RoleNames.Analyst)
             .OrderBy(x => x.FullName)
             .Take(300)
             .Select(x => new ProjectLookupItemDto
@@ -586,10 +587,12 @@ public class ProjectService : IProjectService
 
         if (request.ResponsibleId.HasValue)
         {
-            var userExists = await _dbContext.Users.AnyAsync(x => x.Id == request.ResponsibleId.Value, cancellationToken);
-            if (!userExists)
+            var analystExists = await _dbContext.Users.AnyAsync(
+                x => x.Id == request.ResponsibleId.Value && x.Activo && x.Role != null && x.Role.Name == RoleNames.Analyst,
+                cancellationToken);
+            if (!analystExists)
             {
-                throw new ArgumentException("El responsable seleccionado no existe");
+                throw new ArgumentException("El analista a cargo seleccionado no existe o no está activo");
             }
         }
     }

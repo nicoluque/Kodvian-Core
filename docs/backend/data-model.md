@@ -35,7 +35,7 @@ Representa un proyecto para un cliente.
 Relaciones:
 
 - Requiere `ClienteId` hacia `Client` con delete restrict.
-- Puede tener `ResponsableId` hacia `User` con set null.
+- Puede tener `ResponsableId` hacia `User` con set null; funcionalmente representa el analista a cargo y debe apuntar a un usuario activo con rol `Analista`.
 - Tiene muchas `TaskItem`.
 - Tiene muchas `ProjectDeveloperAssignment` operativas.
 - Tiene muchos `ProjectDeveloperContract`.

@@ -2,9 +2,12 @@
 <mat-dialog-content class="dialog-body">
   <div class="detail-grid">
     <article class="detail-card full-width project-card">
-      <p class="section-eyebrow">Proyecto</p>
       <div class="project-header">
-        <strong class="project-name">{{ data.project.name }}</strong>
+        <div class="project-summary">
+          <p class="section-eyebrow">Proyecto</p>
+          <strong class="project-name">{{ data.project.name }}</strong>
+          <span class="project-analyst">Analista a cargo: {{ data.project.responsibleName || 'Sin analista asignado' }}</span>
+        </div>
         <div class="header-actions">
           <button mat-button class="action-cancel" (click)="crearDesarrollador()">Nuevo desarrollador</button>
           @if (canViewEconomics) {
@@ -15,9 +18,15 @@
     </article>
 
     <article class="detail-card full-width">
-      <p class="section-eyebrow">Equipo asignado</p>
+      <div class="card-heading">
+        <div>
+          <p class="section-eyebrow">Equipo asignado</p>
+          <h3>Desarrolladores operativos</h3>
+        </div>
+        <span>Asignación sin datos económicos.</span>
+      </div>
       <div class="assignment-form">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="assignment-select">
           <mat-label>Desarrollador</mat-label>
           <mat-select [(ngModel)]="selectedDeveloperId">
             <mat-option value="">Seleccionar</mat-option>
@@ -26,9 +35,10 @@
             }
           </mat-select>
         </mat-form-field>
-        <button mat-flat-button color="primary" class="action-save" type="button" (click)="asignarDesarrollador()">Asignar</button>
+        <button mat-flat-button color="primary" class="action-save assign-button" type="button" (click)="asignarDesarrollador()">Asignar</button>
       </div>
 
+      <div class="table-scroll">
       <table mat-table [dataSource]="assignments" class="table full-width assignments-table">
         <ng-container matColumnDef="developer">
           <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
@@ -37,19 +47,22 @@
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td mat-cell *matCellDef="let row">{{ row.isActive ? 'Activo' : 'Inactivo' }}</td>
+          <td mat-cell *matCellDef="let row"><span class="status-pill" [class.is-inactive]="!row.isActive">{{ row.isActive ? 'Activo' : 'Inactivo' }}</span></td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let row" class="actions-cell compact-actions">
-            <button mat-button class="table-action danger" (click)="quitarAsignacion(row)">Quitar</button>
+            <div class="row-actions single-action">
+              <button mat-button class="table-action danger" (click)="quitarAsignacion(row)">Quitar</button>
+            </div>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="assignmentColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: assignmentColumns"></tr>
       </table>
+      </div>
 
       @if (assignments.length === 0) {
         <p class="empty-state">No hay desarrolladores asignados operativamente a este proyecto.</p>
@@ -58,7 +71,14 @@
 
     @if (canViewEconomics) {
       <article class="detail-card full-width">
-        <p class="section-eyebrow">Contratos asociados</p>
+        <div class="card-heading">
+          <div>
+            <p class="section-eyebrow">Contratos asociados</p>
+            <h3>Acuerdos económicos</h3>
+          </div>
+          <span>Solo visible para administración.</span>
+        </div>
+        <div class="table-scroll">
         <table mat-table [dataSource]="contracts" class="table full-width contracts-table">
         <ng-container matColumnDef="developer">
           <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
@@ -83,16 +103,19 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let row" class="actions-cell">
-            <button mat-button class="table-action" (click)="seleccionarContrato(row)">Pagos</button>
-            <button mat-button class="table-action" (click)="verLedger(row)">Resumen</button>
-            <button mat-button class="table-action" (click)="registrarPago(row)">Pagar</button>
-            <button mat-button class="table-action" (click)="editarContrato(row)">Editar</button>
+            <div class="row-actions contract-actions">
+              <button mat-button class="table-action" (click)="seleccionarContrato(row)">Pagos</button>
+              <button mat-button class="table-action" (click)="verLedger(row)">Resumen</button>
+              <button mat-button class="table-action" (click)="registrarPago(row)">Pagar</button>
+              <button mat-button class="table-action" (click)="editarContrato(row)">Editar</button>
+            </div>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="contractColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: contractColumns"></tr>
         </table>
+        </div>
 
         @if (contracts.length === 0) {
           <p class="empty-state">No hay contratos cargados para este proyecto.</p>
@@ -102,8 +125,13 @@
 
     @if (canViewEconomics && selectedContract) {
       <article class="detail-card full-width">
-        <p class="section-eyebrow">Pagos</p>
-        <h3 class="payments-title">{{ selectedContract.developerName }}</h3>
+        <div class="card-heading">
+          <div>
+            <p class="section-eyebrow">Pagos</p>
+            <h3>{{ selectedContract.developerName }}</h3>
+          </div>
+        </div>
+        <div class="table-scroll">
         <table mat-table [dataSource]="payments" class="table full-width payments-table">
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef>Fecha</th>
@@ -134,8 +162,10 @@
                         <strong>{{ receipt.fileName }}</strong>
                         <small>{{ receipt.uploadedAt | date:'dd/MM/yyyy HH:mm' }}</small>
                       </div>
-                      <button mat-button class="table-action" (click)="descargarComprobante(row.id, receipt)">Descargar</button>
-                      <button mat-button class="table-action danger" (click)="eliminarComprobante(row.id, receipt)">Eliminar</button>
+                      <div class="row-actions receipt-actions">
+                        <button mat-button class="table-action" (click)="descargarComprobante(row.id, receipt)">Descargar</button>
+                        <button mat-button class="table-action danger" (click)="eliminarComprobante(row.id, receipt)">Eliminar</button>
+                      </div>
                     </div>
                   }
                 </div>
@@ -146,6 +176,7 @@
           <tr mat-header-row *matHeaderRowDef="paymentColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: paymentColumns"></tr>
         </table>
+        </div>
 
         @if (payments.length === 0) {
           <p class="empty-state">No hay pagos registrados para este contrato.</p>

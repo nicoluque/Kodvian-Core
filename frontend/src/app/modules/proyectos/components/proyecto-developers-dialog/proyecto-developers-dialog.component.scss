@@ -5,59 +5,126 @@
 .dialog-body {
   overflow-y: auto;
   overflow-x: hidden;
+  padding-bottom: 6px;
 }
 
 .detail-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 .detail-card {
   border: 1px solid var(--line-600);
   border-radius: 12px;
-  padding: 12px;
+  padding: 14px;
   background: linear-gradient(170deg, rgba(16, 26, 28, 0.86), rgba(11, 18, 20, 0.98));
 }
 
 .project-card {
-  padding-bottom: 10px;
+  padding: 18px;
+  background: linear-gradient(160deg, rgba(20, 33, 35, 0.95), rgba(10, 18, 20, 0.98));
 }
 
 .project-header {
   display: flex;
-  gap: 12px;
+  gap: 18px;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
 }
 
+.project-summary {
+  display: flex;
+  min-width: 260px;
+  flex: 1 1 420px;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .project-name {
   color: #e9fff0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
+  line-height: 1.15;
+}
+
+.project-analyst {
+  width: fit-content;
+  border: 1px solid rgba(103, 133, 120, 0.46);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--text-300);
+  background: rgba(7, 13, 15, 0.52);
+  font-size: 12px;
 }
 
 .header-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
+
+  button {
+    min-height: 42px;
+  }
+}
+
+.card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 10px;
+
+  h3 {
+    margin: 2px 0 0;
+    color: var(--text-100);
+    font-size: 17px;
+    line-height: 1.2;
+  }
+
+  span {
+    color: var(--text-300);
+    font-size: 12px;
+    text-align: right;
+  }
 }
 
 .assignment-form {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) auto;
-  gap: 10px;
-  align-items: end;
-  margin-top: 8px;
+  grid-template-columns: minmax(320px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin: 6px 0 14px;
+  border: 1px solid rgba(67, 87, 79, 0.45);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(7, 13, 15, 0.38);
+}
+
+.assignment-select {
+  width: 100%;
+}
+
+.assign-button {
+  min-width: 112px;
+  min-height: 48px;
+  align-self: start;
+  margin-top: 4px;
 }
 
 .table {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 0;
   border-radius: 10px;
   overflow: hidden;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border-radius: 10px;
 }
 
 .contracts-table,
@@ -67,15 +134,11 @@
   background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
 }
 
-:host ::ng-deep .contracts-table .mat-mdc-header-row,
-:host ::ng-deep .assignments-table .mat-mdc-header-row,
-:host ::ng-deep .payments-table .mat-mdc-header-row {
+:host ::ng-deep :is(.contracts-table, .assignments-table, .payments-table) .mat-mdc-header-row {
   background: rgba(19, 30, 33, 0.7);
 }
 
-:host ::ng-deep .contracts-table .mat-mdc-header-cell,
-:host ::ng-deep .assignments-table .mat-mdc-header-cell,
-:host ::ng-deep .payments-table .mat-mdc-header-cell {
+:host ::ng-deep :is(.contracts-table, .assignments-table, .payments-table) .mat-mdc-header-cell {
   color: rgba(140, 255, 152, 0.9) !important;
   font-weight: 600;
   font-size: 11px;
@@ -84,44 +147,28 @@
   border-bottom-color: var(--line-600) !important;
 }
 
-:host ::ng-deep .contracts-table .mat-mdc-row,
-:host ::ng-deep .assignments-table .mat-mdc-row,
-:host ::ng-deep .payments-table .mat-mdc-row {
+:host ::ng-deep :is(.contracts-table, .assignments-table, .payments-table) .mat-mdc-row {
   background: rgba(8, 13, 15, 0.52) !important;
 }
 
-:host ::ng-deep .contracts-table .mat-mdc-cell,
-:host ::ng-deep .assignments-table .mat-mdc-cell,
-:host ::ng-deep .payments-table .mat-mdc-cell {
+:host ::ng-deep :is(.contracts-table, .assignments-table, .payments-table) .mat-mdc-cell {
   color: var(--text-100) !important;
   border-bottom-color: var(--line-600) !important;
   font-size: 13px;
   vertical-align: middle;
 }
 
-:host ::ng-deep .contracts-table .mat-mdc-row:hover,
-:host ::ng-deep .assignments-table .mat-mdc-row:hover,
-:host ::ng-deep .payments-table .mat-mdc-row:hover {
+:host ::ng-deep :is(.contracts-table, .assignments-table, .payments-table) .mat-mdc-row:hover {
   background: rgba(24, 36, 39, 0.72) !important;
 }
 
 .actions-cell {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
-  align-items: center;
-  justify-content: stretch;
+  text-align: right;
   min-width: 280px;
 }
 
 .compact-actions {
-  grid-template-columns: 1fr;
-  min-width: 120px;
-}
-
-.payments-title {
-  margin: 6px 0 0;
-  color: var(--text-100);
+  min-width: 140px;
 }
 
 .receipt-list {
@@ -135,6 +182,7 @@
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .receipt-meta {
@@ -143,20 +191,19 @@
   min-width: 220px;
 
   strong {
-    color: #1d2324;
+    color: var(--text-100);
     font-size: 12px;
     line-height: 1.2;
   }
 
   small {
-    color: #67727a;
+    color: var(--text-300);
     font-size: 11px;
   }
 }
 
 .table-action {
-  width: 100%;
-  min-width: 0;
+  min-width: 108px;
   height: 34px;
   line-height: 1;
   padding: 0 8px;
@@ -172,17 +219,56 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  box-shadow: inset 0 1px 0 rgba(147, 175, 162, 0.18);
-  transition: all 140ms ease;
 
   &:hover {
     color: #ecfff0 !important;
     --mdc-text-button-label-text-color: #ecfff0;
     border-color: rgba(90, 216, 113, 0.72);
     background: linear-gradient(180deg, rgba(28, 53, 37, 0.9), rgba(18, 40, 28, 0.96));
-    box-shadow: 0 0 0 1px rgba(56, 157, 76, 0.28) inset, 0 8px 20px rgba(9, 18, 14, 0.45);
-    transform: translateY(-1px);
   }
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.single-action .table-action {
+  width: auto;
+  min-width: 112px;
+}
+
+.contract-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 108px);
+  justify-content: end;
+  gap: 8px;
+}
+
+.receipt-actions {
+  flex: 0 0 auto;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(90, 216, 113, 0.5);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #8bff98;
+  background: rgba(24, 63, 36, 0.46);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.status-pill.is-inactive {
+  border-color: rgba(162, 177, 188, 0.38);
+  color: #c3d0da;
+  background: rgba(34, 42, 48, 0.55);
 }
 
 .table-action.danger {
@@ -190,45 +276,9 @@
   --mdc-text-button-label-text-color: #ff8b8b;
 }
 
-:host ::ng-deep .contracts-table .mat-column-developer {
-  min-width: 180px;
-}
-
-:host ::ng-deep .contracts-table .mat-column-mode {
-  min-width: 120px;
-}
-
-:host ::ng-deep .contracts-table .mat-column-amount {
-  min-width: 110px;
-}
-
-:host ::ng-deep .contracts-table .mat-column-startDate {
-  min-width: 120px;
-}
-
 :host ::ng-deep .contracts-table .mat-column-actions {
   min-width: 280px;
   width: 280px;
-}
-
-:host ::ng-deep .payments-table .mat-column-date {
-  min-width: 120px;
-}
-
-:host ::ng-deep .payments-table .mat-column-amount {
-  min-width: 120px;
-}
-
-:host ::ng-deep .payments-table .mat-column-period {
-  min-width: 110px;
-}
-
-:host ::ng-deep .payments-table .mat-column-reference {
-  min-width: 160px;
-}
-
-:host ::ng-deep .payments-table .mat-column-receipts {
-  min-width: 240px;
 }
 
 .empty-state,
@@ -242,11 +292,36 @@
     align-items: stretch;
   }
 
+  .project-summary {
+    min-width: 0;
+  }
+
   .header-actions {
     justify-content: stretch;
+
+    button {
+      flex: 1 1 210px;
+    }
+  }
+
+  .card-heading {
+    flex-direction: column;
+    align-items: flex-start;
+
+    span {
+      text-align: left;
+    }
   }
 
   .assignment-form {
     grid-template-columns: 1fr;
+  }
+
+  .assign-button {
+    width: 100%;
+  }
+
+  .contract-actions {
+    grid-template-columns: repeat(2, minmax(96px, 1fr));
   }
 }

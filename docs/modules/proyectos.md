@@ -2,12 +2,13 @@
 
 ## Resumen funcional
 
-El modulo de proyectos centraliza la gestion de trabajos para clientes: estado, prioridad, responsable, avance, documentos, equipo asignado y, solo para administradores, contratos y pagos asociados.
+El modulo de proyectos centraliza la gestion de trabajos para clientes: estado, prioridad, analista a cargo, avance, documentos, equipo asignado y, solo para administradores, contratos y pagos asociados.
 
 ## Flujos principales
 
 - Listar proyectos.
 - Crear y editar proyecto.
+- Asignar opcionalmente un analista a cargo del proyecto.
 - Ver detalle.
 - Gestionar documentos y versiones.
 - Asignar desarrolladores operativamente sin datos economicos.
@@ -95,6 +96,7 @@ Enums:
 ## Reglas de negocio
 
 - Todo proyecto pertenece a un cliente.
+- El analista a cargo usa `Project.ResponsableId` y solo puede apuntar a un usuario activo con rol `Analista`.
 - El porcentaje de avance debe ser coherente con estado y tareas.
 - Los documentos de proyecto se versionan, no se reemplazan silenciosamente.
 - La asignacion operativa de equipo no contiene montos, porcentajes ni modalidad de pago.

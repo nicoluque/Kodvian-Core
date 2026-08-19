@@ -161,7 +161,7 @@ export class ProyectosPageComponent implements OnInit {
 
   administrarDesarrolladores(row: ProyectoListado): void {
     this.dialog.open(ProyectoDevelopersDialogComponent, {
-      width: '1100px',
+      width: '1240px',
       maxWidth: 'calc(100vw - 32px)',
       maxHeight: 'calc(100vh - 32px)',
       autoFocus: false,

@@ -37,9 +37,9 @@
     </div>
 
     <mat-form-field appearance="outline">
-      <mat-label>Responsable</mat-label>
+      <mat-label>Analista a cargo</mat-label>
       <mat-select formControlName="responsibleId">
-        <mat-option value="">Sin asignar</mat-option>
+        <mat-option value="">Sin analista asignado</mat-option>
         @for (responsable of data.responsables; track responsable.id) {
           <mat-option [value]="responsable.id">{{ responsable.name }}</mat-option>
         }

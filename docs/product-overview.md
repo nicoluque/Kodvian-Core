@@ -14,7 +14,7 @@ La aplicacion busca centralizar informacion operativa que normalmente queda dist
 
 - Dashboard operativo con KPIs, tareas prioritarias, cobranzas proximas y movimientos recientes.
 - Gestion de clientes y estados comerciales.
-- Gestion de proyectos, responsables, estado, prioridad, avance y presupuesto.
+- Gestion de proyectos, analistas a cargo, estado, prioridad, avance y presupuesto.
 - Gestion de tareas con listado y vista kanban.
 - Gestion de desarrolladores externos.
 - Contratos de desarrolladores por proyecto, pagos, comprobantes y ledger mensual.
