@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "ProjectsRead")]
+[Authorize(Policy = "AdministratorOnly")]
 [Route("api")]
 public class ProjectDeveloperContractsController : ControllerBase
 {

@@ -35,6 +35,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IDeveloperService, DeveloperService>();
+        services.AddScoped<IProjectDeveloperAssignmentService, ProjectDeveloperAssignmentService>();
         services.AddScoped<IProjectDeveloperContractService, ProjectDeveloperContractService>();
         services.AddScoped<IDeveloperPaymentService, DeveloperPaymentService>();
         services.AddScoped<IDashboardService, DashboardService>();

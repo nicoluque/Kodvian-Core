@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="dialog-title">Desarrolladores del proyecto</h2>
+<h2 mat-dialog-title class="dialog-title">Equipo del proyecto</h2>
 <mat-dialog-content class="dialog-body">
   <div class="detail-grid">
     <article class="detail-card full-width project-card">
@@ -7,14 +7,59 @@
         <strong class="project-name">{{ data.project.name }}</strong>
         <div class="header-actions">
           <button mat-button class="action-cancel" (click)="crearDesarrollador()">Nuevo desarrollador</button>
-          <button mat-flat-button color="primary" class="action-save" (click)="crearContrato()">Nuevo contrato</button>
+          @if (canViewEconomics) {
+            <button mat-flat-button color="primary" class="action-save" (click)="crearContrato()">Nuevo contrato</button>
+          }
         </div>
       </div>
     </article>
 
     <article class="detail-card full-width">
-      <p class="section-eyebrow">Contratos asociados</p>
-      <table mat-table [dataSource]="contracts" class="table full-width contracts-table">
+      <p class="section-eyebrow">Equipo asignado</p>
+      <div class="assignment-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Desarrollador</mat-label>
+          <mat-select [(ngModel)]="selectedDeveloperId">
+            <mat-option value="">Seleccionar</mat-option>
+            @for (developer of developers; track developer.id) {
+              <mat-option [value]="developer.id">{{ developer.fullName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button color="primary" class="action-save" type="button" (click)="asignarDesarrollador()">Asignar</button>
+      </div>
+
+      <table mat-table [dataSource]="assignments" class="table full-width assignments-table">
+        <ng-container matColumnDef="developer">
+          <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
+          <td mat-cell *matCellDef="let row">{{ row.developerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">{{ row.isActive ? 'Activo' : 'Inactivo' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row" class="actions-cell compact-actions">
+            <button mat-button class="table-action danger" (click)="quitarAsignacion(row)">Quitar</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="assignmentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: assignmentColumns"></tr>
+      </table>
+
+      @if (assignments.length === 0) {
+        <p class="empty-state">No hay desarrolladores asignados operativamente a este proyecto.</p>
+      }
+    </article>
+
+    @if (canViewEconomics) {
+      <article class="detail-card full-width">
+        <p class="section-eyebrow">Contratos asociados</p>
+        <table mat-table [dataSource]="contracts" class="table full-width contracts-table">
         <ng-container matColumnDef="developer">
           <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
           <td mat-cell *matCellDef="let row">{{ row.developerName }}</td>
@@ -47,14 +92,15 @@
 
         <tr mat-header-row *matHeaderRowDef="contractColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: contractColumns"></tr>
-      </table>
+        </table>
 
-      @if (contracts.length === 0) {
-        <p class="empty-state">No hay contratos cargados para este proyecto.</p>
-      }
-    </article>
+        @if (contracts.length === 0) {
+          <p class="empty-state">No hay contratos cargados para este proyecto.</p>
+        }
+      </article>
+    }
 
-    @if (selectedContract) {
+    @if (canViewEconomics && selectedContract) {
       <article class="detail-card full-width">
         <p class="section-eyebrow">Pagos</p>
         <h3 class="payments-title">{{ selectedContract.developerName }}</h3>

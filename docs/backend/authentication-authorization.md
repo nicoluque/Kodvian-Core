@@ -65,6 +65,7 @@ Definidos en `RoleNames.cs`:
 - `Administrador`.
 - `Operativo`.
 - `Solo lectura`.
+- `Analista`.
 - `Desarrollador`.
 
 ## Permisos
@@ -81,6 +82,8 @@ Definidos en `PermissionCodes.cs`:
 - `projects.documents.delete`.
 - `tasks.read`.
 - `tasks.write`.
+- `team.read`.
+- `team.write`.
 - `finances.read`.
 - `finances.write`.
 - `administration.read`.
@@ -98,22 +101,29 @@ Definido en `RolePermissionMap.cs`.
 
 `Operativo`:
 
-- Dashboard read.
 - Clientes read/write.
 - Proyectos read/write.
 - Documentos de proyecto read/write/delete.
 - Tareas read/write.
-- Finanzas read.
+- Equipo read/write.
 
 `Solo lectura`:
 
-- Dashboard read.
 - Clientes read.
 - Proyectos read.
 - Documentos de proyecto read.
 - Tareas read.
-- Finanzas read.
+- Equipo read.
 - Administracion read.
+
+`Analista`:
+
+- Clientes read/write.
+- Proyectos read/write.
+- Documentos de proyecto read/write/delete.
+- Tareas read/write.
+- Equipo read/write.
+- Sin permisos de finanzas, cobros, pagos, contratos economicos ni administracion.
 
 `Desarrollador`:
 
@@ -132,6 +142,9 @@ Policies declaradas en `Program.cs`:
 - `ProjectsWrite`.
 - `TasksRead`.
 - `TasksWrite`.
+- `TeamRead`.
+- `TeamWrite`.
+- `AdministratorOnly`.
 - `FinancesRead`.
 - `FinancesWrite`.
 - `ProjectsDocumentsRead`.
@@ -145,6 +158,10 @@ Policies declaradas en `Program.cs`:
 Los usuarios con rol `Desarrollador` deben estar vinculados a un `Developer` mediante `Users.DeveloperId`. El JWT incluye el claim `developer_id`, usado por `/api/my-work` para filtrar proyectos y tareas asignadas.
 
 El rol `Desarrollador` no recibe permisos generales de dashboard, clientes, proyectos, tareas o finanzas. Su acceso funcional pasa por endpoints dedicados de `Mi trabajo`.
+
+## Acceso de analistas
+
+El rol `Analista` gestiona operacion de clientes, equipo, proyectos, documentos y tareas. No tiene permisos financieros. Los endpoints de finanzas, pagos de desarrolladores, contratos economicos y ledger quedan restringidos a `Administrador`.
 
 ## Caveats
 

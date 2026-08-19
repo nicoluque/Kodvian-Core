@@ -18,6 +18,8 @@ public static class RolePermissionMap
                 PermissionCodes.ProjectsDocumentsDelete,
                 PermissionCodes.TasksRead,
                 PermissionCodes.TasksWrite,
+                PermissionCodes.TeamRead,
+                PermissionCodes.TeamWrite,
                 PermissionCodes.FinancesRead,
                 PermissionCodes.FinancesWrite,
                 PermissionCodes.AdministrationRead,
@@ -25,7 +27,6 @@ public static class RolePermissionMap
             ],
             RoleNames.Operative =>
             [
-                PermissionCodes.DashboardRead,
                 PermissionCodes.ClientsRead,
                 PermissionCodes.ClientsWrite,
                 PermissionCodes.ProjectsRead,
@@ -35,17 +36,31 @@ public static class RolePermissionMap
                 PermissionCodes.ProjectsDocumentsDelete,
                 PermissionCodes.TasksRead,
                 PermissionCodes.TasksWrite,
-                PermissionCodes.FinancesRead
+                PermissionCodes.TeamRead,
+                PermissionCodes.TeamWrite
             ],
             RoleNames.ReadOnly =>
             [
-                PermissionCodes.DashboardRead,
                 PermissionCodes.ClientsRead,
                 PermissionCodes.ProjectsRead,
                 PermissionCodes.ProjectsDocumentsRead,
                 PermissionCodes.TasksRead,
-                PermissionCodes.FinancesRead,
+                PermissionCodes.TeamRead,
                 PermissionCodes.AdministrationRead
+            ],
+            RoleNames.Analyst =>
+            [
+                PermissionCodes.ClientsRead,
+                PermissionCodes.ClientsWrite,
+                PermissionCodes.ProjectsRead,
+                PermissionCodes.ProjectsWrite,
+                PermissionCodes.ProjectsDocumentsRead,
+                PermissionCodes.ProjectsDocumentsWrite,
+                PermissionCodes.ProjectsDocumentsDelete,
+                PermissionCodes.TasksRead,
+                PermissionCodes.TasksWrite,
+                PermissionCodes.TeamRead,
+                PermissionCodes.TeamWrite
             ],
             RoleNames.Developer =>
             [

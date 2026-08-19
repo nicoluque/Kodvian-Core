@@ -4,6 +4,8 @@ import { Observable, map } from 'rxjs';
 
 import {
   ApiResponse,
+  AsignacionDesarrolladorFormulario,
+  AsignacionDesarrolladorProyecto,
   ContratoDesarrollador,
   ContratoDesarrolladorFormulario,
   DocumentoProyecto,
@@ -76,6 +78,18 @@ export class ProyectosService {
 
   crearDesarrollador(payload: DesarrolladorFormulario): Observable<DesarrolladorExterno> {
     return this.http.post<ApiResponse<DesarrolladorExterno>>('/api/developers', payload).pipe(map((r) => r.data));
+  }
+
+  obtenerAsignacionesDesarrollador(projectId: string): Observable<AsignacionDesarrolladorProyecto[]> {
+    return this.http.get<ApiResponse<AsignacionDesarrolladorProyecto[]>>(`/api/projects/${projectId}/developer-assignments`).pipe(map((r) => r.data));
+  }
+
+  asignarDesarrollador(projectId: string, payload: AsignacionDesarrolladorFormulario): Observable<AsignacionDesarrolladorProyecto> {
+    return this.http.post<ApiResponse<AsignacionDesarrolladorProyecto>>(`/api/projects/${projectId}/developer-assignments`, payload).pipe(map((r) => r.data));
+  }
+
+  quitarAsignacionDesarrollador(assignmentId: string): Observable<void> {
+    return this.http.delete<ApiResponse<unknown>>(`/api/project-developer-assignments/${assignmentId}`).pipe(map(() => undefined));
   }
 
   obtenerContratosDesarrollador(projectId: string): Observable<ContratoDesarrollador[]> {

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "ProjectsWrite")]
+[Authorize(Policy = "TeamRead")]
 [Route("api/developers")]
 public class DevelopersController : ControllerBase
 {
@@ -30,6 +30,7 @@ public class DevelopersController : ControllerBase
     }
 
     [HttpGet("{id:guid}/contracts-summary")]
+    [Authorize(Policy = "AdministratorOnly")]
     public async Task<ActionResult<ApiResponseDto<IReadOnlyCollection<DeveloperContractSummaryDto>>>> GetContractsSummary(Guid id, [FromQuery] int? year, CancellationToken cancellationToken)
     {
         var periodYear = year ?? DateTime.UtcNow.Year;
@@ -43,6 +44,7 @@ public class DevelopersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "TeamWrite")]
     public async Task<ActionResult<ApiResponseDto<DeveloperDto>>> Create([FromBody] DeveloperUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -63,6 +65,7 @@ public class DevelopersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "TeamWrite")]
     public async Task<ActionResult<ApiResponseDto<DeveloperDto>>> Update(Guid id, [FromBody] DeveloperUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);

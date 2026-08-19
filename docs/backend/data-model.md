@@ -37,6 +37,7 @@ Relaciones:
 - Requiere `ClienteId` hacia `Client` con delete restrict.
 - Puede tener `ResponsableId` hacia `User` con set null.
 - Tiene muchas `TaskItem`.
+- Tiene muchas `ProjectDeveloperAssignment` operativas.
 - Tiene muchos `ProjectDeveloperContract`.
 - Tiene documentos versionados con `ProjectDocument`.
 - Tiene documentos legacy o comprobantes relacionados via `DocumentFile`.
@@ -60,6 +61,21 @@ Relaciones:
 
 - Tiene muchos `ProjectDeveloperContract`.
 - Tiene muchas `TaskItem`.
+- Tiene muchas `ProjectDeveloperAssignment`.
+
+### ProjectDeveloperAssignment
+
+Representa asignacion operativa de un desarrollador a un proyecto, sin informacion economica.
+
+Relaciones:
+
+- Requiere `ProjectId` hacia `Project` con delete restrict.
+- Requiere `DeveloperId` hacia `Developer` con delete restrict.
+
+Restricciones:
+
+- `(ProjectId, DeveloperId)` es unico.
+- No guarda montos, porcentajes, modalidad de pago, pagos ni ledger.
 
 ### ProjectDeveloperContract
 

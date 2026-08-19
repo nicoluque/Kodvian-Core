@@ -1,9 +1,9 @@
 <mat-card class="desarrolladores-card">
   <div class="header-row hero-block">
     <div>
-      <p class="eyebrow">Recursos externos</p>
-      <h2>Desarrollador</h2>
-      <p class="subtitulo">Gestion de desarrolladores externos para contratos y pagos</p>
+      <p class="eyebrow">Gestión operativa</p>
+      <h2>Equipo</h2>
+      <p class="subtitulo">Administración del equipo técnico y accesos al sistema</p>
     </div>
     <button mat-flat-button color="primary" (click)="nuevoDesarrollador()">
       <mat-icon>add</mat-icon>
@@ -62,7 +62,9 @@
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let row">
           <div class="acciones-row">
-            <button mat-button type="button" class="table-action" (click)="toggleResumen(row, $event)">Resumen</button>
+            @if (canViewEconomics) {
+              <button mat-button type="button" class="table-action" (click)="toggleResumen(row, $event)">Resumen</button>
+            }
             <button mat-button type="button" class="table-action" (click)="editarDesarrollador(row); $event.stopPropagation()">Editar</button>
           </div>
         </td>

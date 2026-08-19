@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 
+import { AuthSessionService } from '../../core/auth/auth-session.service';
 import { DesarrolladorFormDialogComponent } from './components/desarrollador-form-dialog/desarrollador-form-dialog.component';
 import { DesarrolladorExterno, DesarrolladorFormulario, ResumenContratoDesarrollador } from './models/desarrolladores.models';
 import { DesarrolladoresService } from './services/desarrolladores.service';
@@ -26,6 +27,7 @@ export class DesarrolladoresPageComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly fb = inject(FormBuilder);
+  private readonly authSession = inject(AuthSessionService);
 
   readonly columnas = ['fullName', 'email', 'phone', 'taxId', 'status', 'access', 'actions'];
   readonly filtrosForm = this.fb.group({ search: [''] });
@@ -37,6 +39,10 @@ export class DesarrolladoresPageComponent implements OnInit {
   summaryYear = new Date().getFullYear();
   cargando = false;
   cargandoResumen = false;
+
+  get canViewEconomics(): boolean {
+    return this.authSession.user?.permissions.includes('finances.read') ?? false;
+  }
 
   ngOnInit(): void {
     this.cargarDesarrolladores();
@@ -105,6 +111,9 @@ export class DesarrolladoresPageComponent implements OnInit {
 
   toggleResumen(row: DesarrolladorExterno, event?: Event): void {
     event?.stopPropagation();
+    if (!this.canViewEconomics) {
+      return;
+    }
 
     if (this.selectedDeveloper?.id === row.id) {
       this.selectedDeveloper = null;

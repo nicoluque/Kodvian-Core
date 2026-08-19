@@ -1,11 +1,16 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 
+import { AuthSessionService } from '../../../../core/auth/auth-session.service';
 import {
+  AsignacionDesarrolladorProyecto,
   ComprobanteArchivo,
   ContratoDesarrollador,
   ContratoDesarrolladorFormulario,
@@ -29,28 +34,39 @@ interface DevelopersDialogData {
 @Component({
   selector: 'app-proyecto-developers-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatTableModule, MatButtonModule, CurrencyPipe, DatePipe],
+  imports: [FormsModule, MatDialogModule, MatTableModule, MatButtonModule, MatFormFieldModule, MatSelectModule, CurrencyPipe, DatePipe],
   templateUrl: './proyecto-developers-dialog.component.html',
   styleUrl: './proyecto-developers-dialog.component.scss'
 })
 export class ProyectoDevelopersDialogComponent implements OnInit {
   private readonly proyectosService = inject(ProyectosService);
+  private readonly authSession = inject(AuthSessionService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
 
+  readonly assignmentColumns = ['developer', 'status', 'actions'];
   readonly contractColumns = ['developer', 'mode', 'amount', 'startDate', 'actions'];
   readonly paymentColumns = ['date', 'amount', 'period', 'reference', 'receipts'];
 
   developers: DesarrolladorExterno[] = [];
+  assignments: AsignacionDesarrolladorProyecto[] = [];
   contracts: ContratoDesarrollador[] = [];
   payments: PagoDesarrollador[] = [];
   selectedContract?: ContratoDesarrollador;
+  selectedDeveloperId = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public readonly data: DevelopersDialogData) {}
 
   ngOnInit(): void {
     this.loadDevelopers();
-    this.loadContracts();
+    this.loadAssignments();
+    if (this.canViewEconomics) {
+      this.loadContracts();
+    }
+  }
+
+  get canViewEconomics(): boolean {
+    return this.authSession.user?.permissions.includes('finances.read') ?? false;
   }
 
   loadDevelopers(): void {
@@ -61,6 +77,10 @@ export class ProyectoDevelopersDialogComponent implements OnInit {
   }
 
   loadContracts(): void {
+    if (!this.canViewEconomics) {
+      return;
+    }
+
     this.proyectosService.obtenerContratosDesarrollador(this.data.project.id).subscribe({
       next: (data) => {
         this.contracts = data;
@@ -73,6 +93,44 @@ export class ProyectoDevelopersDialogComponent implements OnInit {
         }
       },
       error: () => this.snackBar.open('No se pudieron cargar los contratos', 'Cerrar', { duration: 3500 })
+    });
+  }
+
+  loadAssignments(): void {
+    this.proyectosService.obtenerAsignacionesDesarrollador(this.data.project.id).subscribe({
+      next: (data) => this.assignments = data,
+      error: () => this.snackBar.open('No se pudo cargar el equipo asignado', 'Cerrar', { duration: 3500 })
+    });
+  }
+
+  asignarDesarrollador(): void {
+    if (!this.selectedDeveloperId) {
+      this.snackBar.open('Seleccioná un desarrollador', 'Cerrar', { duration: 2500 });
+      return;
+    }
+
+    this.proyectosService.asignarDesarrollador(this.data.project.id, { developerId: this.selectedDeveloperId }).subscribe({
+      next: () => {
+        this.selectedDeveloperId = '';
+        this.snackBar.open('Desarrollador asignado correctamente', 'Cerrar', { duration: 3000 });
+        this.loadAssignments();
+      },
+      error: (error) => this.snackBar.open(error?.error?.message ?? 'No se pudo asignar el desarrollador', 'Cerrar', { duration: 3500 })
+    });
+  }
+
+  quitarAsignacion(assignment: AsignacionDesarrolladorProyecto): void {
+    const confirmed = window.confirm(`Se quitará a ${assignment.developerName} del equipo operativo del proyecto. ¿Continuar?`);
+    if (!confirmed) {
+      return;
+    }
+
+    this.proyectosService.quitarAsignacionDesarrollador(assignment.id).subscribe({
+      next: () => {
+        this.snackBar.open('Asignación eliminada correctamente', 'Cerrar', { duration: 3000 });
+        this.loadAssignments();
+      },
+      error: (error) => this.snackBar.open(error?.error?.message ?? 'No se pudo eliminar la asignación', 'Cerrar', { duration: 3500 })
     });
   }
 

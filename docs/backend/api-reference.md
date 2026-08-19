@@ -154,9 +154,23 @@ Base route: `/api/developers`
 | Metodo | Ruta | Descripcion |
 |---|---|---|
 | GET | `/api/developers` | Lista desarrolladores, incluyendo estado de acceso al sistema. |
-| GET | `/api/developers/{id}/contracts-summary` | Resumen anual de contratos por desarrollador. |
+| GET | `/api/developers/{id}/contracts-summary` | Resumen anual de contratos por desarrollador. Solo administrador. |
 | POST | `/api/developers` | Alta de desarrollador, opcionalmente con usuario de acceso. |
 | PUT | `/api/developers/{id}` | Edicion de desarrollador y configuracion de acceso. |
+
+## Developer Assignments
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/ProjectDeveloperAssignmentsController.cs`
+
+Base route: `/api`
+
+Asignaciones operativas de equipo a proyecto, sin montos, porcentajes, modalidad de pago ni ledger.
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/projects/{projectId}/developer-assignments` | Equipo operativo asignado al proyecto. |
+| POST | `/api/projects/{projectId}/developer-assignments` | Asigna un desarrollador al proyecto sin informacion economica. |
+| DELETE | `/api/project-developer-assignments/{id}` | Baja logica de una asignacion operativa. |
 
 ## Developer Contracts
 
@@ -166,7 +180,7 @@ Base route: `/api`
 
 | Metodo | Ruta | Descripcion |
 |---|---|---|
-| GET | `/api/projects/{projectId}/developer-contracts` | Contratos de desarrolladores del proyecto. |
+| GET | `/api/projects/{projectId}/developer-contracts` | Contratos economicos de desarrolladores del proyecto. Solo administrador. |
 | POST | `/api/projects/{projectId}/developer-contracts` | Alta de contrato. |
 | PUT | `/api/developer-contracts/{id}` | Edicion de contrato. |
 | GET | `/api/developer-contracts/{id}/ledger` | Ledger mensual del contrato. |
@@ -179,7 +193,7 @@ Base route: `/api`
 
 | Metodo | Ruta | Descripcion |
 |---|---|---|
-| GET | `/api/developer-contracts/{contractId}/payments` | Pagos de un contrato. |
+| GET | `/api/developer-contracts/{contractId}/payments` | Pagos de un contrato. Solo administrador. |
 | POST | `/api/developer-contracts/{contractId}/payments` | Alta de pago. |
 | GET | `/api/developer-payments/{paymentId}/receipts` | Comprobantes de pago. |
 | POST | `/api/developer-payments/{paymentId}/receipts` | Upload de comprobante PDF. |
@@ -212,4 +226,5 @@ Base route: `/api/users`
 
 - Los controllers principales usan policies por modulo.
 - El rol `Desarrollador` consume `/api/my-work`; no debe usar endpoints generales de gestion.
+- El rol `Analista` no accede a finanzas, contratos economicos, pagos ni ledger.
 - Para nuevos endpoints sensibles, agregar policy backend aunque el frontend oculte botones.

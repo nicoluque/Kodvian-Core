@@ -281,6 +281,16 @@ internal static class RequestValidation
         return null;
     }
 
+    public static string? Validate(ProjectDeveloperAssignmentCreateRequestDto request)
+    {
+        if (request.DeveloperId == Guid.Empty)
+        {
+            return "El desarrollador es obligatorio";
+        }
+
+        return null;
+    }
+
     public static string? Validate(DeveloperPaymentCreateRequestDto request)
     {
         if (request.Amount <= 0)

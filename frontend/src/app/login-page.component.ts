@@ -33,7 +33,7 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {
     this.authSession.ensureSessionLoaded().subscribe((user) => {
       if (user) {
-        void this.router.navigate([user.developerId ? '/mi-trabajo' : '/dashboard']);
+        void this.router.navigate([this.getPostLoginRoute()]);
       }
     });
   }
@@ -52,12 +52,23 @@ export class LoginPageComponent implements OnInit {
       next: () => {
         this.cargando = false;
         this.snackBar.open('Inicio de sesion correcto', 'Cerrar', { duration: 3000 });
-        void this.router.navigate([this.authSession.user?.developerId ? '/mi-trabajo' : '/dashboard']);
+        void this.router.navigate([this.getPostLoginRoute()]);
       },
       error: () => {
         this.cargando = false;
         this.snackBar.open('No se pudo iniciar sesion. Verifica tus credenciales.', 'Cerrar', { duration: 3500 });
       }
     });
+  }
+
+  private getPostLoginRoute(): string {
+    const user = this.authSession.user;
+    if (!user) return '/login';
+    if (user.developerId) return '/mi-trabajo';
+    if (user.permissions.includes('projects.read')) return '/proyectos';
+    if (user.permissions.includes('dashboard.read')) return '/dashboard';
+    if (user.permissions.includes('clients.read')) return '/clientes';
+    if (user.permissions.includes('team.read')) return '/equipo';
+    return '/login';
   }
 }

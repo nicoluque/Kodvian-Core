@@ -719,6 +719,22 @@ namespace Kodvian.Core.Infrastructure.Migrations
                             Description = "Acceso de solo lectura",
                             FechaCreacion = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Solo lectura"
+                        },
+                        new
+                        {
+                            Id = new Guid("7bbad1f2-2c26-4dc0-bf74-2213871f7d52"),
+                            Activo = true,
+                            Description = "Gestion operativa de clientes, equipo, proyectos y tareas",
+                            FechaCreacion = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Analista"
+                        },
+                        new
+                        {
+                            Id = new Guid("58df40de-1019-4dcf-81dc-55a8a2d06235"),
+                            Activo = true,
+                            Description = "Acceso limitado a proyectos y tareas asignadas",
+                            FechaCreacion = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Name = "Desarrollador"
                         });
                 });
 
@@ -1087,6 +1103,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
                 {
                     b.Navigation("Contracts");
 
+                    b.Navigation("ProjectAssignments");
+
                     b.Navigation("Tasks");
 
                     b.Navigation("Users");
@@ -1109,6 +1127,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
 
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.Project", b =>
                 {
+                    b.Navigation("DeveloperAssignments");
+
                     b.Navigation("DeveloperContracts");
 
                     b.Navigation("Documents");

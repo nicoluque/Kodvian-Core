@@ -11,7 +11,8 @@ Las rutas principales estan definidas en `frontend/src/app/app.routes.ts`.
 | `/dashboard` | `DashboardPageComponent` | `authGuard` heredado |
 | `/mi-trabajo` | `MiTrabajoPageComponent` | `authGuard` heredado + `permissionGuard` con `developer.work.read` |
 | `/clientes` | `ClientesPageComponent` | `authGuard` heredado |
-| `/desarrolladores` | `DesarrolladoresPageComponent` | `authGuard` heredado |
+| `/equipo` | `DesarrolladoresPageComponent` | `authGuard` heredado + `permissionGuard` con `team.read` |
+| `/desarrolladores` | Redirige a `/equipo` | `authGuard` heredado |
 | `/proyectos` | `ProyectosPageComponent` | `authGuard` heredado |
 | `/tareas` | `TareasPageComponent` | `authGuard` heredado |
 | `/finanzas` | `FinanzasPageComponent` | `authGuard` heredado |
@@ -46,7 +47,7 @@ La fuente del menu esta en:
 
 - `frontend/src/app/core/services/navigation.service.ts`.
 
-Cada item puede declarar `permission`. `NavigationService` filtra el menu segun permisos del usuario autenticado, para que el rol `Desarrollador` vea solo `Mi trabajo`.
+Cada item puede declarar `permission`. `NavigationService` filtra el menu segun permisos del usuario autenticado, para que `Desarrollador` vea `Mi trabajo` y `Analista` vea clientes, equipo, proyectos y tareas sin finanzas.
 
 ## Administracion
 
@@ -55,6 +56,10 @@ La ruta `/administracion` usa `administrationGuard`, que exige el permiso `admin
 ## Mi trabajo
 
 La ruta `/mi-trabajo` usa `permissionGuard` y exige `developer.work.read`. Despues del login, un usuario con `developerId` se redirige automaticamente a esta ruta.
+
+## Equipo
+
+La ruta visible del modulo es `/equipo`. La ruta legacy `/desarrolladores` redirige a `/equipo`.
 
 ## Cuidados
 

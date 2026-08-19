@@ -2,7 +2,7 @@
 
 ## Resumen funcional
 
-El modulo de proyectos centraliza la gestion de trabajos para clientes: estado, prioridad, responsable, presupuesto, avance, documentos, desarrolladores, contratos y pagos asociados.
+El modulo de proyectos centraliza la gestion de trabajos para clientes: estado, prioridad, responsable, avance, documentos, equipo asignado y, solo para administradores, contratos y pagos asociados.
 
 ## Flujos principales
 
@@ -10,9 +10,9 @@ El modulo de proyectos centraliza la gestion de trabajos para clientes: estado, 
 - Crear y editar proyecto.
 - Ver detalle.
 - Gestionar documentos y versiones.
-- Asociar desarrolladores mediante contratos.
-- Registrar pagos a desarrolladores.
-- Consultar ledger de contrato.
+- Asignar desarrolladores operativamente sin datos economicos.
+- Registrar pagos a desarrolladores solo como administrador.
+- Consultar ledger de contrato solo como administrador.
 
 ## Pantallas frontend
 
@@ -45,6 +45,8 @@ Documentos:
 
 Contratos y pagos:
 
+- Solo administrador.
+
 - `GET /api/projects/{projectId}/developer-contracts`.
 - `POST /api/projects/{projectId}/developer-contracts`.
 - `PUT /api/developer-contracts/{id}`.
@@ -62,6 +64,7 @@ Contratos y pagos:
 - `ProjectDocumentVersion`.
 - `DocumentFile`.
 - `Developer`.
+- `ProjectDeveloperAssignment`.
 - `ProjectDeveloperContract`.
 - `DeveloperPayment`.
 
@@ -76,6 +79,8 @@ Enums:
 
 - `projects.read` y `projects.write` para proyectos.
 - `projects.documents.read`, `projects.documents.write`, `projects.documents.delete` para documentos.
+- `ProjectDeveloperAssignment` usa permisos operativos de proyectos, sin datos economicos.
+- Contratos economicos, pagos y ledger son solo administrador.
 - El frontend evalua permisos de documentos en el detalle.
 - El backend tiene policies especificas para documentos de proyecto.
 
@@ -92,6 +97,7 @@ Enums:
 - Todo proyecto pertenece a un cliente.
 - El porcentaje de avance debe ser coherente con estado y tareas.
 - Los documentos de proyecto se versionan, no se reemplazan silenciosamente.
+- La asignacion operativa de equipo no contiene montos, porcentajes ni modalidad de pago.
 - Los contratos pueden ser por porcentaje o monto fijo.
 - Los pagos deben asociarse a un contrato.
 

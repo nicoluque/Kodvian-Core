@@ -45,7 +45,7 @@ Kodvian Core es un sistema interno liviano para gestionar una empresa de softwar
 
 - [Dashboard](modules/dashboard.md)
 - [Clientes](modules/clientes.md)
-- [Desarrolladores](modules/desarrolladores.md)
+- [Equipo](modules/equipo.md)
 - [Proyectos](modules/proyectos.md)
 - [Tareas](modules/tareas.md)
 - [Finanzas](modules/finanzas.md)

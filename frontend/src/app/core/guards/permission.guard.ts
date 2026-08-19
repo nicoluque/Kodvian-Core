@@ -19,7 +19,16 @@ export const permissionGuard: CanActivateFn = (route) => {
         return router.createUrlTree(['/login']);
       }
 
-      return user.permissions.includes(permission) ? true : router.createUrlTree([user.developerId ? '/mi-trabajo' : '/dashboard']);
+      return user.permissions.includes(permission) ? true : router.createUrlTree([getFallbackRoute(user)]);
     })
   );
 };
+
+function getFallbackRoute(user: { developerId?: string; permissions: string[] }): string {
+  if (user.developerId) return '/mi-trabajo';
+  if (user.permissions.includes('projects.read')) return '/proyectos';
+  if (user.permissions.includes('dashboard.read')) return '/dashboard';
+  if (user.permissions.includes('clients.read')) return '/clientes';
+  if (user.permissions.includes('team.read')) return '/equipo';
+  return '/login';
+}

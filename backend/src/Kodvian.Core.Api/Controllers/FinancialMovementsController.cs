@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "FinancesRead")]
+[Authorize(Policy = "AdministratorOnly")]
 [Route("api/financial-movements")]
 public class FinancialMovementsController : ControllerBase
 {

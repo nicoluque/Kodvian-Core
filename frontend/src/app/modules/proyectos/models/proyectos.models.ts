@@ -99,6 +99,22 @@ export interface ContratoDesarrollador {
   notes?: string;
 }
 
+export interface AsignacionDesarrolladorProyecto {
+  id: string;
+  projectId: string;
+  projectName: string;
+  developerId: string;
+  developerName: string;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface AsignacionDesarrolladorFormulario {
+  developerId: string;
+  notes?: string;
+}
+
 export interface PagoDesarrollador {
   id: string;
   contractId: string;

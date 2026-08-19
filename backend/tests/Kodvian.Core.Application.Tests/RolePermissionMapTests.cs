@@ -16,4 +16,39 @@ public class RolePermissionMapTests
         Assert.DoesNotContain(PermissionCodes.FinancesRead, permissions);
         Assert.Equal(2, permissions.Count);
     }
+
+    [Fact]
+    public void AnalystRoleReceivesOperationalPermissionsWithoutFinances()
+    {
+        var permissions = RolePermissionMap.GetPermissions(RoleNames.Analyst);
+
+        Assert.Contains(PermissionCodes.ClientsRead, permissions);
+        Assert.Contains(PermissionCodes.ClientsWrite, permissions);
+        Assert.Contains(PermissionCodes.ProjectsRead, permissions);
+        Assert.Contains(PermissionCodes.ProjectsWrite, permissions);
+        Assert.Contains(PermissionCodes.ProjectsDocumentsRead, permissions);
+        Assert.Contains(PermissionCodes.ProjectsDocumentsWrite, permissions);
+        Assert.Contains(PermissionCodes.ProjectsDocumentsDelete, permissions);
+        Assert.Contains(PermissionCodes.TasksRead, permissions);
+        Assert.Contains(PermissionCodes.TasksWrite, permissions);
+        Assert.Contains(PermissionCodes.TeamRead, permissions);
+        Assert.Contains(PermissionCodes.TeamWrite, permissions);
+        Assert.DoesNotContain(PermissionCodes.FinancesRead, permissions);
+        Assert.DoesNotContain(PermissionCodes.FinancesWrite, permissions);
+        Assert.DoesNotContain(PermissionCodes.AdministrationRead, permissions);
+    }
+
+    [Theory]
+    [InlineData(RoleNames.Operative)]
+    [InlineData(RoleNames.ReadOnly)]
+    [InlineData(RoleNames.Analyst)]
+    [InlineData(RoleNames.Developer)]
+    public void NonAdministratorRolesDoNotReceiveFinancialDashboardOrFinancePermissions(string roleName)
+    {
+        var permissions = RolePermissionMap.GetPermissions(roleName);
+
+        Assert.DoesNotContain(PermissionCodes.DashboardRead, permissions);
+        Assert.DoesNotContain(PermissionCodes.FinancesRead, permissions);
+        Assert.DoesNotContain(PermissionCodes.FinancesWrite, permissions);
+    }
 }

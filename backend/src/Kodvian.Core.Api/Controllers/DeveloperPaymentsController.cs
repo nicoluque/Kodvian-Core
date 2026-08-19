@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "FinancesRead")]
+[Authorize(Policy = "AdministratorOnly")]
 [Route("api")]
 public class DeveloperPaymentsController : ControllerBase
 {

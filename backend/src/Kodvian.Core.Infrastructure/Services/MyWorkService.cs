@@ -163,7 +163,8 @@ public class MyWorkService : IMyWorkService
         var query = _dbContext.Projects
             .AsNoTracking()
             .Where(x => x.Activo
-                && (x.DeveloperContracts.Any(c => c.DeveloperId == developerId && c.Activo)
+                && (x.DeveloperAssignments.Any(a => a.DeveloperId == developerId && a.Activo)
+                    || x.DeveloperContracts.Any(c => c.DeveloperId == developerId && c.Activo)
                     || x.Tareas.Any(t => t.DeveloperId == developerId && t.Activo)));
 
         if (!string.IsNullOrWhiteSpace(request.Search))

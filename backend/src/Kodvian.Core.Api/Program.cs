@@ -116,7 +116,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.AdministrationRead));
 
     options.AddPolicy("DashboardRead", policy =>
-        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DashboardRead));
+        policy.RequireRole(RoleNames.Administrator).RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DashboardRead));
 
     options.AddPolicy("ClientsRead", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ClientsRead));
@@ -136,11 +136,20 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("TasksWrite", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.TasksWrite));
 
+    options.AddPolicy("TeamRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.TeamRead));
+
+    options.AddPolicy("TeamWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.TeamWrite));
+
+    options.AddPolicy("AdministratorOnly", policy =>
+        policy.RequireRole(RoleNames.Administrator));
+
     options.AddPolicy("FinancesRead", policy =>
-        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.FinancesRead));
+        policy.RequireRole(RoleNames.Administrator).RequireClaim(CustomClaimTypes.Permission, PermissionCodes.FinancesRead));
 
     options.AddPolicy("FinancesWrite", policy =>
-        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.FinancesWrite));
+        policy.RequireRole(RoleNames.Administrator).RequireClaim(CustomClaimTypes.Permission, PermissionCodes.FinancesWrite));
 
     options.AddPolicy("ProjectsDocumentsRead", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsDocumentsRead));

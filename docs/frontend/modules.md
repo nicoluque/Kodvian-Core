@@ -31,9 +31,10 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Dialogs: form, detail y status.
 - Endpoints: `/api/clients`.
 
-## Desarrolladores
+## Equipo
 
-- Ruta: `/desarrolladores`.
+- Ruta: `/equipo`.
+- Redirect legacy: `/desarrolladores` -> `/equipo`.
 - Route file: `frontend/src/app/modules/desarrolladores/desarrolladores.routes.ts`.
 - Page: `desarrolladores-page.component.ts|html|scss`.
 - Service: `services/desarrolladores.service.ts`.
@@ -41,6 +42,7 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Dialog: form.
 - Endpoints: `/api/developers`.
 - Permite habilitar, deshabilitar o restablecer acceso al sistema para el desarrollador.
+- Usa permisos `team.read` y `team.write`.
 
 ## Proyectos
 
@@ -49,8 +51,9 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Page: `proyectos-page.component.ts|html|scss`.
 - Service: `services/proyectos.service.ts`.
 - Models: `models/proyectos.models.ts`.
-- Dialogs: proyecto form/detail, desarrolladores, contratos, pagos, ledger.
-- Endpoints: `/api/projects`, documentos, contratos, pagos y comprobantes.
+- Dialogs: proyecto form/detail, equipo asignado, contratos, pagos, ledger.
+- Endpoints: `/api/projects`, documentos, asignaciones operativas, contratos, pagos y comprobantes.
+- Contratos, pagos y ledger solo deben estar disponibles para administrador.
 
 ## Tareas
 

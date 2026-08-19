@@ -11,7 +11,7 @@ export class NavigationService {
     { label: 'Inicio', icon: 'home', route: '/dashboard', permission: 'dashboard.read' },
     { label: 'Mi trabajo', icon: 'work', route: '/mi-trabajo', permission: 'developer.work.read' },
     { label: 'Clientes', icon: 'groups', route: '/clientes', permission: 'clients.read' },
-    { label: 'Desarrollador', icon: 'engineering', route: '/desarrolladores', permission: 'projects.write' },
+    { label: 'Equipo', icon: 'engineering', route: '/equipo', permission: 'team.read' },
     { label: 'Proyectos', icon: 'folder_open', route: '/proyectos', permission: 'projects.read' },
     { label: 'Tareas', icon: 'task', route: '/tareas', permission: 'tasks.read' },
     { label: 'Finanzas', icon: 'payments', route: '/finanzas', permission: 'finances.read' },
