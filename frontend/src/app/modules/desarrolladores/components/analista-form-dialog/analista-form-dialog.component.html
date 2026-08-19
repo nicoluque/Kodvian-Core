@@ -1,0 +1,47 @@
+<h2 mat-dialog-title class="dialog-title">{{ data?.analista ? 'Editar analista' : 'Nuevo analista' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="dialog-form form-grid">
+    <div class="form-section full-width">
+      <p class="section-eyebrow">Acceso de analista</p>
+      <span class="section-divider"></span>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre y apellido</mat-label>
+      <input matInput formControlName="fullName" />
+      @if (form.controls.fullName.hasError('required') && form.controls.fullName.touched) {
+        <mat-error>El nombre es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" autocomplete="email" />
+      @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+        <mat-error>El email es obligatorio</mat-error>
+      }
+      @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+        <mat-error>Ingresá un email válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ data?.analista ? 'Nueva contraseña (opcional)' : 'Contraseña inicial' }}</mat-label>
+      <input matInput type="password" formControlName="password" autocomplete="new-password" />
+      @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+        <mat-error>La contraseña inicial es obligatoria</mat-error>
+      }
+      @if (form.controls.password.hasError('minlength') && form.controls.password.touched) {
+        <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="full-width toggle-row">
+      <mat-slide-toggle formControlName="isActive">Acceso activo</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>
+  <button mat-flat-button color="primary" class="action-save" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

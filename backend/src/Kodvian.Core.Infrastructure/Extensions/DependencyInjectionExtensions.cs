@@ -7,6 +7,7 @@ using Kodvian.Core.Application.Finances.Abstractions;
 using Kodvian.Core.Application.Locations.Abstractions;
 using Kodvian.Core.Application.MyWork.Abstractions;
 using Kodvian.Core.Application.Projects.Abstractions;
+using Kodvian.Core.Application.Team.Abstractions;
 using Kodvian.Core.Application.Tasks.Abstractions;
 using Kodvian.Core.Infrastructure.Auth;
 using Kodvian.Core.Infrastructure.Persistence;
@@ -45,6 +46,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IMyWorkService, MyWorkService>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<ITeamUserService, TeamUserService>();
         services.AddScoped<ITaskService, TaskService>();
 
         return services;

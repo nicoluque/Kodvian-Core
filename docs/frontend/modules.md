@@ -39,9 +39,9 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Page: `desarrolladores-page.component.ts|html|scss`.
 - Service: `services/desarrolladores.service.ts`.
 - Models: `models/desarrolladores.models.ts`.
-- Dialog: form.
-- Endpoints: `/api/developers`.
-- Permite habilitar, deshabilitar o restablecer acceso al sistema para el desarrollador.
+- Dialogs: desarrollador form y analista form.
+- Endpoints: `/api/developers`, `/api/team/users/analysts`.
+- Permite crear desarrolladores, crear analistas y habilitar, deshabilitar o restablecer acceso al sistema para el desarrollador.
 - Usa permisos `team.read` y `team.write`.
 
 ## Proyectos

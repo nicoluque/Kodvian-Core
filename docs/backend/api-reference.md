@@ -158,6 +158,20 @@ Base route: `/api/developers`
 | POST | `/api/developers` | Alta de desarrollador, opcionalmente con usuario de acceso. |
 | PUT | `/api/developers/{id}` | Edicion de desarrollador y configuracion de acceso. |
 
+## Team Users
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/TeamUsersController.cs`
+
+Base route: `/api/team/users`
+
+Usuarios internos del modulo Equipo. Actualmente expone gestion de analistas.
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/team/users/analysts` | Lista usuarios con rol Analista. |
+| POST | `/api/team/users/analysts` | Crea usuario Analista con contraseña inicial obligatoria. |
+| PUT | `/api/team/users/analysts/{id}` | Edita usuario Analista y permite cambiar contraseña opcionalmente. |
+
 ## Developer Assignments
 
 Controller: `backend/src/Kodvian.Core.Api/Controllers/ProjectDeveloperAssignmentsController.cs`

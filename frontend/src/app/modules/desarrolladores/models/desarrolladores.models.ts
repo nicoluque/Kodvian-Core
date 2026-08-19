@@ -24,6 +24,23 @@ export interface DesarrolladorFormulario {
   accessPassword?: string;
 }
 
+export interface TeamUser {
+  id: string;
+  fullName: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface TeamUserFormulario {
+  fullName: string;
+  email: string;
+  password?: string;
+  isActive: boolean;
+}
+
 export interface ResumenContratoDesarrollador {
   contractId: string;
   projectId: string;
