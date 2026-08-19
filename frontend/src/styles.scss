@@ -70,10 +70,27 @@ html {
 }
 
 .mat-mdc-raised-button.mat-primary,
-.mat-mdc-unelevated-button.mat-primary {
+.mat-mdc-unelevated-button.mat-primary,
+button[mat-flat-button][color="primary"],
+a[mat-flat-button][color="primary"] {
+  --mdc-filled-button-container-color: var(--brand-500);
+  --mdc-filled-button-label-text-color: #031005;
+  --mat-filled-button-state-layer-color: #031005;
+  --mat-filled-button-ripple-color: rgba(3, 16, 5, 0.12);
+  --mat-filled-button-hover-state-layer-opacity: 0.08;
+  --mat-filled-button-focus-state-layer-opacity: 0.12;
+  --mat-filled-button-pressed-state-layer-opacity: 0.14;
   background: linear-gradient(145deg, var(--brand-500), #11d22b) !important;
+  background-color: var(--brand-500) !important;
   color: #031005 !important;
   font-weight: 700;
+}
+
+.mat-mdc-raised-button.mat-primary .mdc-button__label,
+.mat-mdc-unelevated-button.mat-primary .mdc-button__label,
+button[mat-flat-button][color="primary"] .mdc-button__label,
+a[mat-flat-button][color="primary"] .mdc-button__label {
+  color: #031005 !important;
 }
 
 .mat-mdc-outlined-button,
