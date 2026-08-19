@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "DashboardRead")]
 [Route("api/dashboard")]
 public class DashboardController : ControllerBase
 {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { CurrentUser } from '../auth/auth.models';
 import { NavigationItem } from '../../shared/models/navigation-item.model';
 
 @Injectable({
@@ -7,16 +8,21 @@ import { NavigationItem } from '../../shared/models/navigation-item.model';
 })
 export class NavigationService {
   private readonly items: NavigationItem[] = [
-    { label: 'Inicio', icon: 'home', route: '/dashboard' },
-    { label: 'Clientes', icon: 'groups', route: '/clientes' },
-    { label: 'Desarrollador', icon: 'engineering', route: '/desarrolladores' },
-    { label: 'Proyectos', icon: 'folder_open', route: '/proyectos' },
-    { label: 'Tareas', icon: 'task', route: '/tareas' },
-    { label: 'Finanzas', icon: 'payments', route: '/finanzas' },
-    { label: 'Administración', icon: 'admin_panel_settings', route: '/administracion' }
+    { label: 'Inicio', icon: 'home', route: '/dashboard', permission: 'dashboard.read' },
+    { label: 'Mi trabajo', icon: 'work', route: '/mi-trabajo', permission: 'developer.work.read' },
+    { label: 'Clientes', icon: 'groups', route: '/clientes', permission: 'clients.read' },
+    { label: 'Desarrollador', icon: 'engineering', route: '/desarrolladores', permission: 'projects.write' },
+    { label: 'Proyectos', icon: 'folder_open', route: '/proyectos', permission: 'projects.read' },
+    { label: 'Tareas', icon: 'task', route: '/tareas', permission: 'tasks.read' },
+    { label: 'Finanzas', icon: 'payments', route: '/finanzas', permission: 'finances.read' },
+    { label: 'Administración', icon: 'admin_panel_settings', route: '/administracion', permission: 'administration.read' }
   ];
 
-  getItems(): NavigationItem[] {
-    return this.items;
+  getItems(user: CurrentUser | null): NavigationItem[] {
+    if (!user) {
+      return [];
+    }
+
+    return this.items.filter((item) => !item.permission || user.permissions.includes(item.permission));
   }
 }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "FinancesRead")]
 [Route("api")]
 public class DeveloperPaymentsController : ControllerBase
 {
@@ -30,6 +30,7 @@ public class DeveloperPaymentsController : ControllerBase
     }
 
     [HttpPost("developer-contracts/{contractId:guid}/payments")]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<DeveloperPaymentDto>>> Create(Guid contractId, [FromBody] DeveloperPaymentCreateRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -50,6 +51,7 @@ public class DeveloperPaymentsController : ControllerBase
     }
 
     [HttpPost("developer-payments/{paymentId:guid}/receipts")]
+    [Authorize(Policy = "FinancesWrite")]
     [RequestSizeLimit(15 * 1024 * 1024)]
     public async Task<ActionResult<ApiResponseDto<FileMetadataDto>>> UploadReceipt(Guid paymentId, [FromForm] IFormFile file, CancellationToken cancellationToken)
     {
@@ -85,6 +87,7 @@ public class DeveloperPaymentsController : ControllerBase
     }
 
     [HttpDelete("developer-payments/{paymentId:guid}/receipts/{receiptId:guid}")]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<object>>> DeleteReceipt(Guid paymentId, Guid receiptId, CancellationToken cancellationToken)
     {
         var deleted = await _paymentService.DeleteReceiptAsync(paymentId, receiptId, cancellationToken);

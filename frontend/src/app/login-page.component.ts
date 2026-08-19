@@ -33,7 +33,7 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {
     this.authSession.ensureSessionLoaded().subscribe((user) => {
       if (user) {
-        void this.router.navigate(['/dashboard']);
+        void this.router.navigate([user.developerId ? '/mi-trabajo' : '/dashboard']);
       }
     });
   }
@@ -52,7 +52,7 @@ export class LoginPageComponent implements OnInit {
       next: () => {
         this.cargando = false;
         this.snackBar.open('Inicio de sesion correcto', 'Cerrar', { duration: 3000 });
-        void this.router.navigate(['/dashboard']);
+        void this.router.navigate([this.authSession.user?.developerId ? '/mi-trabajo' : '/dashboard']);
       },
       error: () => {
         this.cargando = false;

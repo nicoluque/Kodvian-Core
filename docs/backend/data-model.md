@@ -160,6 +160,12 @@ Restricciones:
 - Email unico.
 - Password hash requerido.
 - Role requerido.
+- Puede vincularse a un `Developer` mediante `DeveloperId` para acceso al portal de trabajo asignado.
+
+Relaciones nuevas:
+
+- `Developer` tiene muchos `User` asociados.
+- `User.DeveloperId` usa delete behavior `SetNull`.
 
 ## Enums
 

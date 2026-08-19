@@ -821,6 +821,9 @@ namespace Kodvian.Core.Infrastructure.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
 
+                    b.Property<Guid?>("DeveloperId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("FechaActualizacion")
                         .HasColumnType("timestamp with time zone");
 
@@ -843,6 +846,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("DeveloperId");
 
                     b.HasIndex("RoleId");
 
@@ -1057,11 +1062,18 @@ namespace Kodvian.Core.Infrastructure.Migrations
 
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.User", b =>
                 {
+                    b.HasOne("Kodvian.Core.Domain.Entities.Developer", "Developer")
+                        .WithMany("Users")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Kodvian.Core.Domain.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Developer");
 
                     b.Navigation("Role");
                 });
@@ -1076,6 +1088,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Navigation("Contracts");
 
                     b.Navigation("Tasks");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.DeveloperPayment", b =>

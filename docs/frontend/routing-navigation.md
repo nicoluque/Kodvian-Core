@@ -9,6 +9,7 @@ Las rutas principales estan definidas en `frontend/src/app/app.routes.ts`.
 | `/login` | `LoginPageComponent` | Ninguno |
 | `/` | Redirige a `/dashboard` dentro del shell | `authGuard` |
 | `/dashboard` | `DashboardPageComponent` | `authGuard` heredado |
+| `/mi-trabajo` | `MiTrabajoPageComponent` | `authGuard` heredado + `permissionGuard` con `developer.work.read` |
 | `/clientes` | `ClientesPageComponent` | `authGuard` heredado |
 | `/desarrolladores` | `DesarrolladoresPageComponent` | `authGuard` heredado |
 | `/proyectos` | `ProyectosPageComponent` | `authGuard` heredado |
@@ -45,14 +46,17 @@ La fuente del menu esta en:
 
 - `frontend/src/app/core/services/navigation.service.ts`.
 
-Cada item debe representar una ruta funcional clara. La navegacion no debe exponer flujos que el usuario no pueda usar, salvo que exista una razon de producto.
+Cada item puede declarar `permission`. `NavigationService` filtra el menu segun permisos del usuario autenticado, para que el rol `Desarrollador` vea solo `Mi trabajo`.
 
 ## Administracion
 
 La ruta `/administracion` usa `administrationGuard`, que exige el permiso `administration.read`. Si el usuario no tiene permiso, se redirige a `/dashboard`.
 
+## Mi trabajo
+
+La ruta `/mi-trabajo` usa `permissionGuard` y exige `developer.work.read`. Despues del login, un usuario con `developerId` se redirige automaticamente a esta ruta.
+
 ## Cuidados
 
-- El item de administracion puede estar visible aunque el guard bloquee el acceso. Si se busca coherencia de permisos, filtrar tambien el menu.
 - El uso directo de `window.matchMedia` puede ser sensible a SSR/prerender.
 - Las rutas comodin redirigen a login; verificar que esto no oculte errores de rutas internas durante desarrollo.

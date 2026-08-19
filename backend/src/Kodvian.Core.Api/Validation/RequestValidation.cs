@@ -236,6 +236,16 @@ internal static class RequestValidation
             return "Ingresa un correo electrónico válido";
         }
 
+        if (request.EnableSystemAccess && string.IsNullOrWhiteSpace(request.Email))
+        {
+            return "El email es obligatorio para habilitar el acceso al sistema";
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.AccessPassword) && request.AccessPassword.Length < 8)
+        {
+            return "La contraseña debe tener al menos 8 caracteres";
+        }
+
         return null;
     }
 

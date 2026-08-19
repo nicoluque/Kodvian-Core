@@ -85,6 +85,23 @@ Base route: `/api/tasks`
 | PUT | `/api/tasks/{id}` | Edicion de tarea. |
 | PATCH | `/api/tasks/{id}/status` | Cambio de estado. |
 
+## My Work
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/MyWorkController.cs`
+
+Base route: `/api/my-work`
+
+Endpoints exclusivos para usuarios con rol `Desarrollador` y claim `developer_id`.
+
+| Metodo | Ruta | Descripcion |
+|---|---|---|
+| GET | `/api/my-work/overview` | Resumen de proyectos y tareas asignadas al desarrollador autenticado. |
+| GET | `/api/my-work/projects` | Proyectos asociados por contrato o tarea asignada. |
+| GET | `/api/my-work/tasks` | Tareas asignadas al desarrollador autenticado. |
+| GET | `/api/my-work/tasks/kanban` | Tareas propias agrupadas para tablero kanban. |
+| GET | `/api/my-work/tasks/{id}` | Detalle de tarea propia. |
+| PATCH | `/api/my-work/tasks/{id}/status` | Cambio de estado de tarea propia. |
+
 ## Financial Movements
 
 Controller: `backend/src/Kodvian.Core.Api/Controllers/FinancialMovementsController.cs`
@@ -136,10 +153,10 @@ Base route: `/api/developers`
 
 | Metodo | Ruta | Descripcion |
 |---|---|---|
-| GET | `/api/developers` | Lista desarrolladores. |
+| GET | `/api/developers` | Lista desarrolladores, incluyendo estado de acceso al sistema. |
 | GET | `/api/developers/{id}/contracts-summary` | Resumen anual de contratos por desarrollador. |
-| POST | `/api/developers` | Alta de desarrollador. |
-| PUT | `/api/developers/{id}` | Edicion de desarrollador. |
+| POST | `/api/developers` | Alta de desarrollador, opcionalmente con usuario de acceso. |
+| PUT | `/api/developers/{id}` | Edicion de desarrollador y configuracion de acceso. |
 
 ## Developer Contracts
 
@@ -193,6 +210,6 @@ Base route: `/api/users`
 
 ## Notas de seguridad
 
-- La mayoria de controllers requiere `[Authorize]`.
-- Las policies finas estan aplicadas principalmente a documentos de proyectos y administracion.
+- Los controllers principales usan policies por modulo.
+- El rol `Desarrollador` consume `/api/my-work`; no debe usar endpoints generales de gestion.
 - Para nuevos endpoints sensibles, agregar policy backend aunque el frontend oculte botones.

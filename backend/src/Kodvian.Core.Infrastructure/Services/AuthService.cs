@@ -45,6 +45,7 @@ public class AuthService : IAuthService
             Email = user.Email,
             FullName = user.FullName,
             Role = user.Role.Name,
+            DeveloperId = user.DeveloperId,
             Permissions = permissions
         });
 
@@ -58,6 +59,7 @@ public class AuthService : IAuthService
                 FullName = user.FullName,
                 Email = user.Email,
                 Role = user.Role.Name,
+                DeveloperId = user.DeveloperId,
                 Permissions = permissions
             }
         };
@@ -81,6 +83,7 @@ public class AuthService : IAuthService
             FullName = user.FullName,
             Email = user.Email,
             Role = user.Role.Name,
+            DeveloperId = user.DeveloperId,
             Permissions = RolePermissionMap.GetPermissions(user.Role.Name)
         };
     }

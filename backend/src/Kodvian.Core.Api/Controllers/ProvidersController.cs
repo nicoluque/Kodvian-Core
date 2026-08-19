@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "FinancesRead")]
 [Route("api/providers")]
 public class ProvidersController : ControllerBase
 {
@@ -28,6 +28,7 @@ public class ProvidersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<ProviderDto>>> Create([FromBody] ProviderUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -41,6 +42,7 @@ public class ProvidersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<ProviderDto>>> Update(Guid id, [FromBody] ProviderUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);

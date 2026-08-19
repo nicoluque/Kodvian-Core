@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "ClientsRead")]
 [Route("api/locations")]
 public class LocationsController : ControllerBase
 {

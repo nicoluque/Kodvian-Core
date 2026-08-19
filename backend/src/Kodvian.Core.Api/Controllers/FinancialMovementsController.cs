@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "FinancesRead")]
 [Route("api/financial-movements")]
 public class FinancialMovementsController : ControllerBase
 {
@@ -71,6 +71,7 @@ public class FinancialMovementsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<FinancialMovementDetailDto>>> Create([FromBody] FinancialMovementUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -90,6 +91,7 @@ public class FinancialMovementsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<FinancialMovementDetailDto>>> Update(Guid id, [FromBody] FinancialMovementUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -115,6 +117,7 @@ public class FinancialMovementsController : ControllerBase
     }
 
     [HttpPost("{id:guid}/receipts")]
+    [Authorize(Policy = "FinancesWrite")]
     [RequestSizeLimit(15 * 1024 * 1024)]
     public async Task<ActionResult<ApiResponseDto<FileMetadataDto>>> UploadReceipt(Guid id, [FromForm] IFormFile file, CancellationToken cancellationToken)
     {
@@ -150,6 +153,7 @@ public class FinancialMovementsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}/receipts/{receiptId:guid}")]
+    [Authorize(Policy = "FinancesWrite")]
     public async Task<ActionResult<ApiResponseDto<object>>> DeleteReceipt(Guid id, Guid receiptId, CancellationToken cancellationToken)
     {
         var deleted = await _financialMovementService.DeleteReceiptAsync(id, receiptId, cancellationToken);

@@ -9,6 +9,8 @@ El modulo de desarrolladores gestiona colaboradores o proveedores tecnicos que p
 - Listar desarrolladores.
 - Crear desarrollador.
 - Editar datos de contacto/fiscales.
+- Habilitar o deshabilitar acceso al sistema para un desarrollador.
+- Restablecer password de acceso del desarrollador.
 - Consultar resumen de contratos por anio.
 
 ## Pantallas frontend
@@ -21,10 +23,10 @@ El modulo de desarrolladores gestiona colaboradores o proveedores tecnicos que p
 
 ## Contratos backend
 
-- `GET /api/developers`.
+- `GET /api/developers`: lista desarrolladores e indica si tienen acceso al sistema.
 - `GET /api/developers/{id}/contracts-summary`.
-- `POST /api/developers`.
-- `PUT /api/developers/{id}`.
+- `POST /api/developers`: alta de desarrollador, opcionalmente con usuario de acceso.
+- `PUT /api/developers/{id}`: edicion de desarrollador y configuracion de acceso.
 
 Archivos:
 
@@ -36,15 +38,16 @@ Archivos:
 ## Modelo de datos
 
 - Entity: `Developer`.
-- Relaciones: tareas asignadas y contratos por proyecto.
+- Relaciones: tareas asignadas, contratos por proyecto y usuarios vinculados.
 - Contratos relacionados: `ProjectDeveloperContract`.
 - Pagos relacionados: `DeveloperPayment`.
+- Acceso relacionado: `User.DeveloperId`.
 
 ## Permisos
 
-- No hay permission code especifico para desarrolladores en el mapa actual.
-- El controller requiere autenticacion general.
-- En mejoras futuras, evaluar permiso dedicado si el modulo maneja informacion sensible de pagos.
+- La gestion de desarrolladores requiere `projects.write`.
+- Los usuarios generados para desarrolladores reciben rol `Desarrollador`.
+- El rol `Desarrollador` tiene `developer.work.read` y `developer.tasks.status.write`.
 
 ## Estados de UI
 
@@ -58,6 +61,9 @@ Archivos:
 - Un desarrollador puede participar en multiples proyectos.
 - Los datos de contacto y fiscales deben estar disponibles para pagos/contratos.
 - El resumen anual debe ser consistente con contratos y pagos.
+- El email del desarrollador se usa como email del usuario de acceso cuando se habilita el acceso al sistema.
+- Para crear acceso nuevo se requiere password.
+- Si se deshabilita acceso, el usuario vinculado queda inactivo.
 
 ## Riesgos y cuidados
 

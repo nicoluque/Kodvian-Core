@@ -3,4 +3,5 @@
 public static class CustomClaimTypes
 {
     public const string Permission = "permission";
+    public const string DeveloperId = "developer_id";
 }

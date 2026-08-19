@@ -30,7 +30,10 @@ export class DesarrolladorFormDialogComponent {
     phone: ['', [Validators.maxLength(40)]],
     taxId: ['', [Validators.maxLength(20)]],
     notes: ['', [Validators.maxLength(1000)]],
-    isActive: [true]
+    isActive: [true],
+    enableSystemAccess: [false],
+    isSystemAccessActive: [true],
+    accessPassword: ['', [Validators.minLength(8)]]
   });
 
   constructor() {
@@ -44,7 +47,10 @@ export class DesarrolladorFormDialogComponent {
       phone: this.data.desarrollador.phone ?? '',
       taxId: this.data.desarrollador.taxId ?? '',
       notes: this.data.desarrollador.notes ?? '',
-      isActive: this.data.desarrollador.isActive
+      isActive: this.data.desarrollador.isActive,
+      enableSystemAccess: this.data.desarrollador.hasSystemAccess,
+      isSystemAccessActive: this.data.desarrollador.isSystemAccessActive,
+      accessPassword: ''
     });
   }
 
@@ -55,13 +61,31 @@ export class DesarrolladorFormDialogComponent {
     }
 
     const raw = this.form.getRawValue();
+    const enableSystemAccess = raw.enableSystemAccess ?? false;
+    const accessPassword = raw.accessPassword?.trim() || undefined;
+
+    if (enableSystemAccess && !raw.email?.trim()) {
+      this.form.controls.email.setErrors({ required: true });
+      this.form.controls.email.markAsTouched();
+      return;
+    }
+
+    if (enableSystemAccess && !this.data?.desarrollador?.hasSystemAccess && !accessPassword) {
+      this.form.controls.accessPassword.setErrors({ required: true });
+      this.form.controls.accessPassword.markAsTouched();
+      return;
+    }
+
     this.dialogRef.close({
       fullName: raw.fullName ?? '',
       email: raw.email || undefined,
       phone: raw.phone || undefined,
       taxId: raw.taxId || undefined,
       notes: raw.notes || undefined,
-      isActive: raw.isActive ?? true
+      isActive: raw.isActive ?? true,
+      enableSystemAccess,
+      isSystemAccessActive: raw.isSystemAccessActive ?? true,
+      accessPassword
     } as DesarrolladorFormulario);
   }
 }

@@ -10,6 +10,7 @@ public class KodvianDbContext : DbContext
     public static readonly Guid AdministratorRoleId = Guid.Parse("95e52dc4-44f5-4b0b-aabf-4044f28cc55a");
     public static readonly Guid OperativeRoleId = Guid.Parse("a77176f8-d33a-4c23-b613-f2e73093e1b7");
     public static readonly Guid ReadOnlyRoleId = Guid.Parse("24b2ab35-0c84-4fa8-9c35-eecf5f476bb8");
+    public static readonly Guid DeveloperRoleId = Guid.Parse("58df40de-1019-4dcf-81dc-55a8a2d06235");
 
     public KodvianDbContext(DbContextOptions<KodvianDbContext> options) : base(options)
     {
@@ -362,6 +363,14 @@ public class KodvianDbContext : DbContext
                     Description = "Acceso de solo lectura",
                     FechaCreacion = new DateTime(2026, 4, 1, 0, 0, 0, DateTimeKind.Utc),
                     Activo = true
+                },
+                new Role
+                {
+                    Id = DeveloperRoleId,
+                    Name = RoleNames.Developer,
+                    Description = "Acceso limitado a proyectos y tareas asignadas",
+                    FechaCreacion = new DateTime(2026, 4, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Activo = true
                 }
             );
         });
@@ -373,11 +382,17 @@ public class KodvianDbContext : DbContext
             entity.Property(x => x.Email).IsRequired().HasMaxLength(120);
             entity.Property(x => x.PasswordHash).IsRequired();
             entity.HasIndex(x => x.Email).IsUnique();
+            entity.HasIndex(x => x.DeveloperId);
 
             entity.HasOne(x => x.Role)
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Developer)
+                .WithMany(x => x.Users)
+                .HasForeignKey(x => x.DeveloperId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
     }
 }

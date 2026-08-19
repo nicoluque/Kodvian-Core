@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "TasksRead")]
 [Route("api/tasks")]
 public class TasksController : ControllerBase
 {
@@ -60,6 +60,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "TasksWrite")]
     public async Task<ActionResult<ApiResponseDto<TaskDetailDto>>> Create([FromBody] TaskUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -79,6 +80,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "TasksWrite")]
     public async Task<ActionResult<ApiResponseDto<TaskDetailDto>>> Update(Guid id, [FromBody] TaskUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -97,6 +99,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPatch("{id:guid}/status")]
+    [Authorize(Policy = "TasksWrite")]
     public async Task<ActionResult<ApiResponseDto<TaskDetailDto>>> UpdateStatus(Guid id, [FromBody] TaskStatusUpdateRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);

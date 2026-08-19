@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "ClientsRead")]
 [Route("api/clients")]
 public class ClientsController : ControllerBase
 {
@@ -42,6 +42,7 @@ public class ClientsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "ClientsWrite")]
     public async Task<ActionResult<ApiResponseDto<ClientDetailDto>>> Create(
         [FromBody] ClientUpsertRequestDto request,
         CancellationToken cancellationToken)
@@ -57,6 +58,7 @@ public class ClientsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "ClientsWrite")]
     public async Task<ActionResult<ApiResponseDto<ClientDetailDto>>> Update(
         Guid id,
         [FromBody] ClientUpsertRequestDto request,
@@ -78,6 +80,7 @@ public class ClientsController : ControllerBase
     }
 
     [HttpPatch("{id:guid}/status")]
+    [Authorize(Policy = "ClientsWrite")]
     public async Task<ActionResult<ApiResponseDto<ClientDetailDto>>> ChangeStatus(
         Guid id,
         [FromBody] ChangeClientStatusRequestDto request,

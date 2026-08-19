@@ -6,8 +6,10 @@ public class User : BaseEntity
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public Guid RoleId { get; set; }
+    public Guid? DeveloperId { get; set; }
 
     public Role? Role { get; set; }
+    public Developer? Developer { get; set; }
 
     public ICollection<Project> Projects { get; set; } = new List<Project>();
     public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();

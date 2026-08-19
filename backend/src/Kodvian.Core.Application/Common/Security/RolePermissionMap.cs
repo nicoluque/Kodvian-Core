@@ -47,6 +47,11 @@ public static class RolePermissionMap
                 PermissionCodes.FinancesRead,
                 PermissionCodes.AdministrationRead
             ],
+            RoleNames.Developer =>
+            [
+                PermissionCodes.DeveloperWorkRead,
+                PermissionCodes.DeveloperTasksStatusWrite
+            ],
             _ => Array.Empty<string>()
         };
     }

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "ProjectsWrite")]
 [Route("api/developers")]
 public class DevelopersController : ControllerBase
 {
@@ -51,8 +51,15 @@ public class DevelopersController : ControllerBase
             return BadRequest(ApiResponseDto<DeveloperDto>.Fail(validationError));
         }
 
-        var data = await _developerService.CreateAsync(request, cancellationToken);
-        return Ok(ApiResponseDto<DeveloperDto>.Ok(data, "El desarrollador se creó correctamente"));
+        try
+        {
+            var data = await _developerService.CreateAsync(request, cancellationToken);
+            return Ok(ApiResponseDto<DeveloperDto>.Ok(data, "El desarrollador se creó correctamente"));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ApiResponseDto<DeveloperDto>.Fail(ex.Message));
+        }
     }
 
     [HttpPut("{id:guid}")]
@@ -64,7 +71,16 @@ public class DevelopersController : ControllerBase
             return BadRequest(ApiResponseDto<DeveloperDto>.Fail(validationError));
         }
 
-        var data = await _developerService.UpdateAsync(id, request, cancellationToken);
+        DeveloperDto? data;
+        try
+        {
+            data = await _developerService.UpdateAsync(id, request, cancellationToken);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ApiResponseDto<DeveloperDto>.Fail(ex.Message));
+        }
+
         if (data is null)
         {
             return NotFound(ApiResponseDto<DeveloperDto>.Fail("Desarrollador no encontrado"));

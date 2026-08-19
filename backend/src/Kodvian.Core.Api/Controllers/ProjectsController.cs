@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kodvian.Core.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Policy = "ProjectsRead")]
 [Route("api/projects")]
 public class ProjectsController : ControllerBase
 {
@@ -50,6 +50,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "ProjectsWrite")]
     public async Task<ActionResult<ApiResponseDto<ProjectDetailDto>>> Create([FromBody] ProjectUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);
@@ -63,6 +64,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "ProjectsWrite")]
     public async Task<ActionResult<ApiResponseDto<ProjectDetailDto>>> Update(Guid id, [FromBody] ProjectUpsertRequestDto request, CancellationToken cancellationToken)
     {
         var validationError = RequestValidation.Validate(request);

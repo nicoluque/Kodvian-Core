@@ -11,6 +11,16 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Models: `models/dashboard.models.ts`.
 - Endpoint principal: `GET /api/dashboard/overview`.
 
+## Mi trabajo
+
+- Ruta: `/mi-trabajo`.
+- Route file: `frontend/src/app/modules/mi-trabajo/mi-trabajo.routes.ts`.
+- Page: `mi-trabajo-page.component.ts|html|scss`.
+- Service: `services/mi-trabajo.service.ts`.
+- Models: `models/mi-trabajo.models.ts`.
+- Endpoints: `/api/my-work`.
+- Audiencia: usuarios con rol `Desarrollador`.
+
 ## Clientes
 
 - Ruta: `/clientes`.
@@ -30,6 +40,7 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Models: `models/desarrolladores.models.ts`.
 - Dialog: form.
 - Endpoints: `/api/developers`.
+- Permite habilitar, deshabilitar o restablecer acceso al sistema para el desarrollador.
 
 ## Proyectos
 

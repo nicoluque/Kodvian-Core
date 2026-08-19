@@ -65,6 +65,7 @@ Definidos en `RoleNames.cs`:
 - `Administrador`.
 - `Operativo`.
 - `Solo lectura`.
+- `Desarrollador`.
 
 ## Permisos
 
@@ -84,6 +85,8 @@ Definidos en `PermissionCodes.cs`:
 - `finances.write`.
 - `administration.read`.
 - `administration.write`.
+- `developer.work.read`.
+- `developer.tasks.status.write`.
 
 ## Mapa rol-permisos
 
@@ -112,18 +115,39 @@ Definido en `RolePermissionMap.cs`.
 - Finanzas read.
 - Administracion read.
 
+`Desarrollador`:
+
+- Mi trabajo read.
+- Cambio de estado de tareas propias.
+
 ## Policies backend
 
 Policies declaradas en `Program.cs`:
 
 - `AdministrationRead`.
+- `DashboardRead`.
+- `ClientsRead`.
+- `ClientsWrite`.
+- `ProjectsRead`.
+- `ProjectsWrite`.
+- `TasksRead`.
+- `TasksWrite`.
+- `FinancesRead`.
+- `FinancesWrite`.
 - `ProjectsDocumentsRead`.
 - `ProjectsDocumentsWrite`.
 - `ProjectsDocumentsDelete`.
+- `DeveloperWorkRead`.
+- `DeveloperTasksStatusWrite`.
+
+## Acceso de desarrolladores
+
+Los usuarios con rol `Desarrollador` deben estar vinculados a un `Developer` mediante `Users.DeveloperId`. El JWT incluye el claim `developer_id`, usado por `/api/my-work` para filtrar proyectos y tareas asignadas.
+
+El rol `Desarrollador` no recibe permisos generales de dashboard, clientes, proyectos, tareas o finanzas. Su acceso funcional pasa por endpoints dedicados de `Mi trabajo`.
 
 ## Caveats
 
-- Muchos controllers usan solo `[Authorize]`, sin policy especifica por modulo.
 - La visibilidad de botones en frontend no reemplaza autorizacion backend.
 - Para nuevas acciones de escritura o datos sensibles, crear policy o verificar permiso explicitamente.
 - `UsersController` requiere `AdministrationRead` y role `Administrador`, pero actualmente devuelve un resultado vacio.

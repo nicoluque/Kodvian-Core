@@ -8,6 +8,8 @@ export interface DesarrolladorExterno {
   taxId?: string;
   notes?: string;
   isActive: boolean;
+  hasSystemAccess: boolean;
+  isSystemAccessActive: boolean;
 }
 
 export interface DesarrolladorFormulario {
@@ -17,6 +19,9 @@ export interface DesarrolladorFormulario {
   taxId?: string;
   notes?: string;
   isActive: boolean;
+  enableSystemAccess: boolean;
+  isSystemAccessActive: boolean;
+  accessPassword?: string;
 }
 
 export interface ResumenContratoDesarrollador {

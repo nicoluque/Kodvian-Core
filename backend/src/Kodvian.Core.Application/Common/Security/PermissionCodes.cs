@@ -16,4 +16,6 @@ public static class PermissionCodes
     public const string FinancesWrite = "finances.write";
     public const string AdministrationRead = "administration.read";
     public const string AdministrationWrite = "administration.write";
+    public const string DeveloperWorkRead = "developer.work.read";
+    public const string DeveloperTasksStatusWrite = "developer.tasks.status.write";
 }

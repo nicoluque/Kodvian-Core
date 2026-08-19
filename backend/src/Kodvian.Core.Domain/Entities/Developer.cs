@@ -10,4 +10,5 @@ public class Developer : BaseEntity
 
     public ICollection<ProjectDeveloperContract> Contracts { get; set; } = new List<ProjectDeveloperContract>();
     public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+    public ICollection<User> Users { get; set; } = new List<User>();
 }

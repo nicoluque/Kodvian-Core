@@ -31,6 +31,11 @@ public class TokenService : ITokenService
             new(ClaimTypes.Role, tokenGeneration.Role)
         };
 
+        if (tokenGeneration.DeveloperId.HasValue)
+        {
+            claims.Add(new Claim(CustomClaimTypes.DeveloperId, tokenGeneration.DeveloperId.Value.ToString()));
+        }
+
         claims.AddRange(tokenGeneration.Permissions.Select(permission => new Claim(CustomClaimTypes.Permission, permission)));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));

@@ -115,6 +115,33 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdministrationRead", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.AdministrationRead));
 
+    options.AddPolicy("DashboardRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DashboardRead));
+
+    options.AddPolicy("ClientsRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ClientsRead));
+
+    options.AddPolicy("ClientsWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ClientsWrite));
+
+    options.AddPolicy("ProjectsRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsRead));
+
+    options.AddPolicy("ProjectsWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsWrite));
+
+    options.AddPolicy("TasksRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.TasksRead));
+
+    options.AddPolicy("TasksWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.TasksWrite));
+
+    options.AddPolicy("FinancesRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.FinancesRead));
+
+    options.AddPolicy("FinancesWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.FinancesWrite));
+
     options.AddPolicy("ProjectsDocumentsRead", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsDocumentsRead));
 
@@ -123,6 +150,12 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("ProjectsDocumentsDelete", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.ProjectsDocumentsDelete));
+
+    options.AddPolicy("DeveloperWorkRead", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DeveloperWorkRead));
+
+    options.AddPolicy("DeveloperTasksStatusWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DeveloperTasksStatusWrite));
 });
 
 var allowedOrigins = builder.Configuration["Cors:AllowedOrigins"];

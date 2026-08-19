@@ -9,4 +9,6 @@ public class DeveloperDto
     public string? TaxId { get; set; }
     public string? Notes { get; set; }
     public bool IsActive { get; set; }
+    public bool HasSystemAccess { get; set; }
+    public bool IsSystemAccessActive { get; set; }
 }

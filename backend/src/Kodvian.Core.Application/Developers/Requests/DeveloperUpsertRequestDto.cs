@@ -8,4 +8,7 @@ public class DeveloperUpsertRequestDto
     public string? TaxId { get; set; }
     public string? Notes { get; set; }
     public bool IsActive { get; set; } = true;
+    public bool EnableSystemAccess { get; set; }
+    public bool IsSystemAccessActive { get; set; } = true;
+    public string? AccessPassword { get; set; }
 }

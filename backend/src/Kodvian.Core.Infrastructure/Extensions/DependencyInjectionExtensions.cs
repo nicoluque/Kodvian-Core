@@ -5,6 +5,7 @@ using Kodvian.Core.Application.Common.Files;
 using Kodvian.Core.Application.Dashboard.Abstractions;
 using Kodvian.Core.Application.Finances.Abstractions;
 using Kodvian.Core.Application.Locations.Abstractions;
+using Kodvian.Core.Application.MyWork.Abstractions;
 using Kodvian.Core.Application.Projects.Abstractions;
 using Kodvian.Core.Application.Tasks.Abstractions;
 using Kodvian.Core.Infrastructure.Auth;
@@ -41,6 +42,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IFinancialMovementService, FinancialMovementService>();
         services.AddScoped<IProviderService, ProviderService>();
         services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IMyWorkService, MyWorkService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<ITaskService, TaskService>();
 

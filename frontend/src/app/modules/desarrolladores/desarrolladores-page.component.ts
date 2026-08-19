@@ -27,7 +27,7 @@ export class DesarrolladoresPageComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly fb = inject(FormBuilder);
 
-  readonly columnas = ['fullName', 'email', 'phone', 'taxId', 'status', 'actions'];
+  readonly columnas = ['fullName', 'email', 'phone', 'taxId', 'status', 'access', 'actions'];
   readonly filtrosForm = this.fb.group({ search: [''] });
 
   desarrolladores: DesarrolladorExterno[] = [];
