@@ -24,6 +24,7 @@ public class DeveloperService : IDeveloperService
     {
         return await _dbContext.Developers
             .AsNoTracking()
+            .Where(x => !x.Users.Any(u => u.Role != null && u.Role.Name == RoleNames.Analyst))
             .OrderBy(x => x.FullName)
             .Select(x => new DeveloperDto
             {

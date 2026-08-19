@@ -63,6 +63,7 @@ Relaciones:
 - Tiene muchas `TaskItem`.
 - Tiene muchas `ProjectDeveloperAssignment`.
 - Puede estar vinculado a un `User` analista para permitir acuerdos y pagos al analista a cargo.
+- Los perfiles `Developer` vinculados a usuarios con rol `Analista` son remunerables internos y no se listan como desarrolladores operativos.
 
 ### ProjectDeveloperAssignment
 

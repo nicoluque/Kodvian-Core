@@ -2,7 +2,7 @@
 <mat-dialog-content class="dialog-body">
   <form [formGroup]="form" class="dialog-form form-grid">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Desarrollador</mat-label>
+      <mat-label>Miembro</mat-label>
       <mat-select formControlName="developerId">
         @for (developer of data.developers; track developer.id) {
           <mat-option [value]="developer.id">{{ developer.fullName }}</mat-option>

@@ -21,9 +21,13 @@ Puede gestionar clientes, proyectos, documentos, equipo y tareas. No puede ver f
 
 Desde `/equipo`, el boton `Nuevo analista` crea un usuario del sistema con rol `Analista` y un perfil `Developer` asociado para acuerdos economicos y pagos. Este perfil remunerable permite que el analista a cargo aparezca en contratos asociados de proyecto.
 
+El perfil remunerable del analista es interno: no aparece en la grilla de desarrolladores ni en el selector de desarrolladores operativos.
+
 ## Desarrolladores
 
 El boton `Nuevo desarrollador` crea un `Developer`. Si se habilita `Permitir acceso al sistema`, tambien se crea o actualiza un usuario asociado con rol `Desarrollador`.
+
+La grilla de desarrolladores muestra solo desarrolladores reales. Excluye perfiles `Developer` asociados a usuarios con rol `Analista`.
 
 ## Endpoints de usuarios de equipo
 

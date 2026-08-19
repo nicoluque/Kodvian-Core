@@ -153,7 +153,7 @@ Base route: `/api/developers`
 
 | Metodo | Ruta | Descripcion |
 |---|---|---|
-| GET | `/api/developers` | Lista desarrolladores, incluyendo estado de acceso al sistema. |
+| GET | `/api/developers` | Lista desarrolladores reales, incluyendo estado de acceso al sistema. Excluye perfiles remunerables de analistas. |
 | GET | `/api/developers/{id}/contracts-summary` | Resumen anual de contratos por desarrollador. Solo administrador. |
 | POST | `/api/developers` | Alta de desarrollador, opcionalmente con usuario de acceso. |
 | PUT | `/api/developers/{id}` | Edicion de desarrollador y configuracion de acceso. |
