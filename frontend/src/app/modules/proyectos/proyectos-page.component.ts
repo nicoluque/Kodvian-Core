@@ -166,7 +166,7 @@ export class ProyectosPageComponent implements OnInit {
       maxHeight: 'calc(100vh - 32px)',
       autoFocus: false,
       data: { project: row }
-    });
+    }).afterClosed().subscribe(() => this.cargarProyectos());
   }
 
   mostrarEstado(estado: EstadoProyecto): string {

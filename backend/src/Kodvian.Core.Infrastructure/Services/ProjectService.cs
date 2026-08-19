@@ -151,13 +151,14 @@ public class ProjectService : IProjectService
 
         var responsibles = await _dbContext.Users
             .AsNoTracking()
-            .Where(x => x.Activo && x.Role != null && x.Role.Name == RoleNames.Analyst)
+            .Where(x => x.Activo && x.DeveloperId != null && x.Role != null && x.Role.Name == RoleNames.Analyst)
             .OrderBy(x => x.FullName)
             .Take(300)
             .Select(x => new ProjectLookupItemDto
             {
                 Id = x.Id,
-                Name = x.FullName
+                Name = x.FullName,
+                DeveloperId = x.DeveloperId
             })
             .ToListAsync(cancellationToken);
 
@@ -588,11 +589,11 @@ public class ProjectService : IProjectService
         if (request.ResponsibleId.HasValue)
         {
             var analystExists = await _dbContext.Users.AnyAsync(
-                x => x.Id == request.ResponsibleId.Value && x.Activo && x.Role != null && x.Role.Name == RoleNames.Analyst,
+                x => x.Id == request.ResponsibleId.Value && x.Activo && x.DeveloperId != null && x.Role != null && x.Role.Name == RoleNames.Analyst,
                 cancellationToken);
             if (!analystExists)
             {
-                throw new ArgumentException("El analista a cargo seleccionado no existe o no está activo");
+                throw new ArgumentException("El analista a cargo seleccionado no existe, no está activo o no tiene perfil remunerable");
             }
         }
     }

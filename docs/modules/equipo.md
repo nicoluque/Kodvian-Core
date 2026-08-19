@@ -19,7 +19,7 @@ El modulo Equipo gestiona desarrolladores, analistas y accesos operativos. Es el
 
 Puede gestionar clientes, proyectos, documentos, equipo y tareas. No puede ver finanzas, contratos economicos, pagos, cobros ni ledger.
 
-Desde `/equipo`, el boton `Nuevo analista` crea un usuario del sistema con rol `Analista`. Este usuario no queda vinculado a un `Developer` y no se puede asignar como desarrollador a proyectos o tareas tecnicas.
+Desde `/equipo`, el boton `Nuevo analista` crea un usuario del sistema con rol `Analista` y un perfil `Developer` asociado para acuerdos economicos y pagos. Este perfil remunerable permite que el analista a cargo aparezca en contratos asociados de proyecto.
 
 ## Desarrolladores
 
@@ -35,6 +35,8 @@ El boton `Nuevo desarrollador` crea un `Developer`. Si se habilita `Permitir acc
 
 La asignacion operativa de desarrolladores a proyectos se realiza con `ProjectDeveloperAssignment` desde el dialog de Equipo del proyecto. Esta asignacion no incluye monto, porcentaje, modalidad de pago ni pagos.
 
+El analista a cargo se asigna desde el mismo dialog usando `Project.ResponsableId`. Si tiene perfil remunerable asociado, puede crear acuerdos y pagos desde contratos asociados.
+
 ## Datos economicos
 
-Contratos de desarrollador, pagos, comprobantes de pago, ledger y resumen de contratos quedan restringidos a `Administrador`.
+Contratos de desarrolladores o analistas, pagos, comprobantes de pago, ledger y resumen de contratos quedan restringidos a `Administrador`.

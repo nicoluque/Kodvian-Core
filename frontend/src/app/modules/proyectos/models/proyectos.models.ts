@@ -65,6 +65,7 @@ export interface ProyectoFiltros {
 export interface LookupItem {
   id: string;
   name: string;
+  developerId?: string;
 }
 
 export interface ProyectoLookups {

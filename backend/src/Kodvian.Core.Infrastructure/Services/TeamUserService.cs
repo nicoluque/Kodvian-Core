@@ -61,6 +61,9 @@ public class TeamUserService : ITeamUserService
             Activo = request.IsActive
         };
 
+        var developer = CreateDeveloperProfile(request.FullName, email, request.IsActive);
+        user.Developer = developer;
+
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return await GetAnalystByIdAsync(user.Id, cancellationToken) ?? throw new InvalidOperationException("No se pudo recuperar el usuario creado");
@@ -88,6 +91,15 @@ public class TeamUserService : ITeamUserService
         user.Email = email;
         user.Activo = request.IsActive;
         user.FechaActualizacion = DateTime.UtcNow;
+        await EnsureDeveloperProfileAsync(user, cancellationToken);
+
+        if (user.Developer is not null)
+        {
+            user.Developer.FullName = user.FullName;
+            user.Developer.Email = user.Email;
+            user.Developer.Activo = user.Activo;
+            user.Developer.FechaActualizacion = DateTime.UtcNow;
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Password))
         {
@@ -115,6 +127,7 @@ public class TeamUserService : ITeamUserService
             FullName = x.FullName,
             Email = x.Email,
             Role = x.Role != null ? x.Role.Name : string.Empty,
+            DeveloperId = x.DeveloperId,
             IsActive = x.Activo,
             CreatedAt = x.FechaCreacion,
             UpdatedAt = x.FechaActualizacion
@@ -124,5 +137,28 @@ public class TeamUserService : ITeamUserService
     private static string NormalizeEmail(string email)
     {
         return email.Trim().ToLowerInvariant();
+    }
+
+    private async Task EnsureDeveloperProfileAsync(User user, CancellationToken cancellationToken)
+    {
+        if (user.DeveloperId.HasValue)
+        {
+            await _dbContext.Entry(user).Reference(x => x.Developer).LoadAsync(cancellationToken);
+            return;
+        }
+
+        var developer = CreateDeveloperProfile(user.FullName, user.Email, user.Activo);
+        user.Developer = developer;
+    }
+
+    private static Developer CreateDeveloperProfile(string fullName, string email, bool isActive)
+    {
+        return new Developer
+        {
+            FullName = fullName.Trim(),
+            Email = email,
+            Notes = "Perfil remunerable de analista",
+            Activo = isActive
+        };
     }
 }

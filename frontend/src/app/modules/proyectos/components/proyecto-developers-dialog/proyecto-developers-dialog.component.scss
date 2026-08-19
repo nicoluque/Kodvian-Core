@@ -115,6 +115,10 @@
   margin-top: 4px;
 }
 
+.analyst-form .assign-button {
+  min-width: 150px;
+}
+
 .table {
   width: 100%;
   margin-top: 0;
@@ -269,6 +273,10 @@
   border-color: rgba(162, 177, 188, 0.38);
   color: #c3d0da;
   background: rgba(34, 42, 48, 0.55);
+}
+
+.action-create {
+  grid-column: 1 / -1;
 }
 
 .table-action.danger {

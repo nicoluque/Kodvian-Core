@@ -57,7 +57,7 @@ Base route: `/api/projects`
 |---|---|---|
 | GET | `/api/projects` | Listado paginado de proyectos. |
 | GET | `/api/projects/{id}` | Detalle de proyecto. |
-| GET | `/api/projects/lookups` | Datos auxiliares para formularios. |
+| GET | `/api/projects/lookups` | Datos auxiliares para formularios. `responsibles` devuelve analistas activos con `developerId` remunerable. |
 | POST | `/api/projects` | Alta de proyecto. |
 | PUT | `/api/projects/{id}` | Edicion de proyecto. |
 | GET | `/api/projects/document-types` | Tipos de documento de proyecto. |
@@ -164,13 +164,13 @@ Controller: `backend/src/Kodvian.Core.Api/Controllers/TeamUsersController.cs`
 
 Base route: `/api/team/users`
 
-Usuarios internos del modulo Equipo. Actualmente expone gestion de analistas.
+Usuarios internos del modulo Equipo. Actualmente expone gestion de analistas y crea/sincroniza su perfil `Developer` remunerable.
 
 | Metodo | Ruta | Descripcion |
 |---|---|---|
-| GET | `/api/team/users/analysts` | Lista usuarios con rol Analista. |
-| POST | `/api/team/users/analysts` | Crea usuario Analista con contraseña inicial obligatoria. |
-| PUT | `/api/team/users/analysts/{id}` | Edita usuario Analista y permite cambiar contraseña opcionalmente. |
+| GET | `/api/team/users/analysts` | Lista usuarios con rol Analista, incluyendo `developerId` si tiene perfil remunerable. |
+| POST | `/api/team/users/analysts` | Crea usuario Analista con contraseña inicial obligatoria y perfil remunerable asociado. |
+| PUT | `/api/team/users/analysts/{id}` | Edita usuario Analista, permite cambiar contraseña y sincroniza/crea el perfil remunerable. |
 
 ## Developer Assignments
 

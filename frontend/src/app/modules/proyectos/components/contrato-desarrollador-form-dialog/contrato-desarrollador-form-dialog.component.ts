@@ -14,6 +14,7 @@ import { ContratoDesarrollador, ContratoDesarrolladorFormulario, DesarrolladorEx
 interface ContratoDialogData {
   developers: DesarrolladorExterno[];
   contract?: ContratoDesarrollador;
+  initialDeveloperId?: string;
 }
 
 @Component({
@@ -55,6 +56,8 @@ export class ContratoDesarrolladorFormDialogComponent {
         isActive: data.contract.isActive,
         notes: data.contract.notes ?? ''
       });
+    } else if (data.initialDeveloperId) {
+      this.form.patchValue({ developerId: data.initialDeveloperId });
     }
   }
 

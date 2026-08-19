@@ -17,8 +17,11 @@ import {
   DesarrolladorExterno,
   DesarrolladorFormulario,
   LedgerContrato,
+  LookupItem,
   PagoDesarrollador,
   PagoDesarrolladorFormulario,
+  ProyectoDetalle,
+  ProyectoFormulario,
   ProyectoListado
 } from '../../models/proyectos.models';
 import { ProyectosService } from '../../services/proyectos.service';
@@ -29,6 +32,14 @@ import { PagoDesarrolladorFormDialogComponent } from '../pago-desarrollador-form
 
 interface DevelopersDialogData {
   project: ProyectoListado;
+}
+
+interface ContractTableRow {
+  key: string;
+  developerId: string;
+  developerName: string;
+  roleLabel: string;
+  contract?: ContratoDesarrollador;
 }
 
 @Component({
@@ -45,19 +56,24 @@ export class ProyectoDevelopersDialogComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
 
   readonly assignmentColumns = ['developer', 'status', 'actions'];
-  readonly contractColumns = ['developer', 'mode', 'amount', 'startDate', 'actions'];
+  readonly contractColumns = ['developer', 'role', 'mode', 'amount', 'startDate', 'actions'];
   readonly paymentColumns = ['date', 'amount', 'period', 'reference', 'receipts'];
 
   developers: DesarrolladorExterno[] = [];
+  analysts: LookupItem[] = [];
   assignments: AsignacionDesarrolladorProyecto[] = [];
   contracts: ContratoDesarrollador[] = [];
   payments: PagoDesarrollador[] = [];
   selectedContract?: ContratoDesarrollador;
   selectedDeveloperId = '';
+  selectedAnalystId = '';
+  projectDetail?: ProyectoDetalle;
 
   constructor(@Inject(MAT_DIALOG_DATA) public readonly data: DevelopersDialogData) {}
 
   ngOnInit(): void {
+    this.loadLookups();
+    this.loadProjectDetail();
     this.loadDevelopers();
     this.loadAssignments();
     if (this.canViewEconomics) {
@@ -69,10 +85,89 @@ export class ProyectoDevelopersDialogComponent implements OnInit {
     return this.authSession.user?.permissions.includes('finances.read') ?? false;
   }
 
+  get selectedAnalyst(): LookupItem | undefined {
+    return this.analysts.find((x) => x.id === this.selectedAnalystId);
+  }
+
+  get contractRows(): ContractTableRow[] {
+    const rows: ContractTableRow[] = this.contracts.map((contract) => ({
+      key: contract.id,
+      developerId: contract.developerId,
+      developerName: contract.developerName,
+      roleLabel: this.selectedAnalyst?.developerId === contract.developerId ? 'Analista a cargo' : 'Desarrollador',
+      contract
+    }));
+
+    const analyst = this.selectedAnalyst;
+    if (analyst?.developerId && !rows.some((row) => row.developerId === analyst.developerId)) {
+      rows.unshift({
+        key: `analyst-${analyst.developerId}`,
+        developerId: analyst.developerId,
+        developerName: analyst.name,
+        roleLabel: 'Analista a cargo'
+      });
+    }
+
+    return rows;
+  }
+
+  loadLookups(): void {
+    this.proyectosService.obtenerLookups().subscribe({
+      next: (data) => this.analysts = data.responsibles,
+      error: () => this.snackBar.open('No se pudieron cargar los analistas', 'Cerrar', { duration: 3500 })
+    });
+  }
+
+  loadProjectDetail(): void {
+    this.proyectosService.obtenerDetalle(this.data.project.id).subscribe({
+      next: (project) => {
+        this.projectDetail = project;
+        this.selectedAnalystId = project.responsibleId ?? '';
+        this.data.project.responsibleId = project.responsibleId;
+        this.data.project.responsibleName = project.responsibleName;
+      },
+      error: () => this.snackBar.open('No se pudo cargar el detalle del proyecto', 'Cerrar', { duration: 3500 })
+    });
+  }
+
   loadDevelopers(): void {
     this.proyectosService.obtenerDesarrolladores().subscribe({
       next: (data) => this.developers = data,
       error: () => this.snackBar.open('No se pudieron cargar los desarrolladores', 'Cerrar', { duration: 3500 })
+    });
+  }
+
+  guardarAnalista(): void {
+    if (!this.projectDetail) {
+      this.snackBar.open('Esperá a que cargue el proyecto', 'Cerrar', { duration: 2500 });
+      return;
+    }
+
+    const payload: ProyectoFormulario = {
+      clientId: this.projectDetail.clientId,
+      name: this.projectDetail.name,
+      description: this.projectDetail.description,
+      responsibleId: this.selectedAnalystId || null,
+      status: this.projectDetail.status,
+      priority: this.projectDetail.priority,
+      startDate: this.projectDetail.startDate ?? null,
+      estimatedDeliveryDate: this.projectDetail.estimatedDeliveryDate ?? null,
+      closingDate: this.projectDetail.closingDate ?? null,
+      budget: this.projectDetail.budget ?? null,
+      progressPercentage: this.projectDetail.progressPercentage,
+      isActive: this.projectDetail.isActive
+    };
+
+    this.proyectosService.actualizar(this.data.project.id, payload).subscribe({
+      next: (project) => {
+        this.projectDetail = project;
+        this.selectedAnalystId = project.responsibleId ?? '';
+        this.data.project.responsibleId = project.responsibleId;
+        this.data.project.responsibleName = project.responsibleName;
+        this.ensureSelectedAnalystInDevelopers();
+        this.snackBar.open('Analista a cargo actualizado', 'Cerrar', { duration: 3000 });
+      },
+      error: (error) => this.snackBar.open(error?.error?.message ?? 'No se pudo actualizar el analista a cargo', 'Cerrar', { duration: 3500 })
     });
   }
 
@@ -178,6 +273,56 @@ export class ProyectoDevelopersDialogComponent implements OnInit {
     });
   }
 
+  crearContratoPara(row: ContractTableRow): void {
+    this.ensureDeveloperInList(row.developerId, row.developerName);
+    const ref = this.dialog.open(ContratoDesarrolladorFormDialogComponent, {
+      width: '760px',
+      maxWidth: 'calc(100vw - 32px)',
+      maxHeight: 'calc(100vh - 32px)',
+      autoFocus: false,
+      data: { developers: this.developers, initialDeveloperId: row.developerId }
+    });
+
+    ref.afterClosed().subscribe((payload?: ContratoDesarrolladorFormulario) => {
+      if (!payload) return;
+
+      this.proyectosService.crearContratoDesarrollador(this.data.project.id, payload).subscribe({
+        next: () => {
+          this.snackBar.open('Acuerdo creado correctamente', 'Cerrar', { duration: 3000 });
+          this.loadContracts();
+        },
+        error: (error) => this.snackBar.open(error?.error?.message ?? 'No se pudo crear el acuerdo', 'Cerrar', { duration: 3500 })
+      });
+    });
+  }
+
+  seleccionarFilaContrato(row: ContractTableRow): void {
+    if (row.contract) {
+      this.seleccionarContrato(row.contract);
+    }
+  }
+
+  verLedgerFila(row: ContractTableRow): void {
+    if (row.contract) {
+      this.verLedger(row.contract);
+    }
+  }
+
+  registrarPagoFila(row: ContractTableRow): void {
+    if (row.contract) {
+      this.registrarPago(row.contract);
+    }
+  }
+
+  editarContratoFila(row: ContractTableRow): void {
+    if (row.contract) {
+      this.editarContrato(row.contract);
+      return;
+    }
+
+    this.crearContratoPara(row);
+  }
+
   editarContrato(contract: ContratoDesarrollador): void {
     const ref = this.dialog.open(ContratoDesarrolladorFormDialogComponent, {
       width: '760px',
@@ -270,5 +415,20 @@ export class ProyectoDevelopersDialogComponent implements OnInit {
       },
       error: (error) => this.snackBar.open(error?.error?.message ?? 'No se pudo eliminar el comprobante', 'Cerrar', { duration: 3500 })
     });
+  }
+
+  private ensureSelectedAnalystInDevelopers(): void {
+    const analyst = this.selectedAnalyst;
+    if (analyst?.developerId) {
+      this.ensureDeveloperInList(analyst.developerId, analyst.name);
+    }
+  }
+
+  private ensureDeveloperInList(developerId: string, fullName: string): void {
+    if (this.developers.some((x) => x.id === developerId)) {
+      return;
+    }
+
+    this.developers = [...this.developers, { id: developerId, fullName, isActive: true }];
   }
 }

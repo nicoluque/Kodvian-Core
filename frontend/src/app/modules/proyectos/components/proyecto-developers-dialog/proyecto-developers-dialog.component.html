@@ -17,6 +17,28 @@
       </div>
     </article>
 
+    <article class="detail-card full-width analyst-card">
+      <div class="card-heading">
+        <div>
+          <p class="section-eyebrow">Analista responsable</p>
+          <h3>Analista a cargo del proyecto</h3>
+        </div>
+        <span>Puede tener acuerdo y pagos como miembro remunerable.</span>
+      </div>
+      <div class="assignment-form analyst-form">
+        <mat-form-field appearance="outline" class="assignment-select">
+          <mat-label>Analista</mat-label>
+          <mat-select [(ngModel)]="selectedAnalystId">
+            <mat-option value="">Sin analista asignado</mat-option>
+            @for (analyst of analysts; track analyst.id) {
+              <mat-option [value]="analyst.id">{{ analyst.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button color="primary" class="action-save assign-button" type="button" (click)="guardarAnalista()">Guardar analista</button>
+      </div>
+    </article>
+
     <article class="detail-card full-width">
       <div class="card-heading">
         <div>
@@ -79,35 +101,50 @@
           <span>Solo visible para administración.</span>
         </div>
         <div class="table-scroll">
-        <table mat-table [dataSource]="contracts" class="table full-width contracts-table">
+        <table mat-table [dataSource]="contractRows" class="table full-width contracts-table">
         <ng-container matColumnDef="developer">
-          <th mat-header-cell *matHeaderCellDef>Desarrollador</th>
+          <th mat-header-cell *matHeaderCellDef>Miembro</th>
           <td mat-cell *matCellDef="let row">{{ row.developerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Rol</th>
+          <td mat-cell *matCellDef="let row"><span class="role-pill">{{ row.roleLabel }}</span></td>
         </ng-container>
 
         <ng-container matColumnDef="mode">
           <th mat-header-cell *matHeaderCellDef>Modalidad</th>
-          <td mat-cell *matCellDef="let row">{{ row.paymentMode === 'Percentage' ? 'Porcentaje' : 'Monto fijo' }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.contract ? (row.contract.paymentMode === 'Percentage' ? 'Porcentaje' : 'Monto fijo') : 'Sin acuerdo' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef>Valor</th>
-          <td mat-cell *matCellDef="let row">{{ row.paymentMode === 'Percentage' ? (row.percentage + '%') : (row.agreedAmount | currency:'ARS':'symbol':'1.0-0') }}</td>
+          <td mat-cell *matCellDef="let row">
+            @if (row.contract) {
+              {{ row.contract.paymentMode === 'Percentage' ? (row.contract.percentage + '%') : (row.contract.agreedAmount | currency:'ARS':'symbol':'1.0-0') }}
+            } @else {
+              -
+            }
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="startDate">
           <th mat-header-cell *matHeaderCellDef>Inicio</th>
-          <td mat-cell *matCellDef="let row">{{ row.startDate }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.contract?.startDate || '-' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let row" class="actions-cell">
             <div class="row-actions contract-actions">
-              <button mat-button class="table-action" (click)="seleccionarContrato(row)">Pagos</button>
-              <button mat-button class="table-action" (click)="verLedger(row)">Resumen</button>
-              <button mat-button class="table-action" (click)="registrarPago(row)">Pagar</button>
-              <button mat-button class="table-action" (click)="editarContrato(row)">Editar</button>
+              @if (row.contract) {
+                <button mat-button class="table-action" (click)="seleccionarFilaContrato(row)">Pagos</button>
+                <button mat-button class="table-action" (click)="verLedgerFila(row)">Resumen</button>
+                <button mat-button class="table-action" (click)="registrarPagoFila(row)">Pagar</button>
+                <button mat-button class="table-action" (click)="editarContratoFila(row)">Editar</button>
+              } @else {
+                <button mat-button class="table-action action-create" (click)="crearContratoPara(row)">Crear acuerdo</button>
+              }
             </div>
           </td>
         </ng-container>
@@ -117,7 +154,7 @@
         </table>
         </div>
 
-        @if (contracts.length === 0) {
+        @if (contractRows.length === 0) {
           <p class="empty-state">No hay contratos cargados para este proyecto.</p>
         }
       </article>

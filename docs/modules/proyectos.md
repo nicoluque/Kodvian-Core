@@ -8,7 +8,7 @@ El modulo de proyectos centraliza la gestion de trabajos para clientes: estado, 
 
 - Listar proyectos.
 - Crear y editar proyecto.
-- Asignar opcionalmente un analista a cargo del proyecto.
+- Asignar opcionalmente un analista a cargo del proyecto desde el formulario o desde el dialog Equipo del proyecto.
 - Ver detalle.
 - Gestionar documentos y versiones.
 - Asignar desarrolladores operativamente sin datos economicos.
@@ -96,7 +96,8 @@ Enums:
 ## Reglas de negocio
 
 - Todo proyecto pertenece a un cliente.
-- El analista a cargo usa `Project.ResponsableId` y solo puede apuntar a un usuario activo con rol `Analista`.
+- El analista a cargo usa `Project.ResponsableId` y solo puede apuntar a un usuario activo con rol `Analista` y perfil `Developer` asociado.
+- El perfil `Developer` del analista permite crear acuerdos economicos y pagos con `ProjectDeveloperContract` y `DeveloperPayment`.
 - El porcentaje de avance debe ser coherente con estado y tareas.
 - Los documentos de proyecto se versionan, no se reemplazan silenciosamente.
 - La asignacion operativa de equipo no contiene montos, porcentajes ni modalidad de pago.
