@@ -1,0 +1,8 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Isotipo Kodvian</title>
+  <desc id="desc">Isotipo plano de Kodvian con barra, k y punto y coma.</desc>
+  <path d="M258 118 L362 126 L190 906 L82 902 Z" fill="#00A550"/>
+  <path d="M378 386 L542 386 L330 604 L548 906 L398 906 L232 604 Z" fill="#00A550"/>
+  <circle cx="750" cy="324" r="58" fill="#00A550"/>
+  <path d="M750 566 C814 566 860 612 860 678 C860 710 850 746 832 788 L786 906 H676 L722 730 C688 713 668 680 668 640 C668 598 700 566 750 566 Z" fill="#00A550"/>
+</svg>

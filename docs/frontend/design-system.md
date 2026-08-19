@@ -8,7 +8,17 @@ Kodvian Core usa una UI oscura, tecnica y operativa, con acento verde neon contr
 - `frontend/src/app/shared/styles/_page-common.scss`.
 - `frontend/src/app/shared/styles/_table-common.scss`.
 - `frontend/src/app/shared/styles/_dialog-common.scss`.
-- `frontend/src/assets/branding/kodvian-k-logo.svg`.
+- `frontend/src/assets/branding/kodvian-isotipo.svg`.
+- `frontend/src/assets/branding/kodvian-wordmark.svg`.
+
+## Marca
+
+- El isotipo compacto usa la composicion `/k;` plana en verde y fondo transparente.
+- La marca textual visible debe mostrarse como `Kodvian solutions;` o `kodvian solutions;` segun el contexto visual.
+- Usar `kodvian-isotipo.svg` en espacios chicos como header o navegacion.
+- Usar `kodvian-wordmark.svg` en superficies donde la marca pueda respirar, como login.
+- Evitar volver al isotipo 3D anterior para piezas de interfaz.
+- Evitar glow, sombras o filtros pesados sobre el logo; el asset debe mantener lectura clara en tamanos chicos.
 
 ## Tokens globales
 

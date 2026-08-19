@@ -1,42 +1,35 @@
 <section class="login-page">
   <mat-card class="login-card">
     <div class="brand-row" aria-label="Identidad de marca Kodvian">
-      <div class="brand-mark" aria-hidden="true">
-        <img class="brand-isotipo" src="/assets/branding/kodvian-k-logo.svg" alt="Isotipo Kodvian" />
-      </div>
-
-      <div class="title-block">
-        <span class="title"><span class="title-kodvian">KODVIAN</span> <span class="title-solutions">SOLUTIONS</span></span>
-        <span class="subtitle">Soluciones informaticas hechas a medida</span>
-      </div>
+      <img class="brand-wordmark" src="/assets/branding/kodvian-wordmark.svg" alt="Kodvian solutions, soluciones informáticas" />
     </div>
 
     <div class="titles">
       <p class="eyebrow">Acceso seguro</p>
-      <h1>Iniciar sesion</h1>
+      <h1>Iniciar sesión</h1>
       <p class="subtitulo">Ingresa tus credenciales para continuar al panel operativo.</p>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="iniciarSesion()">
       <mat-form-field appearance="outline">
-        <mat-label>Correo electronico</mat-label>
+        <mat-label>Correo electrónico</mat-label>
         <input matInput formControlName="email" autocomplete="username" />
         @if (form.controls.email.hasError('required') && form.controls.email.touched) {
-          <mat-error>El correo electronico es obligatorio</mat-error>
+          <mat-error>El correo electrónico es obligatorio</mat-error>
         }
         @if (form.controls.email.hasError('email') && form.controls.email.touched) {
-          <mat-error>Ingresa un correo electronico valido</mat-error>
+          <mat-error>Ingresa un correo electrónico válido</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Contrasena</mat-label>
+        <mat-label>Contraseña</mat-label>
         <input matInput type="password" formControlName="password" autocomplete="current-password" />
         @if (form.controls.password.hasError('required') && form.controls.password.touched) {
-          <mat-error>La contrasena es obligatoria</mat-error>
+          <mat-error>La contraseña es obligatoria</mat-error>
         }
         @if (form.controls.password.hasError('minlength') && form.controls.password.touched) {
-          <mat-error>La contrasena debe tener al menos 8 caracteres</mat-error>
+          <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
         }
       </mat-form-field>
 
@@ -45,6 +38,6 @@
       </button>
     </form>
 
-    <p class="footnote">Sesion protegida con autenticacion segura.</p>
+    <p class="footnote">Sesión protegida con autenticación segura.</p>
   </mat-card>
 </section>

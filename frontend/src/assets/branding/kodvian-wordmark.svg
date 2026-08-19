@@ -1,0 +1,15 @@
+<svg width="1560" height="360" viewBox="0 0 1560 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Kodvian solutions;</title>
+  <desc id="desc">Logo de Kodvian solutions con isotipo verde y texto soluciones informaticas.</desc>
+  <g transform="translate(34 40) scale(0.28)">
+    <path d="M258 118 L362 126 L190 906 L82 902 Z" fill="#00A550"/>
+    <path d="M378 386 L542 386 L330 604 L548 906 L398 906 L232 604 Z" fill="#00A550"/>
+    <circle cx="750" cy="324" r="58" fill="#00A550"/>
+    <path d="M750 566 C814 566 860 612 860 678 C860 710 850 746 832 788 L786 906 H676 L722 730 C688 713 668 680 668 640 C668 598 700 566 750 566 Z" fill="#00A550"/>
+  </g>
+  <text x="316" y="178" fill="#00A550" font-family="Montserrat, Poppins, Segoe UI, sans-serif" font-size="108" font-weight="700" letter-spacing="0.5">k</text>
+  <text x="380" y="178" fill="#F3F5F4" font-family="Montserrat, Poppins, Segoe UI, sans-serif" font-size="108" font-weight="700" letter-spacing="0.5">odvian</text>
+  <text x="760" y="178" fill="#F3F5F4" font-family="Montserrat, Poppins, Segoe UI, sans-serif" font-size="108" font-weight="700" letter-spacing="0.5">solutions</text>
+  <text x="1264" y="178" fill="#00A550" font-family="Montserrat, Poppins, Segoe UI, sans-serif" font-size="108" font-weight="700" letter-spacing="0.5">;</text>
+  <text x="316" y="264" fill="#D8DFDB" font-family="Montserrat, Poppins, Segoe UI, sans-serif" font-size="42" font-weight="400" letter-spacing="4">SOLUCIONES_INFORMATICAS</text>
+</svg>
