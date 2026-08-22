@@ -17,7 +17,7 @@
 
 .page-header {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(320px, 640px);
+  grid-template-columns: minmax(260px, 1fr) max-content;
   gap: 20px;
   align-items: start;
 }
@@ -55,15 +55,16 @@ h2 {
 .acciones-rapidas {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
 
   button {
     min-height: 42px;
     border-radius: 10px;
-    padding-inline: 16px;
+    padding-inline: 14px;
     font-weight: 650;
+    white-space: nowrap;
 
     mat-icon {
       width: 18px;
@@ -88,6 +89,12 @@ h2 {
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.finance-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -137,6 +144,20 @@ h2 {
 
 .kpi-card.wide {
   grid-column: span 2;
+}
+
+.finance-card {
+  min-height: 132px;
+  justify-content: center;
+  padding: 20px 22px;
+}
+
+.finance-card strong {
+  font-size: clamp(26px, 2.4vw, 34px);
+}
+
+.finance-card.result {
+  border-color: rgba(130, 144, 160, 0.26);
 }
 
 .kpi-icon {
@@ -354,6 +375,7 @@ h2 {
   }
 
   .acciones-rapidas {
+    flex-wrap: wrap;
     justify-content: flex-start;
   }
 
@@ -365,6 +387,10 @@ h2 {
 @media (max-width: 1024px) {
   .kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .finance-kpi-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -386,10 +412,6 @@ h2 {
 
   .kpi-grid {
     grid-template-columns: 1fr;
-  }
-
-  .kpi-card.wide {
-    grid-column: auto;
   }
 
   .kpi-card {

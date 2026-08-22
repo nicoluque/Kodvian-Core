@@ -72,7 +72,10 @@
           <p>{{ resumen.kpis.tasksForToday === 0 ? 'Sin tareas pendientes' : 'Pendientes del día' }}</p>
         </div>
       </mat-card>
-      <mat-card class="kpi-card success wide">
+    </div>
+
+    <div class="finance-kpi-grid" aria-label="Indicadores financieros">
+      <mat-card class="kpi-card finance-card success">
         <span class="kpi-icon"><mat-icon>trending_up</mat-icon></span>
         <div>
           <h3>Ingresos del mes</h3>
@@ -80,7 +83,7 @@
           <p>Total acumulado</p>
         </div>
       </mat-card>
-      <mat-card class="kpi-card warning wide">
+      <mat-card class="kpi-card finance-card warning">
         <span class="kpi-icon"><mat-icon>trending_down</mat-icon></span>
         <div>
           <h3>Egresos del mes</h3>
@@ -88,7 +91,7 @@
           <p>Total acumulado</p>
         </div>
       </mat-card>
-      <mat-card class="kpi-card result wide" [class.negative]="resumen.kpis.monthlyResult < 0" [class.positive]="resumen.kpis.monthlyResult >= 0">
+      <mat-card class="kpi-card finance-card result" [class.negative]="resumen.kpis.monthlyResult < 0" [class.positive]="resumen.kpis.monthlyResult >= 0">
         <span class="kpi-icon"><mat-icon>paid</mat-icon></span>
         <div>
           <h3>Resultado mensual</h3>
