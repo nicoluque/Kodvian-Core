@@ -6,7 +6,7 @@
 
   .subtitulo {
     margin: 4px 0 0;
-    color: #64748b;
+    color: var(--kd-text-secondary);
   }
 }
 
@@ -29,7 +29,7 @@
   .sin-resultados {
     padding: 22px;
     text-align: center;
-    color: #64748b;
+    color: var(--kd-text-secondary);
   }
 
   .tabla-wrapper {

@@ -1,0 +1,53 @@
+@use '@angular/material' as mat;
+
+$kodvian-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$spring-green-palette,
+    tertiary: mat.$azure-palette,
+    use-system-variables: true,
+    system-variables-prefix: mat-sys
+  ),
+  typography: (
+    plain-family: (Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif),
+    brand-family: (Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif),
+    bold-weight: 700,
+    medium-weight: 600,
+    regular-weight: 400,
+    use-system-variables: true,
+    system-variables-prefix: mat-sys
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+@include mat.core();
+
+html {
+  color-scheme: dark;
+  @include mat.core-theme($kodvian-theme);
+  @include mat.option-theme($kodvian-theme);
+  @include mat.optgroup-theme($kodvian-theme);
+  @include mat.pseudo-checkbox-theme($kodvian-theme);
+  @include mat.autocomplete-theme($kodvian-theme);
+  @include mat.button-theme($kodvian-theme);
+  @include mat.icon-button-theme($kodvian-theme);
+  @include mat.card-theme($kodvian-theme);
+  @include mat.datepicker-theme($kodvian-theme);
+  @include mat.dialog-theme($kodvian-theme);
+  @include mat.form-field-theme($kodvian-theme);
+  @include mat.icon-theme($kodvian-theme);
+  @include mat.input-theme($kodvian-theme);
+  @include mat.list-theme($kodvian-theme);
+  @include mat.menu-theme($kodvian-theme);
+  @include mat.paginator-theme($kodvian-theme);
+  @include mat.select-theme($kodvian-theme);
+  @include mat.sidenav-theme($kodvian-theme);
+  @include mat.slide-toggle-theme($kodvian-theme);
+  @include mat.snack-bar-theme($kodvian-theme);
+  @include mat.table-theme($kodvian-theme);
+  @include mat.toolbar-theme($kodvian-theme);
+  @include mat.system-level-colors($kodvian-theme);
+  @include mat.system-level-typography($kodvian-theme);
+}

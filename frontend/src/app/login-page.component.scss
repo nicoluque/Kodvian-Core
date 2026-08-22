@@ -1,31 +1,45 @@
 .login-page {
+  position: relative;
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  overflow: hidden;
+  padding: var(--kd-space-6);
   background:
-    radial-gradient(760px 460px at 14% 10%, rgba(39, 255, 63, 0.16), transparent 65%),
-    radial-gradient(780px 520px at 90% 100%, rgba(39, 255, 63, 0.1), transparent 68%),
-    linear-gradient(180deg, rgba(8, 12, 13, 0.98), rgba(5, 9, 10, 1));
+    radial-gradient(720px 720px at -8% -12%, rgba(105, 122, 140, 0.13), transparent 56%),
+    radial-gradient(820px 620px at 106% 112%, rgba(64, 82, 102, 0.18), transparent 62%),
+    linear-gradient(135deg, #0a1017 0%, var(--kd-canvas) 52%, #060b11 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.22;
+    background-image: radial-gradient(rgba(167, 178, 191, 0.24) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(120deg, transparent 0%, #000 35%, #000 70%, transparent 100%);
+  }
 }
 
 .login-card {
-  width: min(560px, 100%);
-  border-radius: 20px;
-  padding: 26px;
-  background: linear-gradient(165deg, rgba(16, 24, 26, 0.92), rgba(10, 16, 17, 0.97));
-  border: 1px solid var(--line-600);
-  box-shadow: var(--shadow-soft);
+  position: relative;
+  z-index: 1;
+  width: min(604px, 100%);
+  border-radius: 22px;
+  padding: 40px;
+  border: 1px solid var(--kd-border-strong);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
+    rgba(17, 26, 36, 0.92);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(14px);
 }
 
 .brand-row {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 14px 18px;
-  border-radius: 14px;
-  border: 1px solid var(--line-600);
-  background: rgba(18, 29, 24, 0.58);
+  margin-bottom: 34px;
 }
 
 .brand-wordmark {
@@ -33,38 +47,41 @@
   height: auto;
   display: block;
   object-fit: contain;
-  filter: drop-shadow(0 0 10px rgba(0, 165, 80, 0.12));
 }
 
 .titles {
-  margin: 18px 0 10px;
+  margin: 0 0 24px;
 }
 
 .eyebrow {
-  margin: 0;
+  margin: 0 0 10px;
+  color: var(--kd-brand-hover);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
-  letter-spacing: 1.4px;
-  font-size: 11px;
-  color: var(--brand-300);
 }
 
 h1 {
-  margin: 8px 0 0;
-  color: var(--text-100);
-  font-size: 34px;
-  line-height: 1.05;
+  margin: 0;
+  color: var(--kd-text-primary);
+  font-size: clamp(32px, 4vw, 42px);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .subtitulo {
   margin: 10px 0 0;
-  color: var(--text-300);
+  color: var(--kd-text-secondary);
   font-size: 17px;
+  line-height: 1.5;
 }
 
 form {
-  margin-top: 18px;
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 mat-form-field {
@@ -74,87 +91,81 @@ mat-form-field {
 :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
 :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch,
 :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing {
-  border-color: #2a3a33 !important;
+  border-color: var(--kd-border-strong) !important;
 }
 
 :host ::ng-deep .mat-mdc-text-field-wrapper {
-  border-radius: 12px !important;
-  background: rgba(9, 15, 17, 0.72) !important;
+  border-radius: 10px !important;
+  background: rgba(11, 17, 24, 0.68) !important;
 }
 
 :host ::ng-deep .mat-mdc-form-field-infix {
-  min-height: 56px;
-  padding-top: 16px !important;
-  padding-bottom: 16px !important;
+  min-height: 54px;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
 }
 
 :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
 :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
 :host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
-  border-color: var(--brand-500) !important;
+  border-color: var(--kd-brand-500) !important;
+  box-shadow: var(--kd-focus-ring);
 }
 
 :host ::ng-deep .mat-mdc-form-field .mdc-floating-label,
 :host ::ng-deep .mat-mdc-form-field input {
-  color: var(--text-100) !important;
-  caret-color: var(--brand-300);
+  color: var(--kd-text-primary) !important;
+  caret-color: var(--kd-brand-500);
 }
 
 :host ::ng-deep .mat-mdc-form-field input::placeholder {
-  color: rgba(168, 181, 173, 0.68) !important;
+  color: var(--kd-text-muted) !important;
 }
 
 :host ::ng-deep .mat-mdc-form-field input:-webkit-autofill,
 :host ::ng-deep .mat-mdc-form-field input:-webkit-autofill:hover,
 :host ::ng-deep .mat-mdc-form-field input:-webkit-autofill:focus,
 :host ::ng-deep .mat-mdc-form-field input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px rgba(9, 15, 17, 0.98) inset !important;
-  -webkit-text-fill-color: var(--text-100) !important;
-  caret-color: var(--brand-300);
+  -webkit-box-shadow: 0 0 0 1000px #0b1118 inset !important;
+  -webkit-text-fill-color: var(--kd-text-primary) !important;
+  caret-color: var(--kd-brand-500);
   transition: background-color 9999s ease-out;
 }
 
 :host ::ng-deep .mat-mdc-form-field .mat-mdc-form-field-error {
-  color: #ff7a7a !important;
-  font-size: 11px;
+  color: var(--kd-danger) !important;
+  font-size: 12px;
 }
 
-button {
-  margin-top: 8px;
+button[type='submit'] {
   min-height: 46px;
-  border-radius: 999px;
+  margin-top: 4px;
+  border-radius: 10px;
   font-size: 15px;
+  font-weight: 700;
 }
 
 .footnote {
-  margin: 14px 0 0;
-  color: var(--text-300);
-  font-size: 12px;
+  margin: 18px 0 0;
+  color: var(--kd-text-secondary);
+  font-size: 13px;
 }
 
 @media (max-width: 700px) {
   .login-page {
-    padding: 14px;
+    padding: var(--kd-space-4);
   }
 
   .login-card {
-    padding: 18px;
-    border-radius: 16px;
+    padding: 26px 20px;
+    border-radius: 18px;
   }
 
   .brand-row {
-    padding: 12px;
+    margin-bottom: 26px;
   }
 
   .brand-wordmark {
     width: min(300px, 100%);
-  }
-
-  h1 {
-    font-size: 28px;
-  }
-
-  .subtitulo {
-    font-size: 15px;
   }
 }

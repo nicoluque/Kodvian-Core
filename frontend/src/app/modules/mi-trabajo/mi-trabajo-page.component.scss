@@ -17,15 +17,15 @@
 .hero-block,
 .panel-card,
 .kpi-card {
-  border: 1px solid var(--line-600);
-  background: linear-gradient(170deg, rgba(15, 23, 24, 0.9), rgba(9, 15, 17, 0.97));
+  border: 1px solid var(--kd-border-subtle);
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.94), rgba(13, 21, 30, 0.98));
   box-shadow: var(--shadow-soft);
 }
 
 .hero-block {
   padding: 16px;
   border-radius: 14px;
-  background: linear-gradient(160deg, rgba(18, 29, 24, 0.75), rgba(11, 17, 19, 0.9));
+  background: linear-gradient(160deg, rgba(22, 33, 45, 0.86), rgba(13, 21, 30, 0.95));
 }
 
 .eyebrow {
@@ -38,7 +38,7 @@
 
 h2,
 .panel-title h3 {
-  color: var(--brand-300);
+  color: var(--kd-text-primary);
 }
 
 .subtitulo {
@@ -57,7 +57,7 @@ h2,
 
   h3 {
     margin: 0;
-    color: var(--brand-300);
+    color: var(--kd-text-secondary);
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -72,7 +72,8 @@ h2,
 }
 
 .kpi-card.accent {
-  box-shadow: var(--shadow-soft), inset 0 0 0 1px rgba(39, 255, 63, 0.2);
+  border-color: var(--kd-brand-border);
+  box-shadow: var(--shadow-soft), inset 0 0 0 1px rgba(32, 189, 106, 0.12);
 }
 
 .panel-card {
@@ -107,7 +108,7 @@ h2,
 .project-name,
 .task-title {
   font-weight: 600;
-  color: #e8f6ef;
+  color: var(--kd-text-primary);
 }
 
 td small {
@@ -121,9 +122,9 @@ td small {
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid var(--line-600);
-  color: var(--brand-300);
-  background: rgba(25, 52, 34, 0.44);
+  border: 1px solid var(--kd-border-strong);
+  color: var(--kd-text-secondary);
+  background: rgba(22, 33, 45, 0.72);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.4px;
@@ -184,7 +185,7 @@ td small {
   border-radius: 999px;
   border: 1px solid rgba(105, 137, 122, 0.45);
   background: rgba(20, 33, 36, 0.7);
-  color: #dceae1;
+  color: var(--kd-text-secondary);
   font-size: 11px;
   font-weight: 700;
 }
@@ -195,7 +196,7 @@ td small {
   padding: 0 10px;
   border: 1px solid rgba(103, 133, 120, 0.58);
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(16, 26, 29, 0.96), rgba(11, 19, 21, 0.98));
+  background: linear-gradient(180deg, rgba(22, 33, 45, 0.96), rgba(15, 23, 32, 0.98));
 }
 
 .sin-resultados {
@@ -206,21 +207,21 @@ td small {
   justify-content: center;
   gap: 6px;
   padding: 22px;
-  color: rgba(177, 255, 186, 0.86);
+  color: var(--kd-text-secondary);
   text-align: center;
 
   mat-icon {
-    color: rgba(118, 234, 138, 0.92);
+    color: var(--kd-text-muted);
   }
 
   p {
     margin: 0;
     font-size: 18px;
-    color: #bfffc9;
+    color: var(--kd-text-primary);
   }
 
   small {
-    color: #7ea08f;
+    color: var(--kd-text-muted);
     font-size: 12px;
   }
 }

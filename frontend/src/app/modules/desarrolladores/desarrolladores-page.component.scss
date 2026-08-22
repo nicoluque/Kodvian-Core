@@ -11,8 +11,8 @@
 
 .desarrolladores-card {
   border-radius: 16px;
-  border: 1px solid var(--line-600);
-  background: linear-gradient(180deg, rgba(10, 18, 22, 0.96), rgba(6, 12, 16, 0.98));
+  border: 1px solid var(--kd-border-subtle);
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.94), rgba(13, 21, 30, 0.98));
   color: var(--text-100);
   padding: 0;
 }
@@ -23,7 +23,7 @@
 
   .eyebrow {
     margin: 0;
-    color: var(--brand-300);
+    color: var(--kd-text-primary);
     font-size: 12px;
     letter-spacing: 1.6px;
     text-transform: uppercase;
@@ -32,7 +32,7 @@
 
   h2 {
     margin: 2px 0 4px;
-    color: var(--brand-300);
+    color: var(--kd-text-primary);
     font-size: 40px;
     line-height: 1;
   }
@@ -100,10 +100,10 @@
 
 .tabla-wrapper {
   overflow: auto;
-  border: 1px solid var(--line-600);
+  border: 1px solid var(--kd-border-subtle);
   border-radius: 12px;
   margin: 8px 18px 16px;
-  background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.92), rgba(13, 21, 30, 0.98));
 }
 
 .tabla-desarrolladores {
@@ -150,14 +150,14 @@
 }
 
 :host ::ng-deep .mat-mdc-row.developer-row.is-selected {
-  background: rgba(24, 44, 34, 0.74) !important;
+  background: rgba(32, 189, 106, 0.14) !important;
 }
 
 .resumen-wrapper {
-  border: 1px solid var(--line-600);
+  border: 1px solid var(--kd-border-subtle);
   border-radius: 12px;
   margin: 0 18px 16px;
-  background: linear-gradient(175deg, rgba(10, 16, 18, 0.85), rgba(7, 12, 14, 0.95));
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.92), rgba(13, 21, 30, 0.98));
 }
 
 .resumen-header {
@@ -170,7 +170,7 @@
 
   h3 {
     margin: 0;
-    color: var(--brand-300);
+    color: var(--kd-text-primary);
     font-size: 16px;
   }
 
@@ -203,7 +203,7 @@
   }
 
   th {
-    color: rgba(140, 255, 152, 0.9);
+    color: var(--kd-text-secondary);
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
@@ -273,7 +273,7 @@
 }
 
 :host ::ng-deep .mat-mdc-header-row {
-  background: rgba(19, 30, 33, 0.7);
+  background: rgba(22, 33, 45, 0.82);
 }
 
 :host ::ng-deep .mat-mdc-table {
@@ -283,7 +283,7 @@
 }
 
 :host ::ng-deep .mat-mdc-header-cell {
-  color: rgba(140, 255, 152, 0.9) !important;
+  color: var(--kd-text-secondary) !important;
   font-weight: 600;
   font-size: 11px;
   text-transform: uppercase;

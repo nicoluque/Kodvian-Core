@@ -18,8 +18,8 @@
 .hero-block {
   padding: 16px;
   border-radius: 14px;
-  border: 1px solid var(--line-600);
-  background: linear-gradient(160deg, rgba(18, 29, 24, 0.75), rgba(11, 17, 19, 0.9));
+  border: 1px solid var(--kd-border-subtle);
+  background: linear-gradient(160deg, rgba(22, 33, 45, 0.86), rgba(13, 21, 30, 0.95));
 }
 
 .eyebrow {
@@ -31,7 +31,7 @@
 }
 
 h2 {
-  color: var(--brand-300);
+  color: var(--kd-text-primary);
 }
 
 .subtitulo {
@@ -48,12 +48,12 @@ h2 {
     padding-inline: 16px;
     border: 1px solid rgba(102, 127, 117, 0.62);
     border-radius: 999px;
-    color: #d7e7de;
-    background: rgba(18, 27, 30, 0.92);
+    color: var(--kd-text-secondary);
+    background: rgba(15, 23, 32, 0.92);
 
     &:hover {
-      color: #eefff2;
-      border-color: rgba(132, 165, 152, 0.7);
+      color: var(--kd-text-primary);
+      border-color: var(--kd-brand-border);
       background: rgba(27, 40, 44, 0.98);
     }
   }
@@ -74,12 +74,13 @@ h2 {
 .kpi-card {
   padding: 14px;
   border-radius: 14px;
-  background: linear-gradient(160deg, rgba(17, 27, 29, 0.84), rgba(11, 18, 19, 0.95));
+  border: 1px solid var(--kd-border-subtle);
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.92), rgba(13, 21, 30, 0.98));
 
   h3 {
     margin: 0;
     font-size: 12px;
-    color: rgba(140, 255, 152, 0.9);
+    color: var(--kd-text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
   }
@@ -94,7 +95,8 @@ h2 {
 }
 
 .kpi-card.result {
-  box-shadow: var(--shadow-glow);
+  border-color: var(--kd-brand-border);
+  box-shadow: var(--shadow-soft), inset 0 0 0 1px rgba(32, 189, 106, 0.12);
 }
 
 .kpi-card.success strong {
@@ -109,8 +111,8 @@ h2 {
 .categorias-card {
   padding: 12px;
   border-radius: 16px;
-  border: 1px solid var(--line-600);
-  background: linear-gradient(170deg, rgba(15, 23, 24, 0.9), rgba(9, 15, 17, 0.97));
+  border: 1px solid var(--kd-border-subtle);
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.94), rgba(13, 21, 30, 0.98));
 }
 
 .filtros-row {
@@ -135,14 +137,14 @@ h2 {
   button[mat-button] {
     min-height: 50px;
     padding-inline: 18px;
-    color: #d7e7de;
-    border: 1px solid rgba(102, 127, 117, 0.62);
+    color: var(--kd-text-secondary);
+    border: 1px solid var(--kd-border-strong);
     border-radius: 999px;
     background: rgba(18, 27, 30, 0.92);
 
     &:hover {
-      color: #eefff2;
-      border-color: rgba(132, 165, 152, 0.7);
+      color: var(--kd-text-primary);
+      border-color: var(--kd-brand-border);
       background: rgba(27, 40, 44, 0.98);
     }
   }
@@ -157,9 +159,9 @@ h2 {
   display: inline-block;
   padding: 4px 8px;
   border-radius: 999px;
-  border: 1px solid var(--line-600);
-  color: var(--brand-300);
-  background: rgba(25, 52, 34, 0.44);
+  border: 1px solid var(--kd-border-strong);
+  color: var(--kd-text-secondary);
+  background: rgba(22, 33, 45, 0.72);
   font-size: 11px;
 }
 
@@ -170,14 +172,14 @@ h2 {
 
   h3 {
     margin: 0;
-    color: var(--brand-300);
+    color: var(--kd-text-primary);
   }
 
   button[mat-button] {
     color: var(--text-100);
 
     &:hover {
-      color: #eefff2;
+      color: var(--kd-text-primary);
     }
   }
 }
@@ -195,7 +197,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(20, 31, 33, 0.66);
+  background: rgba(22, 33, 45, 0.66);
 
   strong {
     color: var(--text-100);
@@ -211,13 +213,13 @@ h2 {
     color: var(--text-100);
 
     &:hover {
-      color: #eefff2;
+      color: var(--kd-text-primary);
     }
   }
 }
 
 .sin-resultados {
-  color: rgba(177, 255, 186, 0.86);
+  color: var(--kd-text-secondary);
 }
 
 :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
@@ -240,11 +242,11 @@ h2 {
 }
 
 :host ::ng-deep .mat-mdc-header-row {
-  background: rgba(19, 30, 33, 0.7);
+  background: rgba(22, 33, 45, 0.82);
 }
 
 :host ::ng-deep .mat-mdc-header-cell {
-  color: rgba(140, 255, 152, 0.9) !important;
+  color: var(--kd-text-secondary) !important;
   font-weight: 600;
   font-size: 11px;
   text-transform: uppercase;

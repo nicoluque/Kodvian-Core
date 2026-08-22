@@ -1,0 +1,36 @@
+:root {
+  --kd-font-sans: Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+.mat-mdc-button-base,
+.mat-mdc-form-field,
+.mat-mdc-table,
+.mat-mdc-paginator,
+.mat-mdc-menu-item,
+.mat-mdc-option,
+.mat-mdc-dialog-container,
+.mat-mdc-snack-bar-container {
+  font-family: var(--kd-font-sans);
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}

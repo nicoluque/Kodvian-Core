@@ -1,0 +1,125 @@
+.mat-mdc-card {
+  border: 1px solid var(--kd-border-subtle);
+  background: var(--kd-surface-1);
+  box-shadow: var(--kd-shadow-card);
+}
+
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+button[mat-flat-button][color='primary'],
+a[mat-flat-button][color='primary'] {
+  --mdc-filled-button-container-color: var(--kd-brand-500);
+  --mdc-filled-button-label-text-color: #06130c;
+  --mat-filled-button-container-color: var(--kd-brand-500);
+  --mat-filled-button-label-text-color: #06130c;
+  --mat-filled-button-state-layer-color: #06130c;
+  --mat-filled-button-ripple-color: rgba(6, 19, 12, 0.14);
+  background: var(--kd-brand-500);
+  color: #06130c;
+  font-weight: 650;
+}
+
+.mat-mdc-raised-button.mat-primary:hover,
+.mat-mdc-unelevated-button.mat-primary:hover,
+button[mat-flat-button][color='primary']:hover,
+a[mat-flat-button][color='primary']:hover {
+  background: var(--kd-brand-hover);
+}
+
+.mat-mdc-outlined-button,
+.mat-mdc-button {
+  --mat-text-button-label-text-color: var(--kd-text-primary);
+  --mat-outlined-button-label-text-color: var(--kd-text-primary);
+  --mat-outlined-button-outline-color: var(--kd-border-strong);
+  border-color: var(--kd-border-strong);
+}
+
+.mat-mdc-icon-button {
+  color: var(--kd-text-secondary);
+}
+
+.mat-mdc-icon-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--kd-text-primary);
+}
+
+.mat-mdc-text-field-wrapper {
+  background: rgba(9, 15, 22, 0.72);
+}
+
+.mat-mdc-form-field.mat-focused {
+  --mdc-outlined-text-field-focus-outline-color: var(--kd-brand-500);
+  --mdc-outlined-text-field-focus-label-text-color: var(--kd-text-primary);
+}
+
+.mat-mdc-form-field-error {
+  color: var(--kd-danger);
+}
+
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel,
+.mat-mdc-menu-panel {
+  border: 1px solid var(--kd-border-subtle);
+  border-radius: var(--kd-radius-md);
+  background: var(--kd-surface-2);
+  box-shadow: var(--kd-shadow-overlay);
+}
+
+.mat-mdc-option {
+  min-height: 44px;
+}
+
+.mat-mdc-option:hover,
+.mat-mdc-menu-item:hover:not([disabled]),
+.mat-mdc-menu-item.cdk-program-focused:not([disabled]),
+.mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]) {
+  background: var(--kd-surface-hover);
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background: var(--kd-brand-soft);
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--kd-border-subtle);
+  background: var(--kd-surface-3);
+  color: var(--kd-text-primary);
+}
+
+.mat-datepicker-content,
+.mat-calendar {
+  border: 1px solid var(--kd-border-subtle);
+  background: var(--kd-surface-2);
+  color: var(--kd-text-primary);
+  box-shadow: var(--kd-shadow-overlay);
+}
+
+.mat-calendar-header {
+  background: var(--kd-surface-1);
+}
+
+.layout-shell,
+.layout-shell .mat-drawer-container,
+.layout-shell .mat-drawer-content,
+.layout-shell .mat-drawer,
+.layout-shell .mat-drawer-inner-container {
+  background-color: var(--kd-canvas);
+}
+
+.layout-shell .mat-drawer {
+  width: auto;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='number']:hover {
+  -moz-appearance: number-input;
+}

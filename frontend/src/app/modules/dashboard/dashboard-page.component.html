@@ -1,125 +1,197 @@
-﻿<section class="dashboard-page">
-  <div class="header-row hero-block">
-    <div class="hero-title">
-      <p class="eyebrow">Centro de control</p>
-      <h2>Dashboard operativo</h2>
-      <p class="subtitulo">Monitorea el rendimiento diario y toma decisiones en tiempo real.</p>
+<section class="dashboard-page">
+  <div class="dashboard-shell">
+    <header class="page-header">
+      <div class="page-copy">
+        <p class="eyebrow">Centro de control</p>
+        <h2>Dashboard operativo</h2>
+        <p class="subtitulo">Monitoreá el rendimiento diario y priorizá las próximas acciones.</p>
+      </div>
+
+      <div class="acciones-rapidas" aria-label="Acciones rápidas">
+        @if (can('clients.write')) {
+          <button mat-flat-button color="primary" routerLink="/clientes" [queryParams]="{ accion: 'nuevo' }">
+            <mat-icon>add</mat-icon>
+            Nuevo cliente
+          </button>
+        }
+        @if (can('projects.write')) {
+          <button mat-button class="action-secondary" routerLink="/proyectos" [queryParams]="{ accion: 'nuevo' }">
+            <mat-icon>add</mat-icon>
+            Nuevo proyecto
+          </button>
+        }
+        @if (can('tasks.write')) {
+          <button mat-button class="action-secondary" routerLink="/tareas" [queryParams]="{ accion: 'nuevo' }">
+            <mat-icon>add</mat-icon>
+            Nueva tarea
+          </button>
+        }
+        @if (can('finances.write')) {
+          <button mat-button class="action-secondary" routerLink="/finanzas" [queryParams]="{ accion: 'nuevo', tipo: 'ingreso' }">
+            <mat-icon>add</mat-icon>
+            Nuevo ingreso
+          </button>
+          <button mat-button class="action-secondary" routerLink="/finanzas" [queryParams]="{ accion: 'nuevo', tipo: 'egreso' }">
+            <mat-icon>add</mat-icon>
+            Nuevo egreso
+          </button>
+        }
+      </div>
+    </header>
+
+    <div class="kpi-grid" aria-label="Indicadores principales">
+      <mat-card class="kpi-card success">
+        <span class="kpi-icon"><mat-icon>groups</mat-icon></span>
+        <div>
+          <h3>Clientes activos</h3>
+          <strong>{{ resumen.kpis.activeClients }}</strong>
+          <p>Clientes con proyectos activos</p>
+        </div>
+      </mat-card>
+      <mat-card class="kpi-card info">
+        <span class="kpi-icon"><mat-icon>folder</mat-icon></span>
+        <div>
+          <h3>Proyectos en curso</h3>
+          <strong>{{ resumen.kpis.projectsInProgress }}</strong>
+          <p>Proyectos en ejecución</p>
+        </div>
+      </mat-card>
+      <mat-card class="kpi-card danger">
+        <span class="kpi-icon"><mat-icon>assignment_late</mat-icon></span>
+        <div>
+          <h3>Tareas vencidas</h3>
+          <strong>{{ resumen.kpis.overdueTasks }}</strong>
+          <p>{{ resumen.kpis.overdueTasks === 0 ? 'Sin tareas vencidas' : 'Requieren revisión' }}</p>
+        </div>
+      </mat-card>
+      <mat-card class="kpi-card info">
+        <span class="kpi-icon"><mat-icon>schedule</mat-icon></span>
+        <div>
+          <h3>Tareas para hoy</h3>
+          <strong>{{ resumen.kpis.tasksForToday }}</strong>
+          <p>{{ resumen.kpis.tasksForToday === 0 ? 'Sin tareas pendientes' : 'Pendientes del día' }}</p>
+        </div>
+      </mat-card>
+      <mat-card class="kpi-card success wide">
+        <span class="kpi-icon"><mat-icon>trending_up</mat-icon></span>
+        <div>
+          <h3>Ingresos del mes</h3>
+          <strong>{{ resumen.kpis.monthlyIncome | currency:'ARS':'symbol':'1.0-0' }}</strong>
+          <p>Total acumulado</p>
+        </div>
+      </mat-card>
+      <mat-card class="kpi-card warning wide">
+        <span class="kpi-icon"><mat-icon>trending_down</mat-icon></span>
+        <div>
+          <h3>Egresos del mes</h3>
+          <strong>{{ resumen.kpis.monthlyExpense | currency:'ARS':'symbol':'1.0-0' }}</strong>
+          <p>Total acumulado</p>
+        </div>
+      </mat-card>
+      <mat-card class="kpi-card result wide" [class.negative]="resumen.kpis.monthlyResult < 0" [class.positive]="resumen.kpis.monthlyResult >= 0">
+        <span class="kpi-icon"><mat-icon>paid</mat-icon></span>
+        <div>
+          <h3>Resultado mensual</h3>
+          <strong>{{ resumen.kpis.monthlyResult | currency:'ARS':'symbol':'1.0-0' }}</strong>
+          <p>Ingresos - Egresos</p>
+        </div>
+      </mat-card>
     </div>
 
-    <div class="acciones-rapidas">
-      <button mat-flat-button color="primary" routerLink="/clientes" [queryParams]="{ accion: 'nuevo' }">Nuevo cliente</button>
-      <button mat-flat-button color="primary" routerLink="/proyectos" [queryParams]="{ accion: 'nuevo' }">Nuevo proyecto</button>
-      <button mat-flat-button color="primary" routerLink="/tareas" [queryParams]="{ accion: 'nuevo' }">Nueva tarea</button>
-      <button mat-flat-button color="primary" routerLink="/finanzas" [queryParams]="{ accion: 'nuevo', tipo: 'ingreso' }">Nuevo ingreso</button>
-      <button mat-flat-button color="primary" routerLink="/finanzas" [queryParams]="{ accion: 'nuevo', tipo: 'egreso' }">Nuevo egreso</button>
+    @if (cargando) {
+      <mat-card class="estado-carga">
+        <mat-icon>sync</mat-icon>
+        <p>Cargando información del dashboard...</p>
+      </mat-card>
+    }
+
+    <div class="tables-grid">
+      <mat-card class="panel-card">
+        <div class="panel-header">
+          <h3>Tareas prioritarias</h3>
+        </div>
+        @if (resumen.priorityTasks.length === 0) {
+          <div class="empty-state">
+            <mat-icon>task_alt</mat-icon>
+            <strong>No hay datos para mostrar</strong>
+            <span>Cuando existan tareas prioritarias, las verás acá.</span>
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="tabla-simple">
+              <thead><tr><th>Título</th><th>Proyecto</th><th>Responsable</th><th>Estado</th></tr></thead>
+              <tbody>
+                @for (item of resumen.priorityTasks; track item.id) {
+                  <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.projectName }}</td>
+                    <td>{{ item.responsibleName || '-' }}</td>
+                    <td><span class="tag-status status-progress">{{ mostrarEstado(item.status) }}</span></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </mat-card>
+
+      <mat-card class="panel-card">
+        <div class="panel-header">
+          <h3>Próximos cobros</h3>
+        </div>
+        @if (resumen.upcomingCollections.length === 0) {
+          <div class="empty-state">
+            <mat-icon>event_available</mat-icon>
+            <strong>No hay datos para mostrar</strong>
+            <span>Cuando existan próximos cobros, los verás acá.</span>
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="tabla-simple">
+              <thead><tr><th>Descripción</th><th>Cliente</th><th>Monto</th><th>Vencimiento</th></tr></thead>
+              <tbody>
+                @for (item of resumen.upcomingCollections; track item.id) {
+                  <tr>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.clientName || '-' }}</td>
+                    <td class="numeric">{{ item.amount | currency:'ARS':'symbol':'1.0-0' }}</td>
+                    <td>{{ item.dueDate || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </mat-card>
+
+      <mat-card class="panel-card">
+        <div class="panel-header">
+          <h3>Últimos movimientos</h3>
+        </div>
+        @if (resumen.recentMovements.length === 0) {
+          <div class="empty-state">
+            <mat-icon>receipt_long</mat-icon>
+            <strong>No hay datos para mostrar</strong>
+            <span>Los movimientos recientes aparecerán en este panel.</span>
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="tabla-simple">
+              <thead><tr><th>Tipo</th><th>Descripción</th><th>Monto</th><th>Fecha</th></tr></thead>
+              <tbody>
+                @for (item of resumen.recentMovements; track item.id) {
+                  <tr>
+                    <td><span class="movement-type">{{ item.movementType }}</span></td>
+                    <td>{{ item.description }}</td>
+                    <td class="numeric">{{ item.amount | currency:'ARS':'symbol':'1.0-0' }}</td>
+                    <td>{{ item.movementDate }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </mat-card>
     </div>
-  </div>
-
-  <div class="kpi-grid">
-    <mat-card class="kpi-card">
-      <h3>Clientes activos</h3>
-      <strong>{{ resumen.kpis.activeClients }}</strong>
-    </mat-card>
-    <mat-card class="kpi-card">
-      <h3>Proyectos en curso</h3>
-      <strong>{{ resumen.kpis.projectsInProgress }}</strong>
-    </mat-card>
-    <mat-card class="kpi-card alert">
-      <h3>Tareas vencidas</h3>
-      <strong>{{ resumen.kpis.overdueTasks }}</strong>
-    </mat-card>
-    <mat-card class="kpi-card">
-      <h3>Tareas para hoy</h3>
-      <strong>{{ resumen.kpis.tasksForToday }}</strong>
-    </mat-card>
-    <mat-card class="kpi-card success">
-      <h3>Ingresos del mes</h3>
-      <strong>{{ resumen.kpis.monthlyIncome | currency:'ARS':'symbol':'1.0-0' }}</strong>
-    </mat-card>
-    <mat-card class="kpi-card warning">
-      <h3>Egresos del mes</h3>
-      <strong>{{ resumen.kpis.monthlyExpense | currency:'ARS':'symbol':'1.0-0' }}</strong>
-    </mat-card>
-    <mat-card class="kpi-card result">
-      <h3>Resultado mensual</h3>
-      <strong>{{ resumen.kpis.monthlyResult | currency:'ARS':'symbol':'1.0-0' }}</strong>
-    </mat-card>
-  </div>
-
-  @if (cargando) {
-    <mat-card class="estado-carga">
-      <p>Cargando informacion del dashboard...</p>
-    </mat-card>
-  }
-
-  <div class="tables-grid">
-    <mat-card class="panel-card">
-      <div class="panel-header">
-        <h3>Tareas prioritarias</h3>
-      </div>
-      @if (resumen.priorityTasks.length === 0) {
-        <p class="vacio">No hay datos para mostrar</p>
-      } @else {
-        <table class="tabla-simple">
-          <thead><tr><th>Titulo</th><th>Proyecto</th><th>Responsable</th><th>Estado</th></tr></thead>
-          <tbody>
-            @for (item of resumen.priorityTasks; track item.id) {
-              <tr>
-                <td>{{ item.title }}</td>
-                <td>{{ item.projectName }}</td>
-                <td>{{ item.responsibleName || '-' }}</td>
-                <td><span class="tag-status">{{ mostrarEstado(item.status) }}</span></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </mat-card>
-
-    <mat-card class="panel-card">
-      <div class="panel-header">
-        <h3>Proximos cobros</h3>
-      </div>
-      @if (resumen.upcomingCollections.length === 0) {
-        <p class="vacio">No hay datos para mostrar</p>
-      } @else {
-        <table class="tabla-simple">
-          <thead><tr><th>Descripcion</th><th>Cliente</th><th>Monto</th><th>Vencimiento</th></tr></thead>
-          <tbody>
-            @for (item of resumen.upcomingCollections; track item.id) {
-              <tr>
-                <td>{{ item.description }}</td>
-                <td>{{ item.clientName || '-' }}</td>
-                <td>{{ item.amount | currency:'ARS':'symbol':'1.0-0' }}</td>
-                <td>{{ item.dueDate || '-' }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </mat-card>
-
-    <mat-card class="panel-card">
-      <div class="panel-header">
-        <h3>Ultimos movimientos</h3>
-      </div>
-      @if (resumen.recentMovements.length === 0) {
-        <p class="vacio">No hay datos para mostrar</p>
-      } @else {
-        <table class="tabla-simple">
-          <thead><tr><th>Tipo</th><th>Descripcion</th><th>Monto</th><th>Fecha</th></tr></thead>
-          <tbody>
-            @for (item of resumen.recentMovements; track item.id) {
-              <tr>
-                <td>{{ item.movementType }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.amount | currency:'ARS':'symbol':'1.0-0' }}</td>
-                <td>{{ item.movementDate }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </mat-card>
   </div>
 </section>

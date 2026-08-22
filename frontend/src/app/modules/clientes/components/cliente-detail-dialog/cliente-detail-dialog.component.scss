@@ -14,10 +14,10 @@
 }
 
 .detail-card {
-  border: 1px solid var(--line-600);
+  border: 1px solid var(--kd-border-subtle);
   border-radius: 12px;
   padding: 12px;
-  background: linear-gradient(170deg, rgba(16, 26, 28, 0.86), rgba(11, 18, 20, 0.98));
+  background: linear-gradient(180deg, rgba(17, 26, 36, 0.92), rgba(13, 21, 30, 0.98));
 }
 
 .full-width {
@@ -27,7 +27,7 @@
 .section-eyebrow {
   margin: 0 0 10px;
   font-size: 11px;
-  color: rgba(140, 255, 152, 0.92);
+  color: var(--kd-text-secondary);
   font-weight: 700;
   letter-spacing: 1.1px;
   text-transform: uppercase;
@@ -60,21 +60,21 @@
 
 .label {
   font-size: 11px;
-  color: #8fb1a2;
+  color: var(--kd-text-muted);
   letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
 .value {
   margin: 0;
-  color: #dceae1;
+  color: var(--kd-text-primary);
   font-size: 15px;
   line-height: 1.35;
 }
 
 .value-main {
   font-size: 22px;
-  color: #e9fff0;
+  color: var(--kd-text-primary);
 }
 
 .status-chip,

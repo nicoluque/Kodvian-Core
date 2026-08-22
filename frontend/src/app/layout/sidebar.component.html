@@ -1,6 +1,9 @@
 <aside class="sidebar">
+  <div class="brand-panel" aria-label="Identidad de marca Kodvian">
+    <img class="brand-wordmark" src="/assets/branding/kodvian-wordmark.svg" alt="Kodvian solutions, soluciones informáticas" />
+  </div>
 
-  <div class="section-title">Panel principal</div>
+  <div class="section-title">Panel operativo</div>
 
   <mat-nav-list>
     @for (item of items; track item.route) {
@@ -10,4 +13,21 @@
       </a>
     }
   </mat-nav-list>
+
+  <div class="sidebar-footer">
+    <div class="security-card">
+      <mat-icon aria-hidden="true">verified_user</mat-icon>
+      <span>Operación segura</span>
+    </div>
+
+    @if (user) {
+      <div class="user-card" aria-label="Usuario autenticado">
+        <span class="avatar">{{ userInitials }}</span>
+        <span class="user-copy">
+          <strong>{{ user.fullName }}</strong>
+          <small>{{ user.role }}</small>
+        </span>
+      </div>
+    }
+  </div>
 </aside>

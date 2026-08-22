@@ -28,16 +28,16 @@
   .dialog-title {
     margin: 0;
     padding: 18px 22px 12px;
-    color: var(--brand-300);
+    color: var(--text-100);
     font-size: 24px;
     letter-spacing: 0.3px;
-    border-bottom: 1px solid rgba(52, 74, 64, 0.48);
-    background: linear-gradient(160deg, rgba(20, 33, 28, 0.72), rgba(12, 19, 21, 0.96));
+    border-bottom: 1px solid var(--line-600);
+    background: rgba(22, 33, 45, 0.92);
   }
 
   .dialog-body {
     padding: 14px 22px 8px !important;
-    background: linear-gradient(175deg, rgba(11, 17, 19, 0.98), rgba(8, 13, 15, 0.99));
+    background: rgba(13, 21, 30, 0.98);
   }
 
   .dialog-form {
@@ -56,7 +56,7 @@
     margin: 0;
     font-size: 11px;
     font-weight: 700;
-    color: rgba(140, 255, 152, 0.9);
+    color: var(--text-300);
     letter-spacing: 1.2px;
     text-transform: uppercase;
     white-space: nowrap;
@@ -65,7 +65,7 @@
   .section-divider {
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, rgba(105, 156, 119, 0.52), rgba(58, 78, 70, 0.12));
+    background: var(--line-600);
   }
 
   .toggle-row {
@@ -75,8 +75,8 @@
   .dialog-actions {
     margin: 0;
     padding: 12px 22px 18px;
-    border-top: 1px solid rgba(52, 74, 64, 0.36);
-    background: linear-gradient(175deg, rgba(10, 16, 18, 0.98), rgba(7, 12, 14, 0.99));
+    border-top: 1px solid var(--line-600);
+    background: rgba(13, 21, 30, 0.98);
     gap: 8px;
   }
 
@@ -90,14 +90,14 @@
     min-height: 42px;
     padding-inline: 16px;
     border-radius: 999px;
-    border: 1px solid rgba(102, 127, 117, 0.62);
-    background: rgba(18, 27, 30, 0.92);
-    color: #d7e7de;
+    border: 1px solid var(--line-600);
+    background: rgba(22, 33, 45, 0.92);
+    color: var(--text-300);
 
     &:hover {
-      color: #eefff2;
-      border-color: rgba(132, 165, 152, 0.7);
-      background: rgba(27, 40, 44, 0.98);
+      color: var(--text-100);
+      border-color: var(--brand-500);
+      background: rgba(32, 47, 61, 0.98);
     }
   }
 
@@ -108,11 +108,11 @@
   :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
   :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch,
   :host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing {
-    border-color: #2a3a33 !important;
+    border-color: var(--line-600) !important;
   }
 
   :host ::ng-deep .mat-mdc-text-field-wrapper {
-    background: rgba(9, 15, 17, 0.72) !important;
+    background: rgba(13, 21, 30, 0.72) !important;
   }
 
   :host ::ng-deep .mat-mdc-form-field .mat-mdc-form-field-infix {
@@ -151,7 +151,7 @@
     --mdc-switch-selected-track-color: var(--brand-500);
     --mdc-switch-selected-hover-track-color: var(--brand-400);
     --mdc-switch-selected-pressed-track-color: var(--brand-400);
-    --mdc-switch-unselected-track-color: #2a3a33;
+    --mdc-switch-unselected-track-color: var(--line-600);
     --mdc-switch-unselected-handle-color: #ffffff;
     color: var(--text-100);
   }
