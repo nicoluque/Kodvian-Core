@@ -64,7 +64,7 @@ export class LoginPageComponent implements OnInit {
   private getPostLoginRoute(): string {
     const user = this.authSession.user;
     if (!user) return '/login';
-    if (user.developerId) return '/mi-trabajo';
+    if (user.developerId && user.permissions.includes('developer.work.read')) return '/mi-trabajo';
     if (user.permissions.includes('projects.read')) return '/proyectos';
     if (user.permissions.includes('dashboard.read')) return '/dashboard';
     if (user.permissions.includes('clients.read')) return '/clientes';

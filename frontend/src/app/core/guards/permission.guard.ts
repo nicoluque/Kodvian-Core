@@ -25,7 +25,7 @@ export const permissionGuard: CanActivateFn = (route) => {
 };
 
 function getFallbackRoute(user: { developerId?: string; permissions: string[] }): string {
-  if (user.developerId) return '/mi-trabajo';
+  if (user.developerId && user.permissions.includes('developer.work.read')) return '/mi-trabajo';
   if (user.permissions.includes('projects.read')) return '/proyectos';
   if (user.permissions.includes('dashboard.read')) return '/dashboard';
   if (user.permissions.includes('clients.read')) return '/clientes';
