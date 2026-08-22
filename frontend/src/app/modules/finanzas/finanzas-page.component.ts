@@ -38,7 +38,7 @@ export class FinanzasPageComponent implements OnInit {
 
   readonly tipos: TipoMovimiento[] = ['Ingreso', 'Egreso'];
   readonly estados: EstadoMovimiento[] = ['Pendiente', 'Cobrado', 'Pagado', 'Vencido', 'Anulado'];
-  readonly columnas = ['movementType', 'category', 'description', 'amount', 'movementDate', 'status', 'actions'];
+  readonly columnas = ['movementType', 'category', 'client', 'description', 'amount', 'movementDate', 'status', 'actions'];
 
   readonly filtrosForm = this.fb.group({
     dateFrom: [null as Date | null],
