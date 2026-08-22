@@ -106,7 +106,8 @@ a[mat-flat-button][color='primary']:hover {
   background-color: var(--kd-canvas);
 }
 
-.layout-shell .mat-drawer {
+.layout-shell .mat-drawer,
+.layout-shell mat-sidenav.mat-drawer {
   width: auto;
 }
 
