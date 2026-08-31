@@ -32,6 +32,8 @@ public class KodvianDbContext : DbContext
     public DbSet<ProjectDocumentVersion> ProjectDocumentVersions => Set<ProjectDocumentVersion>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<GitHubIssueLink> GitHubIssueLinks => Set<GitHubIssueLink>();
+    public DbSet<GitHubOAuthState> GitHubOAuthStates => Set<GitHubOAuthState>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -68,11 +70,17 @@ public class KodvianDbContext : DbContext
             entity.Property(x => x.Prioridad).HasConversion<int>();
             entity.Property(x => x.Presupuesto).HasColumnType("numeric(18,2)");
             entity.Property(x => x.PorcentajeAvance).HasDefaultValue(0);
+            entity.Property(x => x.GitHubOwner).HasMaxLength(100);
+            entity.Property(x => x.GitHubRepoName).HasMaxLength(200);
+            entity.Property(x => x.GitHubRepoUrl).HasMaxLength(500);
             entity.HasIndex(x => x.ClienteId);
             entity.HasIndex(x => x.Estado);
             entity.HasIndex(x => x.Prioridad);
             entity.HasIndex(x => new { x.ClienteId, x.FechaCreacion });
             entity.HasIndex(x => new { x.Estado, x.Prioridad, x.FechaCreacion });
+            entity.HasIndex(x => new { x.GitHubOwner, x.GitHubRepoName })
+                .IsUnique()
+                .HasFilter("\"GitHubOwner\" IS NOT NULL AND \"GitHubRepoName\" IS NOT NULL");
 
             entity.HasOne(x => x.Cliente)
                 .WithMany(x => x.Projects)
@@ -410,8 +418,12 @@ public class KodvianDbContext : DbContext
             entity.Property(x => x.FullName).IsRequired().HasMaxLength(160);
             entity.Property(x => x.Email).IsRequired().HasMaxLength(120);
             entity.Property(x => x.PasswordHash).IsRequired();
+            entity.Property(x => x.GitHubUsername).HasMaxLength(100);
+            entity.Property(x => x.GitHubAccessTokenEncrypted).HasMaxLength(4000);
             entity.HasIndex(x => x.Email).IsUnique();
             entity.HasIndex(x => x.DeveloperId);
+            entity.HasIndex(x => x.GitHubUsername);
+            entity.HasIndex(x => x.GitHubUserId);
 
             entity.HasOne(x => x.Role)
                 .WithMany(x => x.Users)
@@ -422,6 +434,49 @@ public class KodvianDbContext : DbContext
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.DeveloperId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<GitHubIssueLink>(entity =>
+        {
+            entity.ToTable("GitHubIssueLinks");
+            entity.Property(x => x.GitHubIssueNodeId).IsRequired().HasMaxLength(80);
+            entity.Property(x => x.GitHubIssueUrl).IsRequired().HasMaxLength(500);
+            entity.Property(x => x.Title).IsRequired().HasMaxLength(500);
+            entity.Property(x => x.Description).HasMaxLength(8000);
+            entity.Property(x => x.Status).HasConversion<int>();
+            entity.Property(x => x.Priority).HasConversion<int?>();
+            entity.Property(x => x.AssignedGitHubUsername).HasMaxLength(100);
+            entity.Property(x => x.SyncDirection).HasConversion<int>();
+            entity.HasIndex(x => new { x.ProjectId, x.GitHubIssueNumber }).IsUnique();
+            entity.HasIndex(x => x.GitHubIssueNodeId).IsUnique();
+            entity.HasIndex(x => new { x.DeveloperId, x.Status });
+            entity.HasIndex(x => x.ProjectId);
+            entity.HasIndex(x => x.LastSyncedAt);
+
+            entity.HasOne(x => x.Project)
+                .WithMany(x => x.GitHubIssueLinks)
+                .HasForeignKey(x => x.ProjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Developer)
+                .WithMany(x => x.GitHubIssueLinks)
+                .HasForeignKey(x => x.DeveloperId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<GitHubOAuthState>(entity =>
+        {
+            entity.ToTable("GitHubOAuthStates");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.StateToken).IsRequired().HasMaxLength(128);
+            entity.HasIndex(x => x.StateToken).IsUnique();
+            entity.HasIndex(x => x.ExpiresAt);
+            entity.HasIndex(x => x.UserId);
+
+            entity.HasOne(x => x.User)
+                .WithMany(x => x.GitHubOAuthStates)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

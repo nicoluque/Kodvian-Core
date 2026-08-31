@@ -1,0 +1,80 @@
+<section class="mi-perfil-page">
+  <div class="header-row hero-block">
+    <div>
+      <p class="eyebrow">Cuenta</p>
+      <h2>Mi perfil</h2>
+      <p class="subtitulo">Revisá tus datos y conectá GitHub para trabajar en tus repositorios asignados.</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="cargarPerfil()" [disabled]="cargando">
+      <mat-icon>refresh</mat-icon>
+      Actualizar
+    </button>
+  </div>
+
+  <mat-card class="panel-card">
+    <div class="panel-title">
+      <h3>Datos de la cuenta</h3>
+      <span>Información del usuario autenticado</span>
+    </div>
+
+    @if (cargando && !perfil) {
+      <p class="estado-texto">Cargando perfil…</p>
+    } @else if (perfil) {
+      <div class="datos-grid">
+        <div>
+          <span class="label">Nombre</span>
+          <strong>{{ perfil.fullName }}</strong>
+        </div>
+        <div>
+          <span class="label">Email</span>
+          <strong>{{ perfil.email }}</strong>
+        </div>
+        <div>
+          <span class="label">Rol</span>
+          <strong>{{ perfil.role }}</strong>
+        </div>
+      </div>
+    } @else {
+      <p class="estado-texto">No se pudo cargar el perfil.</p>
+    }
+  </mat-card>
+
+  <mat-card class="panel-card">
+    <div class="panel-title">
+      <h3>Conexión GitHub</h3>
+      <span>Necesaria para crear y sincronizar issues desde Mi trabajo</span>
+    </div>
+
+    @if (perfil?.gitHubConnected) {
+      <div class="github-estado conectado">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <p>Conectado como <strong>{{ '@' + (perfil?.gitHubUsername ?? '') }}</strong></p>
+          @if (perfil?.gitHubConnectedAt) {
+            <small>Desde {{ perfil?.gitHubConnectedAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+          }
+        </div>
+      </div>
+      <div class="acciones">
+        <button mat-stroked-button color="warn" type="button" [disabled]="desconectando" (click)="desconectarGitHub()">
+          <mat-icon>link_off</mat-icon>
+          Desconectar
+        </button>
+      </div>
+    } @else {
+      <div class="github-estado desconectado">
+        <mat-icon>hub</mat-icon>
+        <div>
+          <p>Todavía no conectaste tu cuenta de GitHub.</p>
+          <small>Vas a autorizar a Kodvian Core para crear issues en los repos que te asignen.</small>
+        </div>
+      </div>
+      <div class="acciones">
+        <button mat-flat-button color="primary" type="button" (click)="conectarGitHub()">
+          <mat-icon>login</mat-icon>
+          Conectar con GitHub
+        </button>
+      </div>
+    }
+  </mat-card>
+</section>

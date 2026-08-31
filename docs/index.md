@@ -50,6 +50,7 @@ Kodvian Core es un sistema interno liviano para gestionar una empresa de softwar
 - [Tareas](modules/tareas.md)
 - [Finanzas](modules/finanzas.md)
 - [Administracion](modules/administracion.md)
+- [Mi trabajo](modules/mi-trabajo.md) (issues GitHub + OAuth)
 
 ## Desarrollo
 
@@ -57,6 +58,7 @@ Kodvian Core es un sistema interno liviano para gestionar una empresa de softwar
 - [Estrategia de testing](development/testing-strategy.md)
 - [Checklist de validacion](development/validation-checklist.md)
 - [Convenciones](development/conventions.md)
+- [Plan integracion GitHub — Mi trabajo](development/github-integration-plan.md)
 
 ## Mantenimiento
 

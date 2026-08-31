@@ -107,3 +107,45 @@ Actualizar:
 Una tarea no esta terminada si falta la cobertura automatica esperada para el cambio.
 
 La excepcion debe ser explicita, justificada y acompanada por una validacion manual documentada.
+
+## Integracion GitHub — Mi trabajo
+
+Checklist manual end-to-end (requiere `GitHub__Enabled=true` y variables configuradas; ver [railway-readiness.md](../railway-readiness.md) y [github-integration-plan.md](github-integration-plan.md)).
+
+### Preparacion (admin)
+
+- [ ] `GitHub__Enabled=true` y credenciales OAuth en el entorno.
+- [ ] `TokenEncryption__Key` configurada (32+ caracteres o Base64 de 32 bytes).
+- [ ] `GitHub__WebhookSecret` configurada si se usan webhooks.
+- [ ] OAuth App en GitHub con callback `https://{dominio}/api/profile/github/callback`.
+- [ ] Webhook org o por repo apuntando a `https://{dominio}/api/webhooks/github`, eventos **Issues**, secret = `GitHub__WebhookSecret`.
+- [ ] Admin vincula repo GitHub a un proyecto (`PUT /api/projects/{id}/github-repo` o UI en proyecto).
+
+### Flujo desarrollador
+
+- [ ] Login como desarrollador con acceso al proyecto (assignment, contrato o tarea).
+- [ ] Ir a `/mi-perfil` → **Conectar con GitHub** → vuelve con `connected=true`.
+- [ ] Ir a `/mi-trabajo` → aparece el repo vinculado (no todos los repos del usuario en GitHub).
+- [ ] **Sincronizar** importa issues asignadas al username GitHub del dev.
+- [ ] **Nueva tarea** crea issue en GitHub y aparece en la tabla (label `kodvian` si configurado).
+- [ ] Cerrar issue en Kodvian (select Cerrada) → se refleja en GitHub.
+- [ ] Cerrar issue en GitHub → webhook actualiza Kodvian (o usar Sincronizar si webhook no configurado).
+
+### Seguridad y errores
+
+- [ ] Dev sin GitHub: banner CTA a perfil; sync/crear muestran mensaje claro.
+- [ ] Token revocado: mensaje "Reconectá GitHub en Mi perfil".
+- [ ] Usuario sin `developer.issues.write`: no ve boton Nueva tarea.
+- [ ] Webhook con firma invalida: `POST /api/webhooks/github` → `401`.
+
+### Tests automaticos
+
+```bash
+cd backend
+dotnet test --filter "FullyQualifiedName~MyWork|FullyQualifiedName~GitHub"
+```
+
+```bash
+cd frontend
+npm test -- --include='**/mi-trabajo/**' --include='**/mi-perfil/**'
+```

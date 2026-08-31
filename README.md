@@ -130,6 +130,17 @@ Checklist detallado: [`docs/railway-readiness.md`](docs/railway-readiness.md).
 - `Storage__ForcePathStyle=true` (recomendado para R2/MinIO)
 - `Storage__MaxPdfSizeMb` (opcional; default 10)
 
+**GitHub (opcional; arranque degradado si `Enabled=false`)**
+
+- `GitHub__Enabled` (`true` para activar la integración)
+- `GitHub__ClientId` / `GitHub__ClientSecret` (OAuth App; obligatorios si Enabled en Production)
+- `GitHub__CallbackUrl` (ej. `https://tu-dominio.app/api/profile/github/callback`)
+- `GitHub__ServiceToken` (PAT recomendado para validar repos como admin)
+- `GitHub__WebhookSecret` (webhooks)
+- `GitHub__DefaultLabel` (opcional; default `kodvian`)
+- `GitHub__ApiBaseUrl` (opcional; default `https://api.github.com`)
+- `TokenEncryption__Key` (obligatoria si `GitHub__Enabled=true` en Production; Base64 de 32 bytes o secreto ≥32 caracteres)
+
 En Development el storage es local (`Storage__Provider=Local`, `App_Data/files`).
 
 ### Build local del contenedor

@@ -11,10 +11,11 @@ public class RolePermissionMapTests
 
         Assert.Contains(PermissionCodes.DeveloperWorkRead, permissions);
         Assert.Contains(PermissionCodes.DeveloperTasksStatusWrite, permissions);
+        Assert.Contains(PermissionCodes.DeveloperIssuesWrite, permissions);
         Assert.DoesNotContain(PermissionCodes.ProjectsRead, permissions);
         Assert.DoesNotContain(PermissionCodes.TasksWrite, permissions);
         Assert.DoesNotContain(PermissionCodes.FinancesRead, permissions);
-        Assert.Equal(2, permissions.Count);
+        Assert.Equal(3, permissions.Count);
     }
 
     [Fact]

@@ -11,6 +11,9 @@ public interface IProjectService
     Task<ProjectDetailDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<ProjectDetailDto> CreateAsync(ProjectUpsertRequestDto request, CancellationToken cancellationToken = default);
     Task<ProjectDetailDto?> UpdateAsync(Guid id, ProjectUpsertRequestDto request, CancellationToken cancellationToken = default);
+    Task<ProjectDetailDto?> LinkGitHubRepositoryAsync(Guid id, LinkGitHubRepositoryRequestDto request, CancellationToken cancellationToken = default);
+    Task<ProjectDetailDto?> UnlinkGitHubRepositoryAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<ValidateGitHubRepositoryResultDto> ValidateGitHubRepositoryAsync(Guid id, LinkGitHubRepositoryRequestDto request, CancellationToken cancellationToken = default);
     Task<ProjectLookupsDto> GetLookupsAsync(CancellationToken cancellationToken = default);
     Task<IReadOnlyCollection<ProjectDocumentTypeDto>> GetDocumentTypesAsync(CancellationToken cancellationToken = default);
     Task<IReadOnlyCollection<ProjectDocumentListItemDto>> GetDocumentsAsync(Guid projectId, CancellationToken cancellationToken = default);

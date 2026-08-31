@@ -2,3 +2,38 @@
 
 @include dialog.dialog-form-grid(860px);
 @include dialog.dialog-premium-shell();
+
+.github-section {
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.github-hint,
+.github-linked {
+  margin: 0 0 12px;
+  color: var(--kd-text-secondary);
+  font-size: 13px;
+}
+
+.github-linked a {
+  color: var(--brand-300);
+}
+
+.github-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.github-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+@media (max-width: 720px) {
+  .github-fields {
+    grid-template-columns: 1fr;
+  }
+}

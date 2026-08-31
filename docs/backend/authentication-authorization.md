@@ -30,6 +30,12 @@ La cookie configurada por backend es:
 - `Secure = true` fuera de Development o si la request es HTTPS.
 - `Path = /`.
 
+### Implicacion OAuth GitHub
+
+Como `SameSite=Strict`, la cookie `auth_token` **no viaja** en el redirect cross-site desde GitHub hacia el callback.
+
+Por eso `GET /api/profile/github/callback` es `[AllowAnonymous]` y autentica al usuario con el `state` persistido en `GitHubOAuthStates` (contiene `UserId`), no con la cookie JWT.
+
 ## Sesion actual
 
 Endpoint:
@@ -152,6 +158,7 @@ Policies declaradas en `Program.cs`:
 - `ProjectsDocumentsDelete`.
 - `DeveloperWorkRead`.
 - `DeveloperTasksStatusWrite`.
+- `DeveloperIssuesWrite`.
 
 ## Acceso de desarrolladores
 

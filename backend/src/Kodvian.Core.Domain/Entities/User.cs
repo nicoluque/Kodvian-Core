@@ -7,6 +7,10 @@ public class User : BaseEntity
     public string PasswordHash { get; set; } = string.Empty;
     public Guid RoleId { get; set; }
     public Guid? DeveloperId { get; set; }
+    public string? GitHubUsername { get; set; }
+    public long? GitHubUserId { get; set; }
+    public string? GitHubAccessTokenEncrypted { get; set; }
+    public DateTime? GitHubConnectedAt { get; set; }
 
     public Role? Role { get; set; }
     public Developer? Developer { get; set; }
@@ -19,4 +23,6 @@ public class User : BaseEntity
     public ICollection<ProjectDocument> ProjectDocumentsCreated { get; set; } = new List<ProjectDocument>();
     public ICollection<ProjectDocument> ProjectDocumentsDeleted { get; set; } = new List<ProjectDocument>();
     public ICollection<ProjectDocumentVersion> ProjectDocumentVersionsUploaded { get; set; } = new List<ProjectDocumentVersion>();
+    public ICollection<GitHubOAuthState> GitHubOAuthStates { get; set; } = new List<GitHubOAuthState>();
 }
+

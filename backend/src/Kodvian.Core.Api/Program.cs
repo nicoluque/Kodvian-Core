@@ -165,6 +165,9 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("DeveloperTasksStatusWrite", policy =>
         policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DeveloperTasksStatusWrite));
+
+    options.AddPolicy("DeveloperIssuesWrite", policy =>
+        policy.RequireClaim(CustomClaimTypes.Permission, PermissionCodes.DeveloperIssuesWrite));
 });
 
 var allowedOrigins = builder.Configuration["Cors:AllowedOrigins"];
@@ -261,11 +264,15 @@ app.MapFallbackToFile("index.html");
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<KodvianDbContext>();
-    await dbContext.Database.MigrateAsync();
+    if (!app.Configuration.GetValue("SkipDatabaseMigration", false))
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<KodvianDbContext>();
+        await dbContext.Database.MigrateAsync();
+        await DbSeeder.SeedAdminUserAsync(app.Services, app.Configuration);
+        await DbSeeder.SeedFinancialCategoriesAsync(app.Services);
+    }
 }
 
-await DbSeeder.SeedAdminUserAsync(app.Services, app.Configuration);
-await DbSeeder.SeedFinancialCategoriesAsync(app.Services);
-
 app.Run();
+
+public partial class Program;

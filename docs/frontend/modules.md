@@ -18,8 +18,23 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Page: `mi-trabajo-page.component.ts|html|scss`.
 - Service: `services/mi-trabajo.service.ts`.
 - Models: `models/mi-trabajo.models.ts`.
-- Endpoints: `/api/my-work`.
+- Dialog: `components/nueva-tarea-github-dialog/` (crear issue).
+- Endpoints: `/api/my-work` (overview, repositories, issues, sync, tasks legacy).
+- Repos: solo proyectos Kodvian con GitHub vinculado y acceso del desarrollador (assignment/contrato/tarea).
+- Issues: desde `GitHubIssueLink`; botones Sincronizar y Nueva tarea (segun permisos).
+- Cambio estado issue: select Abierta/Cerrada con confirmacion al cerrar (`developer.tasks.status.write`).
+- Empty state sin GitHub: CTA a `/mi-perfil`.
 - Audiencia: usuarios con rol `Desarrollador`.
+
+## Mi perfil
+
+- Ruta: `/mi-perfil`.
+- Route file: `frontend/src/app/modules/mi-perfil/mi-perfil.routes.ts`.
+- Page: `mi-perfil-page.component.ts|html|scss`.
+- Service: `services/mi-perfil.service.ts`.
+- Models: `models/mi-perfil.models.ts`.
+- Endpoints: `/api/profile`, connect/disconnect GitHub.
+- Audiencia: usuarios con `developer.work.read` (rol Desarrollador) via sidebar.
 
 ## Clientes
 
@@ -53,6 +68,7 @@ Este documento mapea los modulos Angular con sus archivos principales.
 - Models: `models/proyectos.models.ts`.
 - Dialogs: proyecto form/detail, equipo asignado, contratos, pagos, ledger.
 - Endpoints: `/api/projects`, documentos, asignaciones operativas, contratos, pagos y comprobantes.
+- Vincular/desvincular/validar repo GitHub: solo Administrador (`PUT|DELETE|POST .../github-repo`).
 - Contratos, pagos y ledger solo deben estar disponibles para administrador.
 
 ## Tareas

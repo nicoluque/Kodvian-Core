@@ -2,6 +2,7 @@ using System.Net.Mail;
 using Kodvian.Core.Application.Clients.Requests;
 using Kodvian.Core.Application.Developers.Requests;
 using Kodvian.Core.Application.Finances.Requests;
+using Kodvian.Core.Application.MyWork.Requests;
 using Kodvian.Core.Application.Projects.Requests;
 using Kodvian.Core.Application.Tasks.Requests;
 
@@ -84,6 +85,56 @@ internal static class RequestValidation
         return null;
     }
 
+    public static string? Validate(LinkGitHubRepositoryRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Owner))
+        {
+            return "El owner de GitHub es obligatorio";
+        }
+
+        if (request.Owner.Trim().Length > 100)
+        {
+            return "El owner de GitHub no puede superar 100 caracteres";
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Repo))
+        {
+            return "El nombre del repositorio es obligatorio";
+        }
+
+        if (request.Repo.Trim().Length > 200)
+        {
+            return "El nombre del repositorio no puede superar 200 caracteres";
+        }
+
+        return null;
+    }
+
+    public static string? Validate(CreateMyWorkIssueRequestDto request)
+    {
+        if (request.ProjectId == Guid.Empty)
+        {
+            return "El proyecto es obligatorio";
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Title))
+        {
+            return "El título es obligatorio";
+        }
+
+        if (request.Title.Trim().Length > 200)
+        {
+            return "El título no puede superar 200 caracteres";
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Priority) && !IsAllowed(request.Priority, "Baja", "Media", "Alta", "Urgente"))
+        {
+            return "La prioridad no es válida";
+        }
+
+        return null;
+    }
+
     public static string? Validate(TaskUpsertRequestDto request)
     {
         if (request.ProjectId == Guid.Empty)
@@ -119,6 +170,21 @@ internal static class RequestValidation
         if (request.DueDate.HasValue && request.StartDate.HasValue && request.DueDate < request.StartDate)
         {
             return "La fecha de vencimiento no puede ser anterior a la fecha de inicio";
+        }
+
+        return null;
+    }
+
+    public static string? Validate(UpdateMyWorkIssueStatusRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Status))
+        {
+            return "El estado es obligatorio";
+        }
+
+        if (!IsAllowed(request.Status, "Open", "Closed"))
+        {
+            return "El estado de la issue no es válido";
         }
 
         return null;

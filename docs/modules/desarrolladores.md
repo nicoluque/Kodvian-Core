@@ -47,7 +47,7 @@ Archivos:
 
 - La gestion de desarrolladores requiere `projects.write`.
 - Los usuarios generados para desarrolladores reciben rol `Desarrollador`.
-- El rol `Desarrollador` tiene `developer.work.read` y `developer.tasks.status.write`.
+- El rol `Desarrollador` tiene `developer.work.read`, `developer.tasks.status.write` y `developer.issues.write`.
 
 ## Estados de UI
 

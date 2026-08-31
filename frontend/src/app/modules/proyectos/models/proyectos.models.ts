@@ -36,6 +36,27 @@ export interface ProyectoDetalle {
   isActive: boolean;
   createdAt: string;
   updatedAt?: string;
+  hasGitHubRepository?: boolean;
+  gitHubOwner?: string;
+  gitHubRepoName?: string;
+  gitHubRepoId?: number;
+  gitHubRepoUrl?: string;
+}
+
+export interface GitHubRepoLinkRequest {
+  owner: string;
+  repo: string;
+}
+
+export interface ValidateGitHubRepoResult {
+  exists: boolean;
+  repoId?: number;
+  owner?: string;
+  repoName?: string;
+  fullName?: string;
+  htmlUrl?: string;
+  isPrivate: boolean;
+  message: string;
 }
 
 export interface ProyectoFormulario {

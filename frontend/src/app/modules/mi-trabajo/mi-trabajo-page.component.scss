@@ -14,6 +14,25 @@
 @include table.status-chip-base(11px, 4px 10px);
 @include table.table-action-pill(auto, 34px, 0 10px);
 
+.panel-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.issue-status-field {
+  width: 140px;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .hero-block,
 .panel-card,
 .kpi-card {
@@ -79,6 +98,47 @@ h2,
 .panel-card {
   padding: 14px 14px 8px;
   border-radius: 16px;
+}
+
+.github-banner {
+  padding: 14px;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  mat-icon {
+    color: var(--brand-300);
+  }
+
+  h3 {
+    margin: 0 0 4px;
+    color: var(--kd-text-primary);
+    font-size: 16px;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-300);
+    font-size: 13px;
+  }
+
+  a {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 720px) {
+  .banner-content {
+    flex-wrap: wrap;
+
+    a {
+      margin-left: 0;
+    }
+  }
 }
 
 .panel-title {

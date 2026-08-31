@@ -1,17 +1,20 @@
-using System.Linq.Expressions;
-using System.Security.Cryptography;
 using Kodvian.Core.Application.Common.Files;
 using Kodvian.Core.Application.Common.Models;
 using Kodvian.Core.Application.Common.Security;
+using Kodvian.Core.Application.Integrations.GitHub.Abstractions;
+using Kodvian.Core.Application.Integrations.GitHub.Dtos;
 using Kodvian.Core.Application.Projects.Abstractions;
 using Kodvian.Core.Application.Projects.Dtos;
 using Kodvian.Core.Application.Projects.Requests;
 using Kodvian.Core.Domain.Entities;
 using Kodvian.Core.Domain.Enums;
+using Kodvian.Core.Infrastructure.Integrations.GitHub;
 using Kodvian.Core.Infrastructure.Persistence;
 using Kodvian.Core.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Linq.Expressions;
+using System.Security.Cryptography;
 
 namespace Kodvian.Core.Infrastructure.Services;
 
@@ -20,12 +23,21 @@ public class ProjectService : IProjectService
     private readonly KodvianDbContext _dbContext;
     private readonly IFileStorageService _fileStorageService;
     private readonly StorageOptions _storageOptions;
+    private readonly IGitHubApiService _gitHubApiService;
+    private readonly GitHubOptions _gitHubOptions;
 
-    public ProjectService(KodvianDbContext dbContext, IFileStorageService fileStorageService, IOptions<StorageOptions> storageOptions)
+    public ProjectService(
+        KodvianDbContext dbContext,
+        IFileStorageService fileStorageService,
+        IOptions<StorageOptions> storageOptions,
+        IGitHubApiService gitHubApiService,
+        IOptions<GitHubOptions> gitHubOptions)
     {
         _dbContext = dbContext;
         _fileStorageService = fileStorageService;
         _storageOptions = storageOptions.Value;
+        _gitHubApiService = gitHubApiService;
+        _gitHubOptions = gitHubOptions.Value;
     }
 
     public async Task<PagedResultDto<ProjectListItemDto>> GetPagedAsync(ProjectListRequestDto request, CancellationToken cancellationToken = default)
@@ -133,6 +145,102 @@ public class ProjectService : IProjectService
             .Where(x => x.Id == id)
             .Select(ToDetailDto())
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ProjectDetailDto?> LinkGitHubRepositoryAsync(
+        Guid id,
+        LinkGitHubRepositoryRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var owner = request.Owner.Trim();
+        var repo = request.Repo.Trim();
+
+        var project = await _dbContext.Projects.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (project is null)
+        {
+            return null;
+        }
+
+        var repository = await ResolveAvailableGitHubRepositoryAsync(id, owner, repo, cancellationToken);
+
+        project.GitHubOwner = repository.OwnerLogin;
+        project.GitHubRepoName = repository.Name;
+        project.GitHubRepoId = repository.Id;
+        project.GitHubRepoUrl = repository.HtmlUrl;
+        project.FechaActualizacion = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return await _dbContext.Projects
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .Select(ToDetailDto())
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ProjectDetailDto?> UnlinkGitHubRepositoryAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var project = await _dbContext.Projects.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (project is null)
+        {
+            return null;
+        }
+
+        project.GitHubOwner = null;
+        project.GitHubRepoName = null;
+        project.GitHubRepoId = null;
+        project.GitHubRepoUrl = null;
+        project.FechaActualizacion = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return await _dbContext.Projects
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .Select(ToDetailDto())
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ValidateGitHubRepositoryResultDto> ValidateGitHubRepositoryAsync(
+        Guid id,
+        LinkGitHubRepositoryRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var projectExists = await _dbContext.Projects.AnyAsync(x => x.Id == id, cancellationToken);
+        if (!projectExists)
+        {
+            throw new InvalidOperationException("Proyecto no encontrado");
+        }
+
+        var owner = request.Owner.Trim();
+        var repo = request.Repo.Trim();
+
+        var exists = await _gitHubApiService.ValidateRepositoryAsync(owner, repo, token: null, cancellationToken);
+        if (!exists)
+        {
+            return new ValidateGitHubRepositoryResultDto
+            {
+                Exists = false,
+                Message = "El repositorio no existe en GitHub o el ServiceToken no tiene acceso"
+            };
+        }
+
+        var repository = await FetchGitHubRepositoryAsync(owner, repo, cancellationToken);
+        var alreadyLinked = await IsGitHubRepositoryLinkedAsync(id, repository.OwnerLogin, repository.Name, cancellationToken);
+
+        return new ValidateGitHubRepositoryResultDto
+        {
+            Exists = true,
+            RepoId = repository.Id,
+            Owner = repository.OwnerLogin,
+            RepoName = repository.Name,
+            FullName = repository.FullName,
+            HtmlUrl = repository.HtmlUrl,
+            IsPrivate = repository.Private,
+            Message = alreadyLinked
+                ? "El repositorio existe, pero ya está vinculado a otro proyecto"
+                : "Repositorio válido y disponible para vincular"
+        };
     }
 
     public async Task<ProjectLookupsDto> GetLookupsAsync(CancellationToken cancellationToken = default)
@@ -574,8 +682,65 @@ public class ProjectService : IProjectService
             ProgressPercentage = x.PorcentajeAvance,
             IsActive = x.Activo,
             CreatedAt = x.FechaCreacion,
-            UpdatedAt = x.FechaActualizacion
+            UpdatedAt = x.FechaActualizacion,
+            HasGitHubRepository = x.GitHubOwner != null && x.GitHubRepoName != null,
+            GitHubOwner = x.GitHubOwner,
+            GitHubRepoName = x.GitHubRepoName,
+            GitHubRepoId = x.GitHubRepoId,
+            GitHubRepoUrl = x.GitHubRepoUrl
         };
+    }
+
+    private async Task<GitHubRepositoryDto> ResolveAvailableGitHubRepositoryAsync(
+        Guid projectId,
+        string owner,
+        string repo,
+        CancellationToken cancellationToken)
+    {
+        var exists = await _gitHubApiService.ValidateRepositoryAsync(owner, repo, token: null, cancellationToken);
+        if (!exists)
+        {
+            throw new InvalidOperationException("El repositorio no existe en GitHub o el ServiceToken no tiene acceso");
+        }
+
+        var repository = await FetchGitHubRepositoryAsync(owner, repo, cancellationToken);
+        if (await IsGitHubRepositoryLinkedAsync(projectId, repository.OwnerLogin, repository.Name, cancellationToken))
+        {
+            throw new InvalidOperationException("Ese repositorio ya está vinculado a otro proyecto");
+        }
+
+        return repository;
+    }
+
+    private async Task<bool> IsGitHubRepositoryLinkedAsync(
+        Guid projectId,
+        string owner,
+        string repo,
+        CancellationToken cancellationToken)
+    {
+        var ownerLower = owner.ToLowerInvariant();
+        var repoLower = repo.ToLowerInvariant();
+
+        return await _dbContext.Projects.AnyAsync(
+            x => x.Id != projectId
+                 && x.GitHubOwner != null
+                 && x.GitHubRepoName != null
+                 && x.GitHubOwner.ToLower() == ownerLower
+                 && x.GitHubRepoName.ToLower() == repoLower,
+            cancellationToken);
+    }
+
+    private async Task<GitHubRepositoryDto> FetchGitHubRepositoryAsync(
+        string owner,
+        string repo,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(_gitHubOptions.ServiceToken))
+        {
+            throw new InvalidOperationException("GitHub__ServiceToken no está configurado");
+        }
+
+        return await _gitHubApiService.GetRepositoryAsync(owner, repo, _gitHubOptions.ServiceToken, cancellationToken);
     }
 
     private async Task ValidateReferencesAsync(ProjectUpsertRequestDto request, CancellationToken cancellationToken)

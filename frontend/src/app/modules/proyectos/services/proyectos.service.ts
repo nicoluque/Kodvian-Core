@@ -11,6 +11,7 @@ import {
   DocumentoProyecto,
   DesarrolladorFormulario,
   DesarrolladorExterno,
+  GitHubRepoLinkRequest,
   LedgerContrato,
   PagoDesarrollador,
   PagoDesarrolladorFormulario,
@@ -22,6 +23,7 @@ import {
   ProyectoLookups,
   TipoDocumentoProyecto,
   TipoDocumentoProyectoItem,
+  ValidateGitHubRepoResult,
   VersionDocumentoProyecto
 } from '../models/proyectos.models';
 
@@ -70,6 +72,20 @@ export class ProyectosService {
 
   actualizar(id: string, payload: ProyectoFormulario): Observable<ProyectoDetalle> {
     return this.http.put<ApiResponse<ProyectoDetalle>>(`${this.endpoint}/${id}`, payload).pipe(map((r) => r.data));
+  }
+
+  vincularRepoGitHub(id: string, payload: GitHubRepoLinkRequest): Observable<ProyectoDetalle> {
+    return this.http.put<ApiResponse<ProyectoDetalle>>(`${this.endpoint}/${id}/github-repo`, payload).pipe(map((r) => r.data));
+  }
+
+  desvincularRepoGitHub(id: string): Observable<ProyectoDetalle> {
+    return this.http.delete<ApiResponse<ProyectoDetalle>>(`${this.endpoint}/${id}/github-repo`).pipe(map((r) => r.data));
+  }
+
+  validarRepoGitHub(id: string, payload: GitHubRepoLinkRequest): Observable<ValidateGitHubRepoResult> {
+    return this.http
+      .post<ApiResponse<ValidateGitHubRepoResult>>(`${this.endpoint}/${id}/github-repo/validate`, payload)
+      .pipe(map((r) => r.data));
   }
 
   obtenerDesarrolladores(): Observable<DesarrolladorExterno[]> {

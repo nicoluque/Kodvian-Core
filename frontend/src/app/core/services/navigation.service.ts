@@ -10,6 +10,7 @@ export class NavigationService {
   private readonly items: NavigationItem[] = [
     { label: 'Inicio', icon: 'home', route: '/dashboard', permission: 'dashboard.read' },
     { label: 'Mi trabajo', icon: 'work', route: '/mi-trabajo', permission: 'developer.work.read' },
+    { label: 'Mi perfil', icon: 'person', route: '/mi-perfil', permission: 'developer.work.read' },
     { label: 'Clientes', icon: 'groups', route: '/clientes', permission: 'clients.read' },
     { label: 'Equipo', icon: 'engineering', route: '/equipo', permission: 'team.read' },
     { label: 'Proyectos', icon: 'folder_open', route: '/proyectos', permission: 'projects.read' },

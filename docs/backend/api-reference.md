@@ -91,16 +91,53 @@ Controller: `backend/src/Kodvian.Core.Api/Controllers/MyWorkController.cs`
 
 Base route: `/api/my-work`
 
-Endpoints exclusivos para usuarios con rol `Desarrollador` y claim `developer_id`.
+Endpoints para usuarios con rol `Desarrollador`, claim `developer_id` y (donde aplica) `userId` (`NameIdentifier`).
 
-| Metodo | Ruta | Descripcion |
-|---|---|---|
-| GET | `/api/my-work/overview` | Resumen de proyectos y tareas asignadas al desarrollador autenticado. |
-| GET | `/api/my-work/projects` | Proyectos asociados por contrato o tarea asignada. |
-| GET | `/api/my-work/tasks` | Tareas asignadas al desarrollador autenticado. |
-| GET | `/api/my-work/tasks/kanban` | Tareas propias agrupadas para tablero kanban. |
-| GET | `/api/my-work/tasks/{id}` | Detalle de tarea propia. |
-| PATCH | `/api/my-work/tasks/{id}/status` | Cambio de estado de tarea propia. |
+### GitHub — repos e issues
+
+| Metodo | Ruta | Policy | Descripcion |
+|---|---|---|---|
+| GET | `/api/my-work/overview` | `DeveloperWorkRead` | KPIs, preview de repos e issues. Incluye `githubNotConnected`. |
+| GET | `/api/my-work/repositories` | `DeveloperWorkRead` | Repos GitHub de proyectos accesibles (paginado). |
+| GET | `/api/my-work/issues` | `DeveloperWorkRead` | Issues desde `GitHubIssueLink` (paginado, filtros). |
+| POST | `/api/my-work/issues` | `DeveloperIssuesWrite` | Crea issue en GitHub y persiste `GitHubIssueLink`. |
+| PATCH | `/api/my-work/issues/{id}/status` | `DeveloperTasksStatusWrite` | `{id}` = GUID de `GitHubIssueLink`. Cierra/reabre en GitHub. |
+| POST | `/api/my-work/sync` | `DeveloperWorkRead` | Import/update issues asignadas al dev. Body opcional: `{ "projectId": "guid" }`. |
+
+### Tareas internas (legacy)
+
+| Metodo | Ruta | Policy | Descripcion |
+|---|---|---|---|
+| GET | `/api/my-work/projects` | `DeveloperWorkRead` | Proyectos asociados por contrato, assignment o tarea. |
+| GET | `/api/my-work/tasks` | `DeveloperWorkRead` | Tareas `TaskItem` asignadas al desarrollador. |
+| GET | `/api/my-work/tasks/kanban` | `DeveloperWorkRead` | Tareas propias agrupadas para tablero kanban. |
+| GET | `/api/my-work/tasks/{id}` | `DeveloperWorkRead` | Detalle de tarea propia. |
+| PATCH | `/api/my-work/tasks/{id}/status` | `DeveloperTasksStatusWrite` | Cambio de estado de tarea interna propia. |
+
+## Profile
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/ProfileController.cs`
+
+Base route: `/api/profile`
+
+| Metodo | Ruta | Auth | Descripcion |
+|---|---|---|---|
+| GET | `/api/profile` | JWT | Perfil del usuario + estado GitHub. |
+| GET | `/api/profile/github/connect` | JWT | Redirect a GitHub OAuth (genera `GitHubOAuthState`). |
+| GET | `/api/profile/github/callback` | Anonimo | Callback OAuth; resuelve usuario por `state` en DB. |
+| DELETE | `/api/profile/github/disconnect` | JWT | Limpia tokens y username GitHub. |
+
+## Webhooks
+
+Controller: `backend/src/Kodvian.Core.Api/Controllers/GitHubWebhookController.cs`
+
+Base route: `/api/webhooks`
+
+| Metodo | Ruta | Auth | Descripcion |
+|---|---|---|---|
+| POST | `/api/webhooks/github` | Anonimo + firma | Recibe eventos `issues` de GitHub. Valida `X-Hub-Signature-256` con `GitHub__WebhookSecret`. Firma invalida → `401`. |
+
+Eventos procesados: `opened`, `closed`, `reopened`, `edited`. Ignora PRs y repos no vinculados a un `Project`.
 
 ## Financial Movements
 

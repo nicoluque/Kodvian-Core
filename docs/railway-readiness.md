@@ -89,6 +89,35 @@ Checklist de pendientes e implementación para desplegar Kodvian Core en Railway
 | `Storage__ForcePathStyle` | Recomendado | `true` para R2/MinIO |
 | `Storage__MaxPdfSizeMb` | No | Default 10 |
 
+### GitHub (opcional)
+
+| Variable | Requerida | Descripción |
+|----------|-----------|-------------|
+| `GitHub__Enabled` | No | `false` por defecto; la app arranca sin integración |
+| `GitHub__ClientId` | Si Enabled en prod | OAuth App client ID |
+| `GitHub__ClientSecret` | Si Enabled en prod | OAuth App client secret |
+| `GitHub__CallbackUrl` | Si Enabled en prod | `https://dominio/api/profile/github/callback` |
+| `GitHub__ServiceToken` | Recomendado | PAT para validación admin de repos |
+| `GitHub__WebhookSecret` | Si webhooks | Secret del webhook |
+| `GitHub__DefaultLabel` | No | Default `kodvian` |
+| `GitHub__ApiBaseUrl` | No | Default `https://api.github.com` |
+| `TokenEncryption__Key` | Si Enabled en prod | Base64 de 32 bytes o secreto ≥32 caracteres para AES-256-GCM |
+
+Con `GitHub__Enabled=false` (o ausente) la API arranca normal. Con `Enabled=true` en Production faltan ClientId/ClientSecret/CallbackUrl/TokenEncryption__Key → fail-fast al startup.
+
+### Webhook GitHub (operativo)
+
+Registrar en la org `kodvian-solutions` (webhook de org) o en cada repo vinculado:
+
+1. GitHub → Settings → Webhooks → Add webhook.
+2. Payload URL: `https://{dominio-railway}/api/webhooks/github`
+3. Content type: `application/json`
+4. Secret: mismo valor que `GitHub__WebhookSecret`
+5. Events: **Issues** (`opened`, `closed`, `reopened`, `edited`)
+6. Al vincular un repo nuevo en Kodvian, verificar que queda cubierto por el org webhook o agregar webhook al repo.
+
+Si el webhook no llega, el dev puede usar **Sincronizar** en `/mi-trabajo` como fallback.
+
 ## 6. Postgres + migraciones / seed
 
 - [x] Parseo de `DATABASE_URL` en Infrastructure
@@ -114,6 +143,7 @@ Checklist de pendientes e implementación para desplegar Kodvian Core en Railway
 - [ ] Login con el admin de `AuthSeed`
 - [ ] Navegación de módulos principales
 - [ ] Upload de PDF (documento/recibo) contra S3
+- [ ] Integracion GitHub: OAuth en `/mi-perfil`, repo vinculado, sync y webhook (ver checklist en `docs/development/validation-checklist.md`)
 
 ## Fuera de alcance (después)
 

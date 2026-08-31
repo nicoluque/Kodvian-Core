@@ -60,6 +60,26 @@
     </article>
 
     <article class="detail-card full-width">
+      <p class="section-eyebrow">Repositorio GitHub</p>
+      @if (proyecto.gitHubOwner && proyecto.gitHubRepoName) {
+        <div class="detail-row">
+          <span class="label">Repositorio</span>
+          <p class="value">
+            @if (proyecto.gitHubRepoUrl) {
+              <a [href]="proyecto.gitHubRepoUrl" target="_blank" rel="noopener noreferrer">
+                {{ proyecto.gitHubOwner }}/{{ proyecto.gitHubRepoName }}
+              </a>
+            } @else {
+              {{ proyecto.gitHubOwner }}/{{ proyecto.gitHubRepoName }}
+            }
+          </p>
+        </div>
+      } @else {
+        <p class="empty-documents">Sin repositorio vinculado.</p>
+      }
+    </article>
+
+    <article class="detail-card full-width">
       <div class="documents-header">
         <p class="section-eyebrow">Documentación del proyecto</p>
       </div>

@@ -15,6 +15,10 @@ public class Project : BaseEntity
     public DateOnly? FechaCierre { get; set; }
     public decimal? Presupuesto { get; set; }
     public int PorcentajeAvance { get; set; }
+    public string? GitHubOwner { get; set; }
+    public string? GitHubRepoName { get; set; }
+    public long? GitHubRepoId { get; set; }
+    public string? GitHubRepoUrl { get; set; }
 
     public Client? Cliente { get; set; }
     public User? Responsable { get; set; }
@@ -23,4 +27,6 @@ public class Project : BaseEntity
     public ICollection<ProjectDeveloperContract> DeveloperContracts { get; set; } = new List<ProjectDeveloperContract>();
     public ICollection<DocumentFile> Documents { get; set; } = new List<DocumentFile>();
     public ICollection<ProjectDocument> ProjectDocuments { get; set; } = new List<ProjectDocument>();
+    public ICollection<GitHubIssueLink> GitHubIssueLinks { get; set; } = new List<GitHubIssueLink>();
 }
+

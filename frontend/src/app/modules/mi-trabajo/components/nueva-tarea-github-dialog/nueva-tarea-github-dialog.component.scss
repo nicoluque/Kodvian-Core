@@ -1,0 +1,17 @@
+.dialog-title {
+  margin: 0;
+}
+
+.dialog-body {
+  min-width: min(520px, 90vw);
+  padding-top: 8px;
+}
+
+.dialog-form {
+  display: grid;
+  gap: 8px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}

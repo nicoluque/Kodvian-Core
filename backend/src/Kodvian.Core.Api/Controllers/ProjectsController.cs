@@ -82,6 +82,72 @@ public class ProjectsController : ControllerBase
         return Ok(ApiResponseDto<ProjectDetailDto>.Ok(data, "El proyecto se actualizó correctamente"));
     }
 
+    [HttpPut("{id:guid}/github-repo")]
+    [Authorize(Policy = "AdministratorOnly")]
+    public async Task<ActionResult<ApiResponseDto<ProjectDetailDto>>> LinkGitHubRepository(
+        Guid id,
+        [FromBody] LinkGitHubRepositoryRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var validationError = RequestValidation.Validate(request);
+        if (validationError is not null)
+        {
+            return BadRequest(ApiResponseDto<ProjectDetailDto>.Fail(validationError));
+        }
+
+        try
+        {
+            var data = await _projectService.LinkGitHubRepositoryAsync(id, request, cancellationToken);
+            if (data is null)
+            {
+                return NotFound(ApiResponseDto<ProjectDetailDto>.Fail("Proyecto no encontrado"));
+            }
+
+            return Ok(ApiResponseDto<ProjectDetailDto>.Ok(data, "Repositorio GitHub vinculado correctamente"));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ApiResponseDto<ProjectDetailDto>.Fail(ex.Message));
+        }
+    }
+
+    [HttpDelete("{id:guid}/github-repo")]
+    [Authorize(Policy = "AdministratorOnly")]
+    public async Task<ActionResult<ApiResponseDto<ProjectDetailDto>>> UnlinkGitHubRepository(Guid id, CancellationToken cancellationToken)
+    {
+        var data = await _projectService.UnlinkGitHubRepositoryAsync(id, cancellationToken);
+        if (data is null)
+        {
+            return NotFound(ApiResponseDto<ProjectDetailDto>.Fail("Proyecto no encontrado"));
+        }
+
+        return Ok(ApiResponseDto<ProjectDetailDto>.Ok(data, "Repositorio GitHub desvinculado correctamente"));
+    }
+
+    [HttpPost("{id:guid}/github-repo/validate")]
+    [Authorize(Policy = "AdministratorOnly")]
+    public async Task<ActionResult<ApiResponseDto<ValidateGitHubRepositoryResultDto>>> ValidateGitHubRepository(
+        Guid id,
+        [FromBody] LinkGitHubRepositoryRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var validationError = RequestValidation.Validate(request);
+        if (validationError is not null)
+        {
+            return BadRequest(ApiResponseDto<ValidateGitHubRepositoryResultDto>.Fail(validationError));
+        }
+
+        try
+        {
+            var data = await _projectService.ValidateGitHubRepositoryAsync(id, request, cancellationToken);
+            return Ok(ApiResponseDto<ValidateGitHubRepositoryResultDto>.Ok(data, data.Message));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ApiResponseDto<ValidateGitHubRepositoryResultDto>.Fail(ex.Message));
+        }
+    }
+
     [HttpGet("document-types")]
     [Authorize(Policy = "ProjectsDocumentsRead")]
     public async Task<ActionResult<ApiResponseDto<IReadOnlyCollection<ProjectDocumentTypeDto>>>> GetDocumentTypes(CancellationToken cancellationToken)

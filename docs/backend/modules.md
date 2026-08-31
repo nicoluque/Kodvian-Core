@@ -76,6 +76,33 @@ Este documento mapea cada modulo funcional con sus archivos backend principales.
 - Security: `RoleNames`, `PermissionCodes`, `RolePermissionMap`.
 - Entities: `User`, `Role`.
 
+## Mi trabajo (desarrollador)
+
+- Controller: `MyWorkController.cs`.
+- Abstraction: `IMyWorkService.cs`.
+- DTOs/requests: `backend/src/Kodvian.Core.Application/MyWork/**`.
+- Service: `MyWorkService.cs`.
+- Sync import: `IGitHubIssueSyncService`, `GitHubIssueSyncService.cs`.
+- Entity: `GitHubIssueLink`.
+- Enums: `GitHubIssueStatus`, `SyncDirection`.
+
+## Perfil y OAuth GitHub
+
+- Controller: `ProfileController.cs`.
+- Abstraction: `IProfileService.cs`.
+- DTOs: `backend/src/Kodvian.Core.Application/Profile/**`.
+- Service: `ProfileService.cs`.
+- Entity: `GitHubOAuthState` (CSRF OAuth).
+- Encryption: `ITokenEncryptionService`, `TokenEncryptionService.cs`.
+- Token runtime: `IGitHubTokenProvider`, `GitHubTokenProvider.cs`.
+
+## Integracion GitHub
+
+- API client: `IGitHubApiService`, `GitHubApiService.cs`, `GitHubOptions`.
+- Webhook: `GitHubWebhookController.cs`, `IGitHubWebhookService`, `GitHubWebhookService.cs`.
+- Anti-loop: `GitHubSyncAntiLoop.cs` (ventana 30s, `SyncDirection`).
+- Vinculo repo en proyecto: `ProjectService` (`LinkGitHubRepositoryAsync`, etc.).
+
 ## Regla de mantenimiento
 
 Cuando se agregue un modulo:

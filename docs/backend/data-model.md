@@ -41,6 +41,12 @@ Relaciones:
 - Tiene muchos `ProjectDeveloperContract`.
 - Tiene documentos versionados con `ProjectDocument`.
 - Tiene documentos legacy o comprobantes relacionados via `DocumentFile`.
+- Puede tener muchas `GitHubIssueLink` cuando el proyecto esta vinculado a un repo GitHub.
+
+Campos GitHub opcionales:
+
+- `GitHubOwner`, `GitHubRepoName`, `GitHubRepoId`, `GitHubRepoUrl`.
+- Unicidad filtrada: `(GitHubOwner, GitHubRepoName)` unica cuando ambos no son null (un repo no puede vincularse a dos proyectos).
 
 ### TaskItem
 
@@ -179,11 +185,49 @@ Restricciones:
 - Password hash requerido.
 - Role requerido.
 - Puede vincularse a un `Developer` mediante `DeveloperId` para acceso al portal de trabajo asignado.
+- Campos OAuth GitHub (MVP OAuth App classic, sin refresh token):
+  - `GitHubUsername`, `GitHubUserId`.
+  - `GitHubAccessTokenEncrypted`.
+  - `GitHubConnectedAt`.
 
 Relaciones nuevas:
 
 - `Developer` tiene muchos `User` asociados.
 - `User.DeveloperId` usa delete behavior `SetNull`.
+- `User` tiene muchos `GitHubOAuthState` temporales para CSRF OAuth.
+
+### GitHubIssueLink
+
+Puente entre Kodvian y una issue de GitHub (dominio de `/mi-trabajo`).
+
+Relaciones:
+
+- Requiere `ProjectId` hacia `Project` con delete restrict.
+- Requiere `DeveloperId` hacia `Developer` con delete restrict.
+
+Campos relevantes:
+
+- `GitHubIssueNumber`, `GitHubIssueNodeId`, `GitHubIssueUrl`.
+- `Title`, `Description`, `Status` (`GitHubIssueStatus`), `Priority` (`TaskPriority` opcional).
+- `AssignedGitHubUsername`, `LastSyncedAt`, `SyncDirection`.
+
+Restricciones:
+
+- `(ProjectId, GitHubIssueNumber)` unico.
+- `GitHubIssueNodeId` unico.
+- Indice `(DeveloperId, Status)`.
+
+### GitHubOAuthState
+
+Estado CSRF temporal del flujo OAuth GitHub (persistido en DB, no memoria).
+
+Campos:
+
+- `StateToken` unico.
+- `UserId` hacia `User` con cascade.
+- `ExpiresAt`, `CreatedAt`.
+
+No hereda `BaseEntity`: es efimero y se elimina tras el callback.
 
 ## Enums
 
@@ -196,6 +240,8 @@ Relaciones nuevas:
 - `FinancialMovementStatus`: `Pendiente`, `Cobrado`, `Pagado`, `Vencido`, `Anulado`.
 - `ContractPaymentMode`: `Percentage`, `FixedAmount`.
 - `ProjectDocumentType`: `Contract`, `Scope`, `Proposal`, `Deliverable`, `Legal`, `Invoice`, `General`.
+- `GitHubIssueStatus`: `Open`, `Closed`.
+- `SyncDirection`: `None`, `FromGitHub`, `FromKodvian`.
 
 ## Cuidados
 

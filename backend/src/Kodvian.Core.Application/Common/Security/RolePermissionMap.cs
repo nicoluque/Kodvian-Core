@@ -65,7 +65,8 @@ public static class RolePermissionMap
             RoleNames.Developer =>
             [
                 PermissionCodes.DeveloperWorkRead,
-                PermissionCodes.DeveloperTasksStatusWrite
+                PermissionCodes.DeveloperTasksStatusWrite,
+                PermissionCodes.DeveloperIssuesWrite
             ],
             _ => Array.Empty<string>()
         };

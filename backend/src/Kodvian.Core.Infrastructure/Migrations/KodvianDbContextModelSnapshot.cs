@@ -450,6 +450,21 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Property<Guid?>("ResponsableId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("GitHubOwner")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long?>("GitHubRepoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("GitHubRepoName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("GitHubRepoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
@@ -463,6 +478,10 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.HasIndex("ClienteId", "FechaCreacion");
 
                     b.HasIndex("Estado", "Prioridad", "FechaCreacion");
+
+                    b.HasIndex("GitHubOwner", "GitHubRepoName")
+                        .IsUnique()
+                        .HasFilter("\"GitHubOwner\" IS NOT NULL AND \"GitHubRepoName\" IS NOT NULL");
 
                     b.ToTable("Projects", (string)null);
                 });
@@ -858,6 +877,20 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("GitHubAccessTokenEncrypted")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<DateTime?>("GitHubConnectedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("GitHubUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("GitHubUsername")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -865,9 +898,121 @@ namespace Kodvian.Core.Infrastructure.Migrations
 
                     b.HasIndex("DeveloperId");
 
+                    b.HasIndex("GitHubUserId");
+
+                    b.HasIndex("GitHubUsername");
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.GitHubIssueLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("AssignedGitHubUsername")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(8000)
+                        .HasColumnType("character varying(8000)");
+
+                    b.Property<Guid>("DeveloperId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GitHubIssueNodeId")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<int>("GitHubIssueNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GitHubIssueUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime?>("LastSyncedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SyncDirection")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GitHubIssueNodeId")
+                        .IsUnique();
+
+                    b.HasIndex("LastSyncedAt");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("DeveloperId", "Status");
+
+                    b.HasIndex("ProjectId", "GitHubIssueNumber")
+                        .IsUnique();
+
+                    b.ToTable("GitHubIssueLinks", (string)null);
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.GitHubOAuthState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("StateToken")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("StateToken")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GitHubOAuthStates", (string)null);
                 });
 
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.DeveloperPayment", b =>
@@ -1094,6 +1239,36 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.GitHubIssueLink", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.Developer", "Developer")
+                        .WithMany("GitHubIssueLinks")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Kodvian.Core.Domain.Entities.Project", "Project")
+                        .WithMany("GitHubIssueLinks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Developer");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Kodvian.Core.Domain.Entities.GitHubOAuthState", b =>
+                {
+                    b.HasOne("Kodvian.Core.Domain.Entities.User", "User")
+                        .WithMany("GitHubOAuthStates")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.Client", b =>
                 {
                     b.Navigation("Projects");
@@ -1102,6 +1277,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
             modelBuilder.Entity("Kodvian.Core.Domain.Entities.Developer", b =>
                 {
                     b.Navigation("Contracts");
+
+                    b.Navigation("GitHubIssueLinks");
 
                     b.Navigation("ProjectAssignments");
 
@@ -1133,6 +1310,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
 
                     b.Navigation("Documents");
 
+                    b.Navigation("GitHubIssueLinks");
+
                     b.Navigation("ProjectDocuments");
 
                     b.Navigation("Tareas");
@@ -1163,6 +1342,8 @@ namespace Kodvian.Core.Infrastructure.Migrations
                     b.Navigation("CreatedTasks");
 
                     b.Navigation("FinancialMovementsCreated");
+
+                    b.Navigation("GitHubOAuthStates");
 
                     b.Navigation("ProjectDocumentVersionsUploaded");
 

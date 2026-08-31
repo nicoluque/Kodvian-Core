@@ -16,6 +16,7 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', canActivate: [permissionGuard], data: { permission: 'dashboard.read' }, loadChildren: () => import('./modules/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES) },
       { path: 'mi-trabajo', canActivate: [permissionGuard], data: { permission: 'developer.work.read' }, loadChildren: () => import('./modules/mi-trabajo/mi-trabajo.routes').then((m) => m.MI_TRABAJO_ROUTES) },
+      { path: 'mi-perfil', loadChildren: () => import('./modules/mi-perfil/mi-perfil.routes').then((m) => m.MI_PERFIL_ROUTES) },
       { path: 'clientes', canActivate: [permissionGuard], data: { permission: 'clients.read' }, loadChildren: () => import('./modules/clientes/clientes.routes').then((m) => m.CLIENTES_ROUTES) },
       { path: 'desarrolladores', pathMatch: 'full', redirectTo: 'equipo' },
       { path: 'equipo', canActivate: [permissionGuard], data: { permission: 'team.read' }, loadChildren: () => import('./modules/desarrolladores/desarrolladores.routes').then((m) => m.DESARROLLADORES_ROUTES) },

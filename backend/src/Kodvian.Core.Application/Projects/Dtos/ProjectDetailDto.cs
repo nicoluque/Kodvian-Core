@@ -19,4 +19,9 @@ public class ProjectDetailDto
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public bool HasGitHubRepository { get; set; }
+    public string? GitHubOwner { get; set; }
+    public string? GitHubRepoName { get; set; }
+    public long? GitHubRepoId { get; set; }
+    public string? GitHubRepoUrl { get; set; }
 }

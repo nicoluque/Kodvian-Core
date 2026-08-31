@@ -105,6 +105,51 @@
       <mat-slide-toggle formControlName="isActive">Activo</mat-slide-toggle>
     </div>
   </form>
+
+  @if (puedeGestionarGitHub) {
+    <div class="github-section" [formGroup]="githubForm">
+      <div class="form-section full-width">
+        <p class="section-eyebrow">Repositorio GitHub</p>
+        <span class="section-divider"></span>
+      </div>
+
+      @if (linkedRepoLabel) {
+        <p class="github-linked">
+          Vinculado:
+          @if (linkedRepoUrl) {
+            <a [href]="linkedRepoUrl" target="_blank" rel="noopener noreferrer">{{ linkedRepoLabel }}</a>
+          } @else {
+            <strong>{{ linkedRepoLabel }}</strong>
+          }
+        </p>
+      } @else {
+        <p class="github-hint">Vinculá un repo de GitHub para que aparezca en Mi trabajo de los desarrolladores asignados.</p>
+      }
+
+      <div class="github-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Owner</mat-label>
+          <input matInput formControlName="owner" placeholder="kodvian" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Repositorio</mat-label>
+          <input matInput formControlName="repo" placeholder="kodvian-core" />
+        </mat-form-field>
+      </div>
+
+      <div class="github-actions">
+        <button mat-stroked-button type="button" [disabled]="githubBusy" (click)="validarRepo()">Validar</button>
+        <button mat-flat-button color="primary" type="button" [disabled]="githubBusy" (click)="vincularRepo()">Vincular</button>
+        @if (linkedRepoLabel) {
+          <button mat-stroked-button color="warn" type="button" [disabled]="githubBusy" (click)="desvincularRepo()">
+            Desvincular
+          </button>
+        }
+      </div>
+    </div>
+  } @else if (!data.proyecto) {
+    <p class="github-hint">Podés vincular el repositorio GitHub después de crear el proyecto (solo Administrador).</p>
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="dialog-actions">
   <button mat-button mat-dialog-close class="action-cancel">Cancelar</button>

@@ -10,6 +10,7 @@ Las rutas principales estan definidas en `frontend/src/app/app.routes.ts`.
 | `/` | Redirige a `/dashboard` dentro del shell | `authGuard` |
 | `/dashboard` | `DashboardPageComponent` | `authGuard` heredado |
 | `/mi-trabajo` | `MiTrabajoPageComponent` | `authGuard` heredado + `permissionGuard` con `developer.work.read` |
+| `/mi-perfil` | `MiPerfilPageComponent` | `authGuard` heredado |
 | `/clientes` | `ClientesPageComponent` | `authGuard` heredado |
 | `/equipo` | `DesarrolladoresPageComponent` | `authGuard` heredado + `permissionGuard` con `team.read` |
 | `/desarrolladores` | Redirige a `/equipo` | `authGuard` heredado |

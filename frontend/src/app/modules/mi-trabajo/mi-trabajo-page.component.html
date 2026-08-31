@@ -3,134 +3,224 @@
     <div>
       <p class="eyebrow">Panel del desarrollador</p>
       <h2>Mi trabajo</h2>
-      <p class="subtitulo">Consulta tus proyectos asociados y actualiza el estado de tus tareas asignadas.</p>
+      <p class="subtitulo">Repos GitHub asignados por Kodvian y tus issues sincronizadas.</p>
     </div>
-    <button mat-flat-button color="primary" type="button" (click)="cargarDatos()">
-      <mat-icon>refresh</mat-icon>
-      Actualizar
-    </button>
+    <div class="header-actions">
+      <button mat-stroked-button type="button" [disabled]="cargando || sincronizando" (click)="sincronizar()">
+        <mat-icon>sync</mat-icon>
+        Sincronizar
+      </button>
+      <button mat-flat-button color="primary" type="button" [disabled]="cargando || sincronizando" (click)="cargarDatos()">
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+    </div>
   </div>
 
   <div class="resumen-grid">
     <mat-card class="kpi-card">
-      <h3>Proyectos asociados</h3>
-      <strong>{{ proyectos.length }}</strong>
+      <h3>Repos asignados</h3>
+      <strong>{{ totalRepositorios }}</strong>
     </mat-card>
     <mat-card class="kpi-card">
-      <h3>Tareas asignadas</h3>
-      <strong>{{ tareas.length }}</strong>
+      <h3>Issues totales</h3>
+      <strong>{{ totalIssues }}</strong>
     </mat-card>
     <mat-card class="kpi-card accent">
-      <h3>Tareas pendientes</h3>
-      <strong>{{ tareasPendientes }}</strong>
+      <h3>Issues abiertas</h3>
+      <strong>{{ issuesAbiertas }}</strong>
     </mat-card>
   </div>
 
+  @if (githubNotConnected) {
+    <mat-card class="panel-card github-banner">
+      <div class="banner-content">
+        <mat-icon>hub</mat-icon>
+        <div>
+          <h3>Conectá tu cuenta de GitHub</h3>
+          <p>Para crear y sincronizar issues necesitás autorizar GitHub en tu perfil.</p>
+        </div>
+        <a mat-flat-button color="primary" routerLink="/mi-perfil">Ir a Mi perfil</a>
+      </div>
+    </mat-card>
+  }
+
   <mat-card class="panel-card">
     <div class="panel-title">
-      <h3>Mis proyectos</h3>
-      <span>Contratos activos o tareas asignadas</span>
+      <h3>Mis repositorios</h3>
+      <span>Solo los repos vinculados a proyectos Kodvian a los que tenés acceso</span>
     </div>
 
     <div class="tabla-wrapper panel-table">
-      <table mat-table [dataSource]="proyectos" class="tabla-proyectos">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+      <table mat-table [dataSource]="repositorios" class="tabla-proyectos">
+        <ng-container matColumnDef="repo">
+          <th mat-header-cell *matHeaderCellDef>Repo</th>
           <td mat-cell *matCellDef="let row">
-            <div class="project-name">{{ row.name }}</div>
-            <small>{{ row.clientName }}</small>
+            <div class="project-name">{{ repoLabel(row) }}</div>
+            <small>{{ row.projectName }}</small>
           </td>
+        </ng-container>
+
+        <ng-container matColumnDef="client">
+          <th mat-header-cell *matHeaderCellDef>Cliente</th>
+          <td mat-cell *matCellDef="let row">{{ row.clientName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Estado</th>
           <td mat-cell *matCellDef="let row">
-            <span class="tag-status" [class.status-planning]="row.status === 'Planificacion'" [class.status-budgeted]="row.status === 'Presupuestado'" [class.status-progress]="row.status === 'EnCurso'" [class.status-paused]="row.status === 'Pausado'" [class.status-finished]="row.status === 'Finalizado'" [class.status-cancelled]="row.status === 'Cancelado'">
-              {{ mostrarEstado(row.status) }}
+            <span
+              class="tag-status"
+              [class.status-planning]="row.projectStatus === 'Planificacion'"
+              [class.status-budgeted]="row.projectStatus === 'Presupuestado'"
+              [class.status-progress]="row.projectStatus === 'EnCurso'"
+              [class.status-paused]="row.projectStatus === 'Pausado'"
+              [class.status-finished]="row.projectStatus === 'Finalizado'"
+              [class.status-cancelled]="row.projectStatus === 'Cancelado'"
+            >
+              {{ mostrarEstadoProyecto(row.projectStatus) }}
             </span>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="priority">
-          <th mat-header-cell *matHeaderCellDef>Prioridad</th>
-          <td mat-cell *matCellDef="let row"><span class="tag-priority" [class.priority-low]="row.priority === 'Baja'" [class.priority-medium]="row.priority === 'Media'" [class.priority-high]="row.priority === 'Alta'" [class.priority-urgent]="row.priority === 'Urgente'">{{ row.priority }}</span></td>
+        <ng-container matColumnDef="openIssues">
+          <th mat-header-cell *matHeaderCellDef>Issues abiertas</th>
+          <td mat-cell *matCellDef="let row"><span class="progress-pill">{{ row.openIssuesCount }}</span></td>
         </ng-container>
 
-        <ng-container matColumnDef="progress">
-          <th mat-header-cell *matHeaderCellDef>Avance</th>
-          <td mat-cell *matCellDef="let row"><span class="progress-pill">{{ row.progressPercentage }}%</span></td>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row" class="acciones-row">
+            @if (row.gitHubRepoUrl) {
+              <a mat-button class="table-action" [href]="row.gitHubRepoUrl" target="_blank" rel="noopener noreferrer">
+                Ver en GitHub
+              </a>
+            } @else {
+              <span>-</span>
+            }
+          </td>
         </ng-container>
 
-        <ng-container matColumnDef="delivery">
-          <th mat-header-cell *matHeaderCellDef>Entrega</th>
-          <td mat-cell *matCellDef="let row">{{ row.estimatedDeliveryDate ? (row.estimatedDeliveryDate | date:'dd/MM/yyyy') : '-' }}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="columnasProyectos"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnasProyectos"></tr>
+        <tr mat-header-row *matHeaderRowDef="columnasRepos"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasRepos"></tr>
       </table>
-      @if (!cargando && proyectos.length === 0) {
+      @if (!cargando && repositorios.length === 0) {
         <div class="sin-resultados">
-          <mat-icon>work_outline</mat-icon>
-          <p>No tenés proyectos asociados</p>
-          <small>Cuando tengas contratos activos o tareas asignadas, aparecerán acá.</small>
+          <mat-icon>folder_off</mat-icon>
+          <p>No tenés repositorios asignados</p>
+          <small>Aparecen cuando un administrador vincula un repo GitHub a un proyecto al que tenés acceso.</small>
         </div>
       }
     </div>
   </mat-card>
 
   <mat-card class="panel-card">
-    <div class="panel-title">
-      <h3>Mis tareas</h3>
-      <span>Actualiza solo el estado de tus tareas asignadas</span>
+    <div class="panel-title panel-title-row">
+      <div>
+        <h3>Mis issues</h3>
+        <span>Issues de GitHub en tus repos asignados</span>
+      </div>
+      @if (puedeCrearIssue) {
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          [disabled]="cargando || sincronizando || creandoIssue"
+          (click)="abrirNuevaTarea()"
+        >
+          <mat-icon>add</mat-icon>
+          Nueva tarea
+        </button>
+      }
     </div>
 
     <div class="tabla-wrapper panel-table">
-      <table mat-table [dataSource]="tareas" class="tabla-tareas">
+      <table mat-table [dataSource]="issues" class="tabla-tareas">
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef>Tarea</th>
-          <td mat-cell *matCellDef="let row"><div class="task-title">{{ row.title }}</div></td>
+          <td mat-cell *matCellDef="let row">
+            <div class="task-title">{{ row.title }}</div>
+            <small>#{{ row.gitHubIssueNumber }}</small>
+          </td>
         </ng-container>
 
-        <ng-container matColumnDef="project">
-          <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-          <td mat-cell *matCellDef="let row">{{ row.projectName }}</td>
+        <ng-container matColumnDef="repo">
+          <th mat-header-cell *matHeaderCellDef>Repo</th>
+          <td mat-cell *matCellDef="let row">{{ row.repositoryFullName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Estado</th>
           <td mat-cell *matCellDef="let row">
-            <mat-select class="status-select" [value]="row.status" [disabled]="actualizandoId === row.id" (selectionChange)="cambiarEstado(row, $event.value)">
-              @for (estado of estados; track estado.value) {
-                <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
-              }
-            </mat-select>
+            @if (puedeCambiarEstadoIssue) {
+              <mat-form-field appearance="outline" class="issue-status-field" subscriptSizing="dynamic">
+                <mat-select
+                  [value]="row.status"
+                  [disabled]="actualizandoEstadoIssueId === row.id || cargando || sincronizando"
+                  (selectionChange)="cambiarEstadoIssue(row, $event.value)"
+                >
+                  @for (estado of estadosIssue; track estado.value) {
+                    <mat-option [value]="estado.value">{{ estado.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            } @else {
+              <span
+                class="tag-status"
+                [class.status-progress]="row.status === 'Open'"
+                [class.status-finished]="row.status === 'Closed'"
+              >
+                {{ mostrarEstadoIssue(row.status) }}
+              </span>
+            }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="priority">
           <th mat-header-cell *matHeaderCellDef>Prioridad</th>
-          <td mat-cell *matCellDef="let row"><span class="tag-priority" [class.priority-low]="row.priority === 'Baja'" [class.priority-medium]="row.priority === 'Media'" [class.priority-high]="row.priority === 'Alta'" [class.priority-urgent]="row.priority === 'Urgente'">{{ row.priority }}</span></td>
+          <td mat-cell *matCellDef="let row">
+            @if (row.priority) {
+              <span
+                class="tag-priority"
+                [class.priority-low]="row.priority === 'Baja'"
+                [class.priority-medium]="row.priority === 'Media'"
+                [class.priority-high]="row.priority === 'Alta'"
+                [class.priority-urgent]="row.priority === 'Urgente'"
+              >
+                {{ row.priority }}
+              </span>
+            } @else {
+              <span>-</span>
+            }
+          </td>
         </ng-container>
 
-        <ng-container matColumnDef="dueDate">
-          <th mat-header-cell *matHeaderCellDef>Vence</th>
-          <td mat-cell *matCellDef="let row">{{ row.dueDate ? (row.dueDate | date:'dd/MM/yyyy') : '-' }}</td>
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Creada</th>
+          <td mat-cell *matCellDef="let row">{{ row.createdAt | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
-          <td mat-cell *matCellDef="let row" class="acciones-row"><button mat-button type="button" class="table-action" (click)="verDetalle(row)">Ver detalle</button></td>
+          <td mat-cell *matCellDef="let row" class="acciones-row">
+            @if (row.gitHubIssueUrl) {
+              <a mat-button class="table-action" [href]="row.gitHubIssueUrl" target="_blank" rel="noopener noreferrer">
+                Ver en GitHub
+              </a>
+            } @else {
+              <span>-</span>
+            }
+          </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="columnasTareas"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnasTareas"></tr>
+        <tr mat-header-row *matHeaderRowDef="columnasIssues"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasIssues"></tr>
       </table>
-      @if (!cargando && tareas.length === 0) {
+      @if (!cargando && issues.length === 0) {
         <div class="sin-resultados">
-          <mat-icon>task_alt</mat-icon>
-          <p>No tenés tareas asignadas</p>
-          <small>Las tareas que te asignen aparecerán en esta tabla.</small>
+          <mat-icon>bug_report</mat-icon>
+          <p>No hay issues sincronizadas</p>
+          <small>Cuando se importen o crees issues en tus repos asignados, aparecerán acá.</small>
         </div>
       }
     </div>
